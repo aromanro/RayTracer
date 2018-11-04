@@ -123,6 +123,9 @@ namespace PDFs
 	};
 
 
+	// See 'An Anisotropic Phong BRDF Model' by Michael Ashikhmin and Peter Shirley
+	// https://www.cs.utah.edu/~shirley/papers/jgtbrdf.pdf
+
 	class AnisotropicPhongPDF : public ProbabilityDistributionFunction
 	{
 	public:
