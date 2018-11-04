@@ -669,7 +669,7 @@ void RayTracerFrame::Compute()
 		}
 		else
 		{
-
+			scene.blackSky = options.skyOther == 1;
 			FillOtherScene(scene, options);
 		}
 
@@ -688,7 +688,7 @@ void RayTracerFrame::Compute()
 			camera = Camera(Vector3D<double>(278., 278., -800.), Vector3D<double>(278., 278., 0.), Vector3D<double>(0., 1., 0.), 40, 1., 0., 10);
 		}
 		else
-			camera = Camera(Vector3D<double>(13., 2., 3.), Vector3D<double>(4., 1., 0.), Vector3D<double>(0., 1., 0.), 60, 1080. / 1920.);			
+			camera = Camera(Vector3D<double>(13., 2., 3.), Vector3D<double>(4., 1., 0.), Vector3D<double>(0., 1., 0.), 60, 1080. / 1920., options.depthOfFieldOther ? 0.1 : 0., (Vector3D<double>(13., 2., 3.) - Vector3D<double>(4, 1, 0)).Length());			
 		
 		double distMax = 30000;
 
