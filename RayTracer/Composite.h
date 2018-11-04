@@ -104,7 +104,6 @@ namespace Objects {
 		}
 
 
-		// TODO: check the following two. The problem is that some objects might be hidden by others
 		virtual double pdfValue(const Vector3D<double>& o, const Vector3D<double>& v, Random& rnd) const override
 		{
 			PointInfo info;

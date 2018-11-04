@@ -115,12 +115,12 @@ namespace Transforms
 
 			virtual double pdfValue(const Vector3D<double>& o, const Vector3D<double>& v, Random& rnd) const override
 			{
-				return obj->pdfValue(o, v, rnd);
+				return obj->pdfValue(o - offset, v, rnd);
 			}
 
 			virtual Vector3D<double> getRandom(const Vector3D<double>& origin, Random& rnd) const override
 			{
-				return obj->getRandom(origin, rnd);
+				return obj->getRandom(origin - offset, rnd) + offset;
 			}
 
 
@@ -222,7 +222,7 @@ namespace Transforms
 		{
 			static const Vector3D<double> YAxis(0, 1, 0);
 
-			return obj->getRandom(origin.RotateAround(YAxis, -angle), rnd);
+			return obj->getRandom(origin.RotateAround(YAxis, -angle), rnd).RotateAround(YAxis, angle);
 		}
 
 	protected:
