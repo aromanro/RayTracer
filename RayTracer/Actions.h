@@ -115,6 +115,7 @@ namespace Transforms
 
 			virtual double pdfValue(const Vector3D<double>& o, const Vector3D<double>& v, Random& rnd) const override
 			{
+				// v should not need to be 'offset', because only the direction matters, and that does not change
 				return obj->pdfValue(o - offset, v, rnd);
 			}
 
