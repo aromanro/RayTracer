@@ -1,0 +1,28 @@
+#include "RayTracerApp.h"
+
+
+wxIMPLEMENT_APP(RayTracerApp);
+
+
+bool RayTracerApp::OnInit()
+{
+	if (!wxApp::OnInit())
+		return false;
+
+	wxInitAllImageHandlers();
+
+	options.Open();
+	options.Load();
+
+	frame = new RayTracerFrame("RayTracer", wxPoint(50, 50), wxSize(1024, 800));
+	frame->Show(true);
+
+	return true;
+}
+
+int RayTracerApp::OnExit()
+{
+	options.Close();
+
+	return wxApp::OnExit();
+}
