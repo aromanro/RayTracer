@@ -326,7 +326,7 @@ void FillCornellScene(Scene& scene, const Options& options)
 			scene.objects.emplace_back(trbox1);
 			scene.objects.emplace_back(trbox2);
 
-			if (options.addSmallObjectToImportanceSampling) scene.AddPriorityObject(trbox1);
+			if (options.addSmallObjectToImportanceSampling) scene.AddPriorityObject(trbox2);
 		}
 		else
 		{
@@ -336,7 +336,7 @@ void FillCornellScene(Scene& scene, const Options& options)
 			scene.objects.emplace_back(ctrbox1);
 			scene.objects.emplace_back(ctrbox2);
 
-			if (options.addSmallObjectToImportanceSampling) scene.AddPriorityObject(ctrbox1);
+			if (options.addSmallObjectToImportanceSampling) scene.AddPriorityObject(ctrbox2);
 		}
 	}
 	else if (3 == options.boxContent)
