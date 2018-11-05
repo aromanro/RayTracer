@@ -22,3 +22,8 @@ The project has some known issues, for example loading an object from an obj fil
 Also importance sampling with composite objects has some issues. I know why they occur and how it could be solved, but I don't have enough patience for those changes right now :)
 
 
+Some images obtained while implementing it:
+
+After the first book, 'Ray Tracing in one weekend':
+
+![alt text](https://raw.githubusercontent.com/aromanro/RayTracer/blob/master/img/RayTracing4000spp.png)
