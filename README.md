@@ -19,7 +19,6 @@ Journal of Graphics Tools, 2(1):21--28, 1997.
 http://www.graphics.cornell.edu/pubs/1997/MT97.pdf
 
 The project has some known issues, for example loading an object from an obj file does not split correctly concave polygons, they must be convex.
-Also importance sampling with composite objects might have some issues.
-
+Also importance sampling with composite objects has some issues. I know why they occur and how it could be solved, but I don't have enough patience for those changes right now :)
 
 
