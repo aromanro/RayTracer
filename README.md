@@ -2,6 +2,7 @@
 A ray tracing program
 
 Mainly based on 'Ray Tracing' books from Peter Shirley: http://in1weekend.blogspot.com/2016/01/ray-tracing-in-one-weekend.html
+I skipped the boring (for me) texture generation part and also the motion bluring, I prefered to go further enhancing the materials and loading obj files.
 
 But not only, info coming soon on the Computational Physics Blog: https://compphys.go.ro
 
@@ -36,7 +37,7 @@ The Cornell box (during the 'next week' book):
 
 ![Screenshot](img/CornellBox.png)
 
-Adding triangles:
+Adding triangles, already beyond the 'rest of your life' book:
 
 ![Screenshot](img/triangle.png)
 
