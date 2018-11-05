@@ -61,7 +61,7 @@ Now together with colors/textures:
 
 ![Screenshot](img/indian.png)
 
-Implementing specular reflection:
+Implementing the Phong model:
 
 ![Screenshot](img/Phong.png)
 
