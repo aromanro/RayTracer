@@ -108,16 +108,15 @@ namespace Objects {
 
 
 		virtual double pdfValue(const Vector3D<double>& o, const Vector3D<double>& v, Random& rnd) const override
-		{
+		{							
 			PointInfo info;
 
 			if (Hit(Ray(o, v), info, 0.001, DBL_MAX, 1, rnd))
 			{
 				const double w = 1. / objects.size(); //equal weight for all of them, reasonably good if they are about the same size, if not, maybe something different should be used (based on area?)
-
 				return w * info.object->pdfValue(o, v, rnd);
 			}
-
+			
 			return 0;
 		}
 

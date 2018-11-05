@@ -36,11 +36,13 @@ namespace Objects
 
 			if (x < m_x0 || x > m_x1 || y < m_y0 || y > m_y1) return false;
 
+			static const Vector3D<double> normal(0, 0, 1);
+
 			info.distance = t;
 			info.position = ray(t);
 			info.material = material.get();
 			info.object = this;
-			info.normal = Vector3D<double>(0, 0, 1);
+			info.normal = normal;
 
 			info.u = (x - m_x0) * invdim1;
 			info.v = (y - m_y0) * invdim2;
@@ -140,11 +142,14 @@ namespace Objects
 
 			if (x < m_x0 || x > m_x1 || z < m_z0 || z > m_z1) return false;
 
+
+			static const Vector3D<double> normal(0, 1, 0);
+
 			info.distance = t;
 			info.position = ray(t);
 			info.material = material.get();
 			info.object = this;
-			info.normal = Vector3D<double>(0, 1, 0);
+			info.normal = normal;
 
 			info.u = (x - m_x0) * invdim1;
 			info.v = (z - m_z0) * invdim2;
@@ -244,11 +249,14 @@ namespace Objects
 
 			if (y < m_y0 || y > m_y1 || z < m_z0 || z > m_z1) return false;
 
+
+			static const Vector3D<double> normal(1, 0, 0);
+
 			info.distance = t;
 			info.position = ray(t);
 			info.material = material.get();
 			info.object = this;
-			info.normal = Vector3D<double>(1, 0, 0);
+			info.normal = normal;
 
 			info.u = (y - m_y0) * invdim1;
 			info.v = (z - m_z0) * invdim2;
