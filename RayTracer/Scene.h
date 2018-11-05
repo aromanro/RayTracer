@@ -122,6 +122,8 @@ public:
 
 	void AddPriorityObject(std::shared_ptr<VisibleObject> obj)
 	{
+		if (obj->IsComposite()) return; // composite objects need more work
+
 		PriorityObjects.emplace_back(obj);
 		invPriSize = 1. / PriorityObjects.size();
 	}

@@ -88,8 +88,9 @@ namespace Objects
 
 			if (Hit(Ray(o, v), info, 0.001, DBL_MAX, 1, rnd))
 			{
+				const double c = v * info.normal;
 				const double dist2 = info.distance * info.distance;
-				const double cosine = abs(v * info.normal);
+				const double cosine = abs(c);
 
 				return dist2 / (cosine * area);
 			}
@@ -190,8 +191,9 @@ namespace Objects
 
 			if (Hit(Ray(o, v), info, 0.001, DBL_MAX, 1, rnd))
 			{
+				const double c = v * info.normal;
 				const double dist2 = info.distance * info.distance;
-				const double cosine = abs(v * info.normal);
+				const double cosine = abs(c);
 
 				return dist2 / (cosine * area);
 			}
@@ -294,8 +296,10 @@ namespace Objects
 
 			if (Hit(Ray(o, v), info, 0.001, DBL_MAX, 1, rnd))
 			{
+				const double c = v * info.normal;
+
 				const double dist2 = info.distance * info.distance;
-				const double cosine = abs(v * info.normal);
+				const double cosine = abs(c);
 
 				return dist2 / (cosine * area);
 			}

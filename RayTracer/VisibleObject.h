@@ -59,6 +59,8 @@ namespace Objects {
 
 		virtual double pdfValue(const Vector3D<double>& o, const Vector3D<double>& v, Random& rnd) const { return 0; }
 		virtual Vector3D<double> getRandom(const Vector3D<double>& origin, Random& rnd) const { return Vector3D<double>(0, 0, 1); }
+
+		virtual bool IsComposite() const { return false; }
 	};
 
 

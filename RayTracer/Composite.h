@@ -20,6 +20,9 @@ namespace Objects {
 
 		VisibleObjectComposite() {}
 
+		virtual bool IsComposite() const override { return true; }
+
+
 		virtual bool Hit(const Ray& ray, PointInfo& info, double minr, double maxr, unsigned rcount, Random& random) const override
 		{
 			if (root) return root->Hit(ray, info, minr, maxr, rcount, random);

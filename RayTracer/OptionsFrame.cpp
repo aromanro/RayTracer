@@ -395,7 +395,7 @@ wxPanel* OptionsFrame::CreateCornellBoxSettingsPage(wxBookCtrlBase* parent)
 	item0->Add(itemSizer, 0, wxALL | wxGROW, 0);
 
 	itemSizer = new wxBoxSizer(wxHORIZONTAL);
-	wxCheckBox *checkBoxObjSampling = new wxCheckBox(panel, ID_SMALLOBJ_SAMPLING, "Importance Sampling for small object");
+	wxCheckBox *checkBoxObjSampling = new wxCheckBox(panel, ID_SMALLOBJ_SAMPLING, "Importance Sampling for small object (non composite only, that is, the sphere)");
 	itemSizer->Add(checkBoxObjSampling, 0, wxALIGN_RIGHT|wxALIGN_CENTER_VERTICAL|wxALL);
 	item0->Add(itemSizer, 0, wxALL | wxGROW, 0);
 

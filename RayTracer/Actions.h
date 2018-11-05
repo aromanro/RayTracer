@@ -11,6 +11,8 @@ namespace Transforms
 		FlipNormal() {};
 		FlipNormal(const std::shared_ptr<Objects::VisibleObject>& o) : obj(o) {}
 
+		virtual bool IsComposite() const override { return obj->IsComposite(); }
+
 		virtual bool Hit(const Ray& ray, PointInfo& info, double minr, double maxr, unsigned rcount, Random& random) const override
 		{
 			if (obj->Hit(ray, info, minr, maxr, rcount, random))
@@ -68,6 +70,8 @@ namespace Transforms
 				offlen = off.Length();
 			}
 
+			virtual bool IsComposite() const override { return obj->IsComposite(); }
+
 
 			virtual bool Hit(const Ray& ray, PointInfo& info, double minr, double maxr, unsigned rcount, Random& random) const override
 			{
@@ -120,7 +124,7 @@ namespace Transforms
 
 			virtual Vector3D<double> getRandom(const Vector3D<double>& origin, Random& rnd) const override
 			{
-				return obj->getRandom(origin /*- offset*/, rnd) /*+ offset*/;
+				return obj->getRandom(origin - offset, rnd) + offset;
 			}
 
 
@@ -167,6 +171,9 @@ namespace Transforms
 			box = BVH::AxisAlignedBoundingBox(Min, Max);
 		}
 
+		virtual bool IsComposite() const override { return obj->IsComposite(); }
+
+
 		virtual bool Hit(const Ray& ray, PointInfo& info, double minr, double maxr, unsigned rcount, Random& random) const override
 		{
 			static const Vector3D<double> YAxis(0, 1, 0);
@@ -176,9 +183,7 @@ namespace Transforms
 			{
 				info.position = info.position.RotateAround(YAxis, angle);
 				info.normal = info.normal.RotateAround(YAxis, angle);
-
-				//info.distance = (info.position - ray.getOrigin()).Length();
-
+				
 				return true;
 			}
 
