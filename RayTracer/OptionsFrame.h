@@ -39,6 +39,7 @@ protected:
 	void OnSphereTexClear(wxCommandEvent& event);
 	void OnObjectChoose(wxCommandEvent& event);
 	void OnObjectClear(wxCommandEvent& event);
+	void OnChoiceContent(wxCommandEvent& event);
 	void OnSkyboxChooseOther(wxCommandEvent& event);
 	void OnSkyboxClearOther(wxCommandEvent& event);
 	void OnObjectChooseOther(wxCommandEvent& event);

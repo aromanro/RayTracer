@@ -80,6 +80,7 @@ EVT_BUTTON(ID_SPHERETEX_CHOOSE, OptionsFrame::OnSphereTexChoose)
 EVT_BUTTON(ID_SPHERETEX_CLEAR, OptionsFrame::OnSphereTexClear) 
 EVT_BUTTON(ID_OBJECT_CHOOSE, OptionsFrame::OnObjectChoose) 
 EVT_BUTTON(ID_OBJECT_CLEAR, OptionsFrame::OnObjectClear) 
+EVT_CHOICE(ID_CONTENT, OptionsFrame::OnChoiceContent)
 EVT_BUTTON(ID_SKYBOXDIR_CHOOSE_OTHER, OptionsFrame::OnSkyboxChooseOther) 
 EVT_BUTTON(ID_SKYBOXDIR_CLEAR_OTHER, OptionsFrame::OnSkyboxClearOther) 
 EVT_BUTTON(ID_OBJECT_CHOOSE_OTHER, OptionsFrame::OnObjectChooseOther) 
@@ -399,6 +400,8 @@ wxPanel* OptionsFrame::CreateCornellBoxSettingsPage(wxBookCtrlBase* parent)
 	itemSizer->Add(checkBoxObjSampling, 0, wxALIGN_RIGHT|wxALIGN_CENTER_VERTICAL|wxALL);
 	item0->Add(itemSizer, 0, wxALL | wxGROW, 0);
 
+	checkBoxObjSampling->Enable(3 == options.boxContent);
+
 
 	itemSizer = new wxBoxSizer(wxHORIZONTAL);
 
@@ -409,6 +412,9 @@ wxPanel* OptionsFrame::CreateCornellBoxSettingsPage(wxBookCtrlBase* parent)
 
 	wxChoice* contentChoice = new wxChoice(panel, ID_CONTENT, wxDefaultPosition, wxSize(60, -1), 5, strings, 0);
 	contentChoice->SetSelection(options.boxContent);
+
+	if (3 != options.boxContent) options.addSmallObjectToImportanceSampling = false;
+
 	itemSizer->Add(contentChoice, 1, wxALIGN_RIGHT|wxALIGN_CENTER_VERTICAL|wxALL | wxGROW, 5);
 
 	item0->Add(itemSizer, 0, wxALL | wxGROW, 0);
@@ -558,6 +564,26 @@ wxPanel* OptionsFrame::CreateCornellBoxSettingsPage(wxBookCtrlBase* parent)
 
 	return panel;
 }
+
+
+void OptionsFrame::OnChoiceContent(wxCommandEvent& /*event*/)
+{
+	TransferDataFromWindow();
+
+	wxCheckBox* check = (wxCheckBox*)FindWindow(ID_SMALLOBJ_SAMPLING);
+	if (3 == options.boxContent)
+	{
+		if (check) check->Enable();
+	}
+	else
+	{
+		if (check) check->Enable(false);
+		options.addSmallObjectToImportanceSampling = false;
+	}
+
+	TransferDataToWindow();
+}
+
 
 
 void OptionsFrame::OnObjectChoose(wxCommandEvent& /*event*/)
