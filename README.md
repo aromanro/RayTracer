@@ -26,5 +26,50 @@ Some images obtained while implementing it:
 
 After the first book, 'Ray Tracing in one weekend':
 
-
 ![Screenshot](img/RayTracing4000spp.png)
+
+With local illumination, depth of field and textures:
+
+![Screenshot](img/LocalIllumination.png)
+
+The Cornell box (during the 'next week' book):
+
+![Screenshot](img/CornellBox.png)
+
+Adding triangles:
+
+![Screenshot](img/triangle.png)
+
+Adding Beer-Lambert law for transparent objects:
+
+![Screenshot](img/BeerLambert.png)
+
+The first obj file loaded in the Cornell box:
+
+![Screenshot](img/monkey.png)
+
+Making it transparent:
+
+![Screenshot](img/transparentmonkey.png)
+
+Trying some other obj models:
+
+![Screenshot](img/car.png)
+
+![Screenshot](img/indian.png)
+
+Implementing specular reflection:
+
+![Screenshot](img/Phong.png)
+
+Trying it on a model, exponents are too high:
+
+![Screenshot](img/IndianPhong.png)
+
+More testing:
+
+![Screenshot](img/carphong.png)
+
+And some new model for testing the features:
+
+![Screenshot](img/newcarphong.png)
