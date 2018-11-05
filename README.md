@@ -26,4 +26,4 @@ Some images obtained while implementing it:
 
 After the first book, 'Ray Tracing in one weekend':
 
-![alt text](https://raw.githubusercontent.com/aromanro/RayTracer/blob/master/img/RayTracing4000spp.png)
+[[https://github.com/aromanro/RayTracer/blob/master/img/RayTracing4000spp.png|alt=octocat]]
