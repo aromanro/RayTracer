@@ -56,6 +56,8 @@ Trying some other obj models:
 
 ![Screenshot](img/car.png)
 
+Now together with colors/textures:
+
 ![Screenshot](img/indian.png)
 
 Implementing specular reflection:
