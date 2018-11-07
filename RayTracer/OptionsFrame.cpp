@@ -194,7 +194,7 @@ wxPanel* OptionsFrame::CreateGeneralSettingsPage(wxBookCtrlBase* parent)
 
 	itemSizer = new wxBoxSizer(wxHORIZONTAL);
 
-	wxCheckBox *checkBox = new wxCheckBox(panel, ID_JITTER, "Jitter");
+	wxCheckBox *checkBox = new wxCheckBox(panel, ID_JITTER, "Jitter (will round up rays/pixel/thread to a square number)");
 	itemSizer->Add(checkBox, 0, wxALIGN_RIGHT|wxALIGN_CENTER_VERTICAL|wxALL);
 
 	item0->Add(itemSizer, 0, wxALL | wxGROW, 0);
