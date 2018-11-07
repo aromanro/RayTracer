@@ -822,6 +822,8 @@ wxPanel* OptionsFrame::CreateOtherSettingsPage(wxBookCtrlBase* parent)
 	v3.SetPrecision(2);
 	poszCtrl->SetValidator(v3);
 
+	matChoice->SetValidator(wxGenericValidator(&options.objMaterialOther));
+
 
 	topSizer->Add(item0, 0, wxALL | wxGROW, 5);
 	panel->SetSizerAndFit(topSizer);
