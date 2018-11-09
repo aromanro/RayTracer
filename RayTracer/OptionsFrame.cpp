@@ -528,7 +528,7 @@ wxPanel* OptionsFrame::CreateCornellBoxSettingsPage(wxBookCtrlBase* parent)
 
 	wxFloatingPointValidator<double> dblVal(&options.scale);
 	dblVal.SetRange(0, 1000000);
-	dblVal.SetPrecision(2);
+	dblVal.SetPrecision(3);
 	scaleCtrl->SetValidator(dblVal);
 
 
@@ -791,7 +791,7 @@ wxPanel* OptionsFrame::CreateOtherSettingsPage(wxBookCtrlBase* parent)
 
 	wxFloatingPointValidator<double> dblVal(&options.scaleOther);
 	dblVal.SetRange(0, 1000000);
-	dblVal.SetPrecision(2);
+	dblVal.SetPrecision(3);
 	scaleCtrl->SetValidator(dblVal);
 
 
