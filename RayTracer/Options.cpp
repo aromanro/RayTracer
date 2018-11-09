@@ -3,7 +3,7 @@
 #include <wx/stdpaths.h> 
 
 Options::Options()
-	: nrThreads(20), nrSamples(20), recursivityStop(60), scene(0), jitter(true),
+	: nrThreads(8), nrSamples(4), recursivityStop(60), scene(0), jitter(true),
 	depthOfField(false), localIllumination(true), sky(0),
 	mirrorOnWall(false), addMirrorToImportanceSampling(false), addSmallObjectToImportanceSampling(false), boxContent(0),
 	scale(1), rotateX(0), rotateY(0), rotateZ(0),
@@ -52,8 +52,8 @@ void Options::Load()
 	wxConfigBase *conf=wxConfigBase::Get(false);
 	if (conf)
 	{
-		nrThreads = conf->ReadLong("/nrThreads", 20);
-		nrSamples = conf->ReadLong("/nrSamples", 20);
+		nrThreads = conf->ReadLong("/nrThreads", 8);
+		nrSamples = conf->ReadLong("/nrSamples", 4);
 		recursivityStop = conf->ReadLong("/recursivityStop", 60);
 		scene = conf->ReadLong("/scene", 0);
 		jitter = conf->ReadBool("/jitter", true);
