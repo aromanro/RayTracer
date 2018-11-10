@@ -59,22 +59,22 @@ namespace Textures
 
 		imageData.resize(Height);
 
-		for (int i = Height - 1; i >= 0; --i)
+		for (int line = Height - 1; line >= 0; --line)
 		{
-			imageData[i].resize(Width);
+			imageData[line].resize(Width);
 
 			wxImagePixelData::Iterator rowStart = p;
 
-			for (int j = 0; j < image.GetWidth(); ++j, ++p)
+			for (int col = 0; col < image.GetWidth(); ++col, ++p)
 			{
 
-				imageData[i][j].r = p.Red() / 255.;
-				imageData[i][j].g = p.Green() / 255.;
-				imageData[i][j].b = p.Blue() / 255.;
+				imageData[line][col].r = p.Red() / 255.;
+				imageData[line][col].g = p.Green() / 255.;
+				imageData[line][col].b = p.Blue() / 255.;
 			}
 
 			p = rowStart;
-			if (0 != i) p.OffsetY(data, 1);
+			if (0 != line) p.OffsetY(data, 1);
 		}
 
 		return false;
@@ -89,16 +89,16 @@ namespace Textures
 		if (flipVertically) v = 1. - v;
 		if (flipAxes) std::swap(u, v);
 
-		int i = static_cast<int>(u * Width);
-		int j = static_cast<int>(v * Height - 0.001);
+		int col = static_cast<int>(u * Width);
+		int line = static_cast<int>(v * Height - 0.001);
 
-		if (i < 0) i = 0;
-		else if (i >= Width) i = Width - 1;
+		if (col < 0) col = 0;
+		else if (col >= Width) col = Width - 1;
 
-		if (j < 0) j = 0;
-		else if (j >= Height) j = Height - 1;
+		if (line < 0) line = 0;
+		else if (line >= Height) line = Height - 1;
 
-		return imageData[j][i];
+		return imageData[line][col];
 	}
 
 
