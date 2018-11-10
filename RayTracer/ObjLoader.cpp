@@ -144,7 +144,7 @@ bool ObjLoader::Load(const std::string& name, bool center)
 							{
 								indexvertex = std::stoi(val);
 								// indices may be negative, in that case it indexes from current position backwards
-								if (indexvertex < 0) indexvertex = vertices.size() + indexvertex + 1;
+								if (indexvertex < 0) indexvertex = vertices.size() + indexvertex + 1; // +1 because there will be decremented later
 							}
 							else if (1 == cnt)
 							{
@@ -152,7 +152,7 @@ bool ObjLoader::Load(const std::string& name, bool center)
 								{
 									indextex = std::stoi(val);
 									// indices may be negative, in that case it indexes from current position backwards
-									if (indextex < 0) indextex = textureCoords.size() + indextex + 1;
+									if (indextex < 0) indextex = textureCoords.size() + indextex + 1; // +1 because there will be decremented later
 								}
 							}
 							else
@@ -161,7 +161,7 @@ bool ObjLoader::Load(const std::string& name, bool center)
 								{
 									indexnormal = std::stoi(val);
 									// indices may be negative, in that case it indexes from current position backwards
-									if (indexnormal < 0) indexnormal = normals.size() + indexnormal + 1;
+									if (indexnormal < 0) indexnormal = normals.size() + indexnormal + 1; // +1 because there will be decremented later
 								}
 							}
 
@@ -372,6 +372,7 @@ bool ObjLoader::Load(const std::string& name, bool center)
 		// another way to find that vertex: just 'walk' around the polygon, checking the angle
 
 
+	
 		for (int i = 3; i < polygon.size(); ++i)
 		{
 			const int nextIndexVertex = std::get<0>(polygon[i]);
@@ -381,6 +382,7 @@ bool ObjLoader::Load(const std::string& name, bool center)
 			const int nextIndexNormal = std::get<2>(polygon[i]);
 			if (nextIndexNormal < 0 || nextIndexNormal >= normals.size()) 
 				break;
+
 
 			const int nextIndexTex = std::get<1>(polygon[i]);
 
@@ -422,7 +424,7 @@ bool ObjLoader::Load(const std::string& name, bool center)
 				triangle->U3 = -1;
 				triangle->V3 = -1;
 			}
-				
+
 			triangle->SetUseInterpolation();
 
 			triangles.emplace_back(triangle);

@@ -143,7 +143,7 @@ void Options::Save()
 		conf->Write("/rotateYOther", static_cast<long int>(rotateYOther));
 		conf->Write("/rotateZOther", static_cast<long int>(rotateZOther));
 		conf->Write("/positionXOther", positionXOther);
-		conf->Write("/positionY", positionYOther);
+		conf->Write("/positionYOther", positionYOther);
 		conf->Write("/positionZOther", positionZOther);
 		conf->Write("/objMaterialOther", static_cast<long int>(objMaterialOther));
 	}
