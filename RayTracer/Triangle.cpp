@@ -7,7 +7,7 @@ namespace Objects {
 	{
 		edge1 = B - A;
 		edge2 = C - A;
-		normal = edge2 % edge1;
+		normal = edge1 % edge2;
 		area = normal.Length() * 0.5;
 		normal = normal.Normalize();
 
@@ -21,7 +21,7 @@ namespace Objects {
 	{
 		edge1 = B - A;
 		edge2 = C - A;
-		const Vector3D<double> Normal = edge2 % edge1;
+		const Vector3D<double> Normal = edge1 % edge2;
 		area = Normal.Length() * 0.5;
 		normal = Normal.Normalize();
 

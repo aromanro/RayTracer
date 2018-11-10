@@ -371,7 +371,7 @@ bool ObjLoader::Load(const std::string& name, bool center)
 		// this should work if only one vertex is the reason of concavity
 		// another way to find that vertex: just 'walk' around the polygon, checking the angle
 
-
+		// a more general method would be 'ear clipping', but definitively I won't have patience for that, it's boring
 	
 		for (int i = 3; i < polygon.size(); ++i)
 		{
