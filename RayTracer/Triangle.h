@@ -40,7 +40,7 @@ namespace Objects {
 			edge2 = C - A;
 			// area does not change
 
-			normal = normal.RotateAround(v, angle);
+			normal = (edge1 % edge2).Normalize();
 
 			if (threeNormals)
 			{
@@ -62,7 +62,7 @@ namespace Objects {
 			
 			area *= scale * scale;
 
-			ConstructBoundingBox();
+			boundingBox.Scale(scale);
 		}
 
 

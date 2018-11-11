@@ -88,6 +88,8 @@ public:
 	ObjLoader();
 	~ObjLoader();
 
+	static void LeftTrim(std::string& str);
+
 	bool Load(const std::string& name, bool center = true);
 
 	bool LoadMaterial(const std::string& name, const std::string& dir);

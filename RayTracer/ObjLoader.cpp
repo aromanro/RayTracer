@@ -65,7 +65,7 @@ bool ObjLoader::Load(const std::string& name, bool center)
 	Vector3D<double> centerCoord;
 	
 	while (std::getline(infile, line))
-	{		
+	{	
 		if (line.length() >= 2)
 		{
 			switch (line.at(0))
@@ -74,6 +74,7 @@ bool ObjLoader::Load(const std::string& name, bool center)
 				if (line.at(1) == 't') // texture coordinates
 				{
 					line = line.substr(3);
+					LeftTrim(line);
 
 					std::istringstream sstream(line);
 
@@ -91,6 +92,7 @@ bool ObjLoader::Load(const std::string& name, bool center)
 				else if (line.at(1) == 'n') // vertex normal
 				{
 					line = line.substr(3);
+					LeftTrim(line);
 
 					Vector3D<double> normal;
 
@@ -118,6 +120,7 @@ bool ObjLoader::Load(const std::string& name, bool center)
 			case 'f': // face - can be a triangle or in general, some polygon
 				{
 					line = line.substr(2);
+					LeftTrim(line);
 
 					std::istringstream sstream(line);
 					std::string token;
@@ -132,6 +135,7 @@ bool ObjLoader::Load(const std::string& name, bool center)
 						// second: index for texture coordinate (can miss)
 						// third: index for the normal (can miss?)
 
+
 						std::istringstream tokenstream(token);
 						
 
@@ -142,6 +146,8 @@ bool ObjLoader::Load(const std::string& name, bool center)
 						int cnt = 0;
 						while (std::getline(tokenstream, val, '/'))
 						{
+							LeftTrim(val);
+							
 							if (0 == cnt)
 							{
 								indexvertex = std::stoi(val);
@@ -185,18 +191,26 @@ bool ObjLoader::Load(const std::string& name, bool center)
 				break;
 
 			// can be more, materials, textures...
+			case 's':
+				// TODO: Should I do something with this? It's 'smooth' or something like that
+				break;
 			case 'm':
 				if (line.substr(0, 6) == "mtllib")
 				{
-					const std::string name = line.substr(7);
-					
-					LoadMaterial(name, dir);
+					line = line.substr(7);
+					LeftTrim(line);
+					LoadMaterial(line, dir);
 				}
 				break;
 
 			case 'u':
 				if (line.substr(0, 6) == "usemtl")
-					curMaterial = line.substr(7);
+				{
+					line = line.substr(7);
+					LeftTrim(line);
+					curMaterial = line;
+				}
+					
 				break;
 
 			} // switch			
@@ -205,13 +219,19 @@ bool ObjLoader::Load(const std::string& name, bool center)
 
 	infile.close();
 
-	if (center)
+	if (center) // center the object in origin
 	{
 		centerCoord /= vertices.size();
 		for (auto& vertex : vertices)
 			vertex -= centerCoord;
 
 	}
+
+
+	// from here start building the object from the info loaded from the .obj file
+
+
+	// first, create the materials
 
 	const auto WhiteMaterial = std::make_shared<Materials::Lambertian>(std::dynamic_pointer_cast<Textures::Texture>(std::make_shared<Textures::ColorTexture>(Color(0.73, 0.73, 0.73))));
 
@@ -282,6 +302,7 @@ bool ObjLoader::Load(const std::string& name, bool center)
 		}
 	}
 
+	// not build the geometrical object out of polygons, by splitting them to triangles
 
 	for (const auto& polygonpair : polygons)
 	{
@@ -442,6 +463,13 @@ bool ObjLoader::Load(const std::string& name, bool center)
 }
 
 
+void ObjLoader::LeftTrim(std::string& line)
+{
+	while(line.length() >= 2 && (line.at(0) == ' ' || line.at(0) == '\t'))
+		line.erase(line.begin());
+}
+
+
 bool ObjLoader::LoadMaterial(const std::string& name, const std::string& dir)
 {
 	std::ifstream infile(dir + name);
@@ -453,8 +481,7 @@ bool ObjLoader::LoadMaterial(const std::string& name, const std::string& dir)
 	std::string line;
 	while (std::getline(infile, line))
 	{	
-		while(line.length() >= 2 && (line.at(0) == ' ' || line.at(0) == '\t'))
-			line.erase(line.begin());
+		LeftTrim(line);
 
 		if (line.length() >= 2)
 		{			
@@ -466,6 +493,7 @@ bool ObjLoader::LoadMaterial(const std::string& name, const std::string& dir)
 					if (what == "Ka ")
 					{
 						line = line.substr(3);
+						LeftTrim(line);
 						std::istringstream sstream(line);
 
 						sstream >> mat.ambientColor.r;
@@ -481,6 +509,7 @@ bool ObjLoader::LoadMaterial(const std::string& name, const std::string& dir)
 					else if (what == "Kd ")
 					{
 						line = line.substr(3);
+						LeftTrim(line);
 						std::istringstream sstream(line);
 						sstream >> mat.diffuseColor.r;
 						try
@@ -495,6 +524,7 @@ bool ObjLoader::LoadMaterial(const std::string& name, const std::string& dir)
 					else if (what == "Ks")
 					{
 						line = line.substr(3);
+						LeftTrim(line);
 						std::istringstream sstream(line);
 						sstream >> mat.specularColor.r;
 						try
@@ -514,6 +544,8 @@ bool ObjLoader::LoadMaterial(const std::string& name, const std::string& dir)
 					if (what == "Tf ")
 					{
 						line = line.substr(3);
+						LeftTrim(line);
+
 						std::istringstream sstream(line);
 
 						// TODO: implement it!
@@ -521,6 +553,8 @@ bool ObjLoader::LoadMaterial(const std::string& name, const std::string& dir)
 					else if (what == "Tr ")
 					{
 						line = line.substr(3);
+						LeftTrim(line);
+
 						std::istringstream sstream(line);
 						sstream >> mat.dissolve;
 						mat.dissolve = 1. - mat.dissolve;
@@ -533,12 +567,16 @@ bool ObjLoader::LoadMaterial(const std::string& name, const std::string& dir)
 					if (what == "Ns ")
 					{	
 						line = line.substr(3);
+						LeftTrim(line);
+
 						std::istringstream sstream(line);
 						sstream >> mat.exponent;
 					}
 					else if (what == "Ni ")
 					{
 						line = line.substr(3);
+						LeftTrim(line);
+
 						std::istringstream sstream(line);
 						sstream >> mat.refractionCoeff;
 					}
@@ -550,6 +588,8 @@ bool ObjLoader::LoadMaterial(const std::string& name, const std::string& dir)
 					if (what == "d ")
 					{
 						line = line.substr(2);
+						LeftTrim(line);
+
 						std::istringstream sstream(line);
 						sstream >> mat.dissolve;
 					}
@@ -561,6 +601,7 @@ bool ObjLoader::LoadMaterial(const std::string& name, const std::string& dir)
 					if (what == "illum ")
 					{
 						line = line.substr(6);
+						LeftTrim(line);
 						int i;
 						std::istringstream sstream(line);
 						sstream >> i;
@@ -574,16 +615,19 @@ bool ObjLoader::LoadMaterial(const std::string& name, const std::string& dir)
 					if (what == "map_Ka ")
 					{	
 						line = line.substr(7);
+						LeftTrim(line);
 						mat.ambientTexture = line;
 					}
 					else if (what == "map_Kd ")
 					{
 						line = line.substr(7);
+						LeftTrim(line);
 						mat.diffuseTexture = line;
 					}
 					else if (what == "map_Ks ")
 					{
 						line = line.substr(7);
+						LeftTrim(line);
 						mat.specularTexture = line;
 					}
 				}
@@ -600,6 +644,8 @@ bool ObjLoader::LoadMaterial(const std::string& name, const std::string& dir)
 					mat.Clear();
 
 					line = line.substr(7);
+					LeftTrim(line);
+
 					mat.name = line;
 				}
 				break;

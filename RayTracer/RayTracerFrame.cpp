@@ -510,7 +510,6 @@ void FillOtherScene(Scene& scene, const Options& options)
 	
 		scene.objects.emplace_back(object);
 	}
-
 }
 
 
