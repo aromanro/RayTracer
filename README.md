@@ -22,7 +22,7 @@ http://www.graphics.cornell.edu/pubs/1997/MT97.pdf
 The project has some known issues, for example loading an object from an obj file does not split correctly concave polygons, they must be convex (unless you are lucky). See the code for how that could be fixed.
 Also importance sampling with composite objects has some issues. I know why they occur and how it could be solved, but I don't have enough patience for those changes right now :)
 
-Texturing has issues with some object files, I found one that contains quads and for the second triangle texturing is wrong. The file contains some 3D texture coordinates like this `vt 0.4620 0.0794 -0.4176` and I have no ideea what the third coordinate is, so for now this is not supported.
+Obj loader is very basic, it seems to work for some cases, but in many cases I got either missing triangles or wrong texture coordinates.
 
 
 Some images obtained while implementing it:

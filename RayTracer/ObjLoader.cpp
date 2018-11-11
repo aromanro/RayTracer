@@ -58,18 +58,19 @@ bool ObjLoader::Load(const std::string& name, bool center)
 	std::vector<std::pair<Polygon, std::string>> polygons; // will be converted to triangles in the end
 
 	triangles.clear();
+	materials.clear();
 
 	std::string line;
 
 	Vector3D<double> centerCoord;
 	
 	while (std::getline(infile, line))
-	{
+	{		
 		if (line.length() >= 2)
 		{
 			switch (line.at(0))
 			{
-			case 'v': // vertex info
+			case 'v': // vertex info				
 				if (line.at(1) == 't') // texture coordinates
 				{
 					line = line.substr(3);
@@ -82,7 +83,7 @@ bool ObjLoader::Load(const std::string& name, bool center)
 					sstream >> u >> v;
 
 					// for tilling
-					u -= floor(u);					
+					u -= floor(u);
 					v -= floor(v);
 
 					textureCoords.emplace_back(std::make_pair(u, v));
@@ -92,13 +93,13 @@ bool ObjLoader::Load(const std::string& name, bool center)
 					line = line.substr(3);
 
 					Vector3D<double> normal;
-					
+
 					std::istringstream sstream(line);
 					sstream >> normal.X >> normal.Y >> normal.Z;
 
 					normals.emplace_back(normal);
 				}
-				else // the actual vertex
+				else if (line.at(1) == ' ' || line.at(1) == '\t') // the actual vertex
 				{
 					line = line.substr(2);
 
@@ -130,6 +131,7 @@ bool ObjLoader::Load(const std::string& name, bool center)
 						// first number: index for the vertex
 						// second: index for texture coordinate (can miss)
 						// third: index for the normal (can miss?)
+
 						std::istringstream tokenstream(token);
 						
 
@@ -172,7 +174,8 @@ bool ObjLoader::Load(const std::string& name, bool center)
 						--indextex;
 						--indexnormal;
 
-						if (indexvertex < 0 || indexnormal < 0) break;
+						if (indexvertex < 0 || indexnormal < 0) 
+							break;
 
 						polygon.emplace_back(std::make_tuple(indexvertex, indextex, indexnormal));
 					}
@@ -183,23 +186,22 @@ bool ObjLoader::Load(const std::string& name, bool center)
 
 			// can be more, materials, textures...
 			case 'm':
-				if (line.substr(0, 7) == "mtllib ")
+				if (line.substr(0, 6) == "mtllib")
 				{
-					std::string name = line.substr(7);
+					const std::string name = line.substr(7);
 					
 					LoadMaterial(name, dir);
 				}
 				break;
 
 			case 'u':
-				if (line.substr(0, 7) == "usemtl ")
+				if (line.substr(0, 6) == "usemtl")
 					curMaterial = line.substr(7);
 				break;
 
-			}
-		}
-
-	}
+			} // switch			
+		} // line length > 2
+	} // while
 
 	infile.close();
 
@@ -279,6 +281,7 @@ bool ObjLoader::Load(const std::string& name, bool center)
 			}
 		}
 	}
+
 
 	for (const auto& polygonpair : polygons)
 	{
@@ -449,12 +452,12 @@ bool ObjLoader::LoadMaterial(const std::string& name, const std::string& dir)
 
 	std::string line;
 	while (std::getline(infile, line))
-	{		
+	{	
+		while(line.length() >= 2 && (line.at(0) == ' ' || line.at(0) == '\t'))
+			line.erase(line.begin());
+
 		if (line.length() >= 2)
-		{
-			while((line.at(0) == ' ' || line.at(0) == '\t') && line.length() >=2)
-				line.erase(line.begin());
-			
+		{			
 			switch (line.at(0))
 			{
 			case 'K': // Ka, Kd, Ks
