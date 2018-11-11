@@ -39,7 +39,7 @@ namespace Objects {
 		const double det = pvec * edge1;
 
 		// non-culling
-		if (abs(det) < 0.0001) return false;
+		if (abs(det) < 1E-8) return false;
 
 		const double invdet = 1. / det;
 

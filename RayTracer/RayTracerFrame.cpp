@@ -689,12 +689,12 @@ void RayTracerFrame::Compute()
 		else
 			camera = Camera(Vector3D<double>(13., 2., 3.), Vector3D<double>(4., 1., 0.), Vector3D<double>(0., 1., 0.), 60, 1080. / 1920., options.depthOfFieldOther ? 0.1 : 0., (Vector3D<double>(13., 2., 3.) - Vector3D<double>(4, 1, 0)).Length());			
 		
-		double distMax = 30000;
+		const double distMax = 30000;
 
 
 		for (int t = 0; t < nrThreads; ++t)
 		{
-			tasks[t] = std::async(std::launch::async, [t, samples, jitter, nx, ny, &camera, &scene, &randomEngines, &distMax]()->std::vector<std::vector<Color>>
+			tasks[t] = std::async(std::launch::async, [t, samples, jitter, nx, ny, &camera, &scene, &randomEngines, distMax]()->std::vector<std::vector<Color>>
 			{
 				Random &random = randomEngines[t];
 				std::vector<std::vector<Color>> results(nx);

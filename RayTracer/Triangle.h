@@ -15,9 +15,15 @@ namespace Objects {
 
 		virtual void ConstructBoundingBox() override
 		{
-			const Vector3D<double> minv(std::min(std::min(A.X, B.X), C.X) - 0.0001, std::min(std::min(A.Y, B.Y), C.Y) - 0.0001, std::min(std::min(A.Z, B.Z), C.Z) - 0.0001);
-			const Vector3D<double> maxv(std::max(std::max(A.X, B.X), C.X) + 0.0001, std::max(std::max(A.Y, B.Y), C.Y) + 0.0001, std::max(std::max(A.Z, B.Z), C.Z) + 0.0001);
-			
+			Vector3D<double> minv(std::min(std::min(A.X, B.X), C.X), std::min(std::min(A.Y, B.Y), C.Y), std::min(std::min(A.Z, B.Z), C.Z));
+			Vector3D<double> maxv(std::max(std::max(A.X, B.X), C.X), std::max(std::max(A.Y, B.Y), C.Y), std::max(std::max(A.Z, B.Z), C.Z));
+
+			const Vector3D<double> dif = maxv - minv;
+
+			if (dif.X < 1E-5) maxv.X += 1E-5;
+			if (dif.Y < 1E-5) maxv.Y += 1E-5;
+			if (dif.Z < 1E-5) maxv.Z += 1E-5;
+
 			boundingBox = BVH::AxisAlignedBoundingBox(minv, maxv);
 		}
 
