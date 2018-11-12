@@ -22,7 +22,7 @@ http://www.graphics.cornell.edu/pubs/1997/MT97.pdf
 The project has some known issues, for example loading an object from an obj file does not split correctly concave polygons, they must be convex (unless you are lucky). See the code for how that could be fixed.
 Also importance sampling with composite objects has some issues. I know why they occur and how it could be solved, but I don't have enough patience for those changes right now :)
 
-Obj loader is very basic, it seems to work for some cases, but in many cases I got wrong texture coordinates.
+Obj loader is very basic, it seems to work for some cases.
 
 
 Some images obtained while implementing it:

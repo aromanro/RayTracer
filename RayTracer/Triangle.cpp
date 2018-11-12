@@ -73,8 +73,11 @@ namespace Objects {
 
 		if (useInterpolation)
 		{			
-			info.u = Interpolate(info, U1, U2, U3);
-			info.v = Interpolate(info, V1, V2, V3);
+			const double unew = Interpolate(info, U1, U2, U3);
+			const double vnew = Interpolate(info, V1, V2, V3);
+
+			info.u = unew;
+			info.v = vnew;
 		}
 		
 		return true;

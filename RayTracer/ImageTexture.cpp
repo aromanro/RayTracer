@@ -63,21 +63,20 @@ namespace Textures
 		{
 			imageData[line].resize(Width);
 
-			wxImagePixelData::Iterator rowStart = p;
+			const wxImagePixelData::Iterator rowStartSave = p;
 
-			for (int col = 0; col < image.GetWidth(); ++col, ++p)
+			for (int col = 0; col < Width; ++col, ++p)
 			{
-
 				imageData[line][col].r = p.Red() / 255.;
 				imageData[line][col].g = p.Green() / 255.;
 				imageData[line][col].b = p.Blue() / 255.;
 			}
 
-			p = rowStart;
+			p = rowStartSave;
 			if (0 != line) p.OffsetY(data, 1);
 		}
 
-		return false;
+		return true;
 	}
 
 

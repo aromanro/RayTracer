@@ -78,12 +78,14 @@ namespace Objects {
 		inline static double Interpolate(const PointInfo& info, double val1, double val2, double val3)
 		{
 			const double w = 1. - info.u - info.v;
+
 			return w * val1 + info.u * val2 + info.v * val3;
 		}
 
 		inline static Color Interpolate(const PointInfo& info, const Color& col1, const Color& col2, const Color& col3)
 		{
 			const double w = 1. - info.u - info.v;
+
 			return w * col1 + info.u * col2 + info.v * col3;
 		}
 
