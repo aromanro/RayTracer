@@ -89,8 +89,8 @@ namespace Textures
 		if (flipVertically) v = 1. - v;
 		if (flipAxes) std::swap(u, v);
 
-		int col = static_cast<int>(u * Width);
-		int line = static_cast<int>(v * Height - 1E-3);
+		int col = static_cast<int>(round(u * (Width - 1.)));
+		int line = static_cast<int>(round(v * (Height - 1.)));
 
 		if (col < 0) col = 0;
 		else if (col >= Width) col = Width - 1;

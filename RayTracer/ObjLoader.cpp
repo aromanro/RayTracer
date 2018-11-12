@@ -4,6 +4,7 @@
 
 #include <fstream>
 #include <sstream>
+#include <cctype>
 
 
 #define _MATH_DEFINES_DEFINED
@@ -63,7 +64,8 @@ bool ObjLoader::Load(const std::string& name, bool center)
 	std::string line;
 
 	Vector3D<double> centerCoord;
-	
+	std::string curMaterial;
+
 	while (std::getline(infile, line))
 	{	
 		LeftTrim(line);
@@ -106,6 +108,7 @@ bool ObjLoader::Load(const std::string& name, bool center)
 				else if (line.at(1) == ' ' || line.at(1) == '\t') // the actual vertex
 				{
 					line = line.substr(2);
+					LeftTrim(line);
 
 					Vector3D<double> vertex;
 					
@@ -160,10 +163,10 @@ bool ObjLoader::Load(const std::string& name, bool center)
 							else if (1 == cnt)
 							{
 								if (!val.empty())
-								{
+								{									
 									indextex = std::stoi(val);
 									// indices may be negative, in that case it indexes from current position backwards
-									if (indextex < 0) indextex = textureCoords.size() + indextex + 1; // +1 because there will be decremented later
+									if (indextex < 0) indextex = textureCoords.size() + indextex + 1; // +1 because there will be decremented later									
 								}
 							}
 							else
@@ -174,6 +177,8 @@ bool ObjLoader::Load(const std::string& name, bool center)
 									// indices may be negative, in that case it indexes from current position backwards
 									if (indexnormal < 0) indexnormal = normals.size() + indexnormal + 1; // +1 because there will be decremented later
 								}
+
+								break;
 							}
 
 							++cnt;
@@ -202,6 +207,7 @@ bool ObjLoader::Load(const std::string& name, bool center)
 				{
 					line = line.substr(7);
 					LeftTrim(line);
+
 					LoadMaterial(line, dir);
 				}
 				break;
@@ -211,6 +217,12 @@ bool ObjLoader::Load(const std::string& name, bool center)
 				{
 					line = line.substr(7);
 					LeftTrim(line);
+				
+					line.erase(std::find_if(line.rbegin(), line.rend(), [](int c) 
+					{
+						return !std::isspace(c) && c != '\r';
+					}).base(), line.end());
+
 					curMaterial = line;
 				}
 					
@@ -246,7 +258,7 @@ bool ObjLoader::Load(const std::string& name, bool center)
 
 
 	for (const auto& mat : materials)
-	{		
+	{	
 		if (mat.second.diffuseTexture.empty())
 		{
 			auto tex = std::dynamic_pointer_cast<Textures::Texture>(std::make_shared<Textures::ColorTexture>((mat.second.IsTransparent() && mat.second.diffuseColor.VeryAbsorbing()) ? mat.second.specularColor : mat.second.diffuseColor));
@@ -310,7 +322,7 @@ bool ObjLoader::Load(const std::string& name, bool center)
 	for (const auto& polygonpair : polygons)
 	{
 		const auto& polygon = polygonpair.first;
-		const std::string& matName = polygonpair.second;
+		const std::string& matName = polygonpair.second;		
 
 		const int indexvertex1 = std::get<0>(polygon[0]);
 		const int indextex1 = std::get<1>(polygon[0]);
@@ -468,8 +480,7 @@ bool ObjLoader::Load(const std::string& name, bool center)
 
 void ObjLoader::LeftTrim(std::string& line)
 {
-	while(line.length() >= 2 && (line.at(0) == ' ' || line.at(0) == '\t'))
-		line.erase(line.begin());
+	line.erase(line.begin(), std::find_if(line.begin(), line.end(), [](int c) { return !std::isspace(c); }));
 }
 
 
@@ -649,6 +660,12 @@ bool ObjLoader::LoadMaterial(const std::string& name, const std::string& dir)
 					line = line.substr(7);
 					LeftTrim(line);
 
+					line.erase(std::find_if(line.rbegin(), line.rend(), [](int c) 
+					{
+						return !std::isspace(c) && c != '\r';
+					}).base(), line.end());
+
+
 					mat.name = line;
 				}
 				break;
@@ -657,7 +674,7 @@ bool ObjLoader::LoadMaterial(const std::string& name, const std::string& dir)
 	}
 
 
-	if (!mat.IsEmpty())
+	if (!mat.IsEmpty() && materials.find(mat.name) != materials.end())
 		materials[mat.name] = mat;
 
 	return true;

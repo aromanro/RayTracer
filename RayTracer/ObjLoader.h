@@ -94,9 +94,6 @@ public:
 
 	bool LoadMaterial(const std::string& name, const std::string& dir);
 
-	std::string curMaterial;
-
-
 	std::map<std::string, Material> materials;
 	std::vector<std::shared_ptr<Objects::Triangle>> triangles;
 };
