@@ -167,7 +167,7 @@ namespace Objects {
 			PointInfo info1, info2;
 
 			if (boundary->Hit(ray, info1, -DBL_MAX, DBL_MAX, rcount, random))
-				if (boundary->Hit(ray, info2, info1.distance + 0.0001, DBL_MAX, rcount, random))
+				if (boundary->Hit(ray, info2, info1.distance + 0.000001, DBL_MAX, rcount, random))
 				{
 					if (info1.distance < minr)
 						info1.distance = minr;

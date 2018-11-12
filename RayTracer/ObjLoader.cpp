@@ -66,11 +66,13 @@ bool ObjLoader::Load(const std::string& name, bool center)
 	
 	while (std::getline(infile, line))
 	{	
+		LeftTrim(line);
+
 		if (line.length() >= 2)
 		{
 			switch (line.at(0))
 			{
-			case 'v': // vertex info				
+			case 'v': // vertex info
 				if (line.at(1) == 't') // texture coordinates
 				{
 					line = line.substr(3);
@@ -135,6 +137,7 @@ bool ObjLoader::Load(const std::string& name, bool center)
 						// second: index for texture coordinate (can miss)
 						// third: index for the normal (can miss?)
 
+						LeftTrim(token);
 
 						std::istringstream tokenstream(token);
 						

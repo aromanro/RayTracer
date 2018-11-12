@@ -52,7 +52,7 @@ namespace Objects
 
 		virtual void ConstructBoundingBox() override
 		{
-			boundingBox = BVH::AxisAlignedBoundingBox(Vector3D<double>(m_x0, m_y0, m_z - 0.0001), Vector3D<double>(m_x1, m_y1, m_z + 0.0001));
+			boundingBox = BVH::AxisAlignedBoundingBox(Vector3D<double>(m_x0, m_y0, m_z - 0.000001), Vector3D<double>(m_x1, m_y1, m_z + 0.000001));
 		}
 
 		virtual void Translate(const Vector3D<double>& t) override
@@ -88,7 +88,7 @@ namespace Objects
 		{ 
 			PointInfo info;
 
-			if (Hit(Ray(o, v), info, 0.001, DBL_MAX, 1, rnd))
+			if (Hit(Ray(o, v), info, 0.000001, DBL_MAX, 1, rnd))
 			{
 				const double c = v * info.normal;
 				const double dist2 = info.distance * info.distance;
@@ -102,7 +102,7 @@ namespace Objects
 		
 		virtual Vector3D<double> getRandom(const Vector3D<double>& origin, Random& rnd) const override 
 		{ 
-			const Vector3D<double> rndPoint(m_x0 + rnd.getZeroOne() * dim1, m_y0 + rnd.getZeroOne() * dim2, m_z + 0.0001);
+			const Vector3D<double> rndPoint(m_x0 + rnd.getZeroOne() * dim1, m_y0 + rnd.getZeroOne() * dim2, m_z + 0.000001);
 
 			return rndPoint - origin; 
 		}
@@ -159,7 +159,7 @@ namespace Objects
 
 		virtual void ConstructBoundingBox() override
 		{
-			boundingBox = BVH::AxisAlignedBoundingBox(Vector3D<double>(m_x0, m_y /*- 0.0001*/, m_z0), Vector3D<double>(m_x1, m_y + 0.0001, m_z1));
+			boundingBox = BVH::AxisAlignedBoundingBox(Vector3D<double>(m_x0, m_y - 0.000001, m_z0), Vector3D<double>(m_x1, m_y + 0.000001, m_z1));
 		}
 
 		virtual void Translate(const Vector3D<double>& t) override
@@ -208,7 +208,7 @@ namespace Objects
 		
 		virtual Vector3D<double> getRandom(const Vector3D<double>& origin, Random& rnd) const override 
 		{ 
-			const Vector3D<double> rndPoint(m_x0 + rnd.getZeroOne() * dim1, m_y/* + 0.0001*/, m_z0 + rnd.getZeroOne() * dim2);
+			const Vector3D<double> rndPoint(m_x0 + rnd.getZeroOne() * dim1, m_y + 0.000001, m_z0 + rnd.getZeroOne() * dim2);
 
 			return rndPoint - origin; 
 		}
@@ -266,7 +266,7 @@ namespace Objects
 
 		virtual void ConstructBoundingBox() override
 		{
-			boundingBox = BVH::AxisAlignedBoundingBox(Vector3D<double>(m_x - 0.0001, m_y0, m_z0), Vector3D<double>(m_x + 0.0001, m_y1, m_z1));
+			boundingBox = BVH::AxisAlignedBoundingBox(Vector3D<double>(m_x - 0.000001, m_y0, m_z0), Vector3D<double>(m_x + 0.000001, m_y1, m_z1));
 		}
 
 		virtual void Translate(const Vector3D<double>& t) override
@@ -317,7 +317,7 @@ namespace Objects
 		
 		virtual Vector3D<double> getRandom(const Vector3D<double>& origin, Random& rnd) const override 
 		{ 
-			const Vector3D<double> rndPoint(m_x /* + 0.0001*/, m_y0 + rnd.getZeroOne() * dim1, m_z0 + rnd.getZeroOne() * dim2);
+			const Vector3D<double> rndPoint(m_x + 0.000001, m_y0 + rnd.getZeroOne() * dim1, m_z0 + rnd.getZeroOne() * dim2);
 
 			return rndPoint - origin; 
 		}
