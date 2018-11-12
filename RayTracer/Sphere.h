@@ -75,7 +75,7 @@ namespace Objects
 		{ 
 			PointInfo info;
 
-			if (Hit(Ray(o, v), info, 0.001, DBL_MAX, 1, rnd))
+			if (Hit(Ray(o, v), info, 1E-5, DBL_MAX, 1, rnd))
 			{
 				static const double TWO_M_PI = 2. * M_PI;
 

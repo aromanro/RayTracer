@@ -19,7 +19,7 @@ public:
 		if (skyBox)
 		{
 			PointInfo info;
-			if (skyBox->Hit(ray, info, 0.001, DBL_MAX, 1, random))
+			if (skyBox->Hit(ray, info, 1E-5, DBL_MAX, 1, random))
 				return info.material->Emitted(info);	
 		}
 		else if (blackSky) return Color(0, 0, 0); // black sky
@@ -36,7 +36,7 @@ public:
 
 		PointInfo info;
 
-		if (Hit(ray, info, 0.001, maxr, rcount, random))
+		if (Hit(ray, info, 1E-5, maxr, rcount, random))
 		{
 			if (info.material)
 			{

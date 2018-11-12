@@ -1,5 +1,6 @@
 #include "Triangle.h"
 
+
 namespace Objects {
 
 	Triangle::Triangle(const Vector3D<double>& a, const Vector3D<double>& b, const Vector3D<double>& c, const std::shared_ptr<Materials::Material>& m)
@@ -72,13 +73,7 @@ namespace Objects {
 		else info.normal = normal;
 
 		if (useInterpolation)
-		{			
-			const double unew = Interpolate(info, U1, U2, U3);
-			const double vnew = Interpolate(info, V1, V2, V3);
-
-			info.u = unew;
-			info.v = vnew;
-		}
+			std::tie(info.u, info.v) = Interpolate(info, std::make_pair(U1, V1), std::make_pair(U2, V2), std::make_pair(U3, V3));
 		
 		return true;
 	}

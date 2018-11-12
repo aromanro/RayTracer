@@ -4,6 +4,8 @@
 #include "VisibleObject.h"
 #include "Actions.h"
 
+#include <tuple>
+
 namespace Objects {
 
 	class Triangle : public VisibleObjectElementary
@@ -82,6 +84,14 @@ namespace Objects {
 			return w * val1 + info.u * val2 + info.v * val3;
 		}
 
+
+		inline static std::pair<double, double> Interpolate(const PointInfo& info, const std::pair<double, double> v1, std::pair<double, double> v2, std::pair<double, double> v3)
+		{
+			const double w = 1. - info.u - info.v;
+
+			return std::make_pair(w * v1.first + info.u * v2.first + info.v * v3.first, w * v1.second + info.u * v2.second + info.v * v3.second);
+		}
+
 		inline static Color Interpolate(const PointInfo& info, const Color& col1, const Color& col2, const Color& col3)
 		{
 			const double w = 1. - info.u - info.v;
@@ -93,7 +103,7 @@ namespace Objects {
 		{ 
 			PointInfo info;
 
-			if (Hit(Ray(o, v), info, 0.001, DBL_MAX, 1, rnd))
+			if (Hit(Ray(o, v), info, 1E-5, DBL_MAX, 1, rnd))
 			{
 				const double dist2 = info.distance * info.distance;
 				const double cosine = abs(v * normal); // don't use the normal from info because for three normals case it's not good for pdf
