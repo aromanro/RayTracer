@@ -165,6 +165,7 @@ bool ObjLoader::Load(const std::string& name, bool center)
 								if (!val.empty())
 								{									
 									indextex = std::stoi(val);
+
 									// indices may be negative, in that case it indexes from current position backwards
 									if (indextex < 0) indextex = textureCoords.size() + indextex + 1; // +1 because there will be decremented later									
 								}
@@ -227,7 +228,6 @@ bool ObjLoader::Load(const std::string& name, bool center)
 				}
 					
 				break;
-
 			} // switch			
 		} // line length > 2
 	} // while
@@ -317,7 +317,7 @@ bool ObjLoader::Load(const std::string& name, bool center)
 		}
 	}
 
-	// not build the geometrical object out of polygons, by splitting them to triangles
+	// not build the object out of polygons, by splitting them to triangles
 
 	for (const auto& polygonpair : polygons)
 	{
