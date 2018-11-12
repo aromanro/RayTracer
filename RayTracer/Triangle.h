@@ -85,7 +85,7 @@ namespace Objects {
 		}
 
 
-		inline static std::pair<double, double> Interpolate(const PointInfo& info, const std::pair<double, double> v1, std::pair<double, double> v2, std::pair<double, double> v3)
+		inline static std::pair<double, double> Interpolate(const PointInfo& info, const std::pair<double, double> v1, const std::pair<double, double> v2, const std::pair<double, double> v3)
 		{
 			const double w = 1. - info.u - info.v;
 
