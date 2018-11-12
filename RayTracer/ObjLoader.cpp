@@ -218,11 +218,6 @@ bool ObjLoader::Load(const std::string& name, bool center)
 				{
 					line = line.substr(7);
 					LeftTrim(line);
-				
-					line.erase(std::find_if(line.rbegin(), line.rend(), [](int c) 
-					{
-						return !std::isspace(c) && c != '\r';
-					}).base(), line.end());
 
 					curMaterial = line;
 				}
@@ -659,12 +654,6 @@ bool ObjLoader::LoadMaterial(const std::string& name, const std::string& dir)
 
 					line = line.substr(7);
 					LeftTrim(line);
-
-					line.erase(std::find_if(line.rbegin(), line.rend(), [](int c) 
-					{
-						return !std::isspace(c) && c != '\r';
-					}).base(), line.end());
-
 
 					mat.name = line;
 				}
