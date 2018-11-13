@@ -68,8 +68,6 @@ bool ObjLoader::Load(const std::string& name, bool center)
 
 	while (std::getline(infile, line))
 	{	
-		LeftTrim(line);
-
 		if (line.length() >= 2)
 		{
 			switch (line.at(0))
@@ -78,7 +76,6 @@ bool ObjLoader::Load(const std::string& name, bool center)
 				if (line.at(1) == 't') // texture coordinates
 				{
 					line = line.substr(3);
-					LeftTrim(line);
 
 					std::istringstream sstream(line);
 
@@ -96,7 +93,6 @@ bool ObjLoader::Load(const std::string& name, bool center)
 				else if (line.at(1) == 'n') // vertex normal
 				{
 					line = line.substr(3);
-					LeftTrim(line);
 
 					Vector3D<double> normal;
 
@@ -108,7 +104,6 @@ bool ObjLoader::Load(const std::string& name, bool center)
 				else if (line.at(1) == ' ' || line.at(1) == '\t') // the actual vertex
 				{
 					line = line.substr(2);
-					LeftTrim(line);
 
 					Vector3D<double> vertex;
 					
@@ -125,7 +120,6 @@ bool ObjLoader::Load(const std::string& name, bool center)
 			case 'f': // face - can be a triangle or in general, some polygon
 				{
 					line = line.substr(2);
-					LeftTrim(line);
 
 					std::istringstream sstream(line);
 					std::string token;
@@ -140,8 +134,6 @@ bool ObjLoader::Load(const std::string& name, bool center)
 						// second: index for texture coordinate (can miss)
 						// third: index for the normal (can miss?)
 
-						LeftTrim(token);
-
 						std::istringstream tokenstream(token);
 						
 
@@ -152,8 +144,6 @@ bool ObjLoader::Load(const std::string& name, bool center)
 						int cnt = 0;
 						while (std::getline(tokenstream, val, '/'))
 						{
-							LeftTrim(val);
-							
 							if (0 == cnt)
 							{
 								indexvertex = std::stoi(val);
@@ -207,7 +197,6 @@ bool ObjLoader::Load(const std::string& name, bool center)
 				if (line.substr(0, 6) == "mtllib")
 				{
 					line = line.substr(7);
-					LeftTrim(line);
 
 					LoadMaterial(line, dir);
 				}
@@ -217,7 +206,6 @@ bool ObjLoader::Load(const std::string& name, bool center)
 				if (line.substr(0, 6) == "usemtl")
 				{
 					line = line.substr(7);
-					LeftTrim(line);
 
 					curMaterial = line;
 				}
@@ -498,11 +486,10 @@ bool ObjLoader::LoadMaterial(const std::string& name, const std::string& dir)
 			{
 			case 'K': // Ka, Kd, Ks
 				{
-					std::string what = line.substr(0, 3);
-					if (what == "Ka ")
+					std::string what = line.substr(0, 2);
+					if (what == "Ka")
 					{
 						line = line.substr(3);
-						LeftTrim(line);
 						std::istringstream sstream(line);
 
 						sstream >> mat.ambientColor.r;
@@ -515,10 +502,9 @@ bool ObjLoader::LoadMaterial(const std::string& name, const std::string& dir)
 							mat.ambientColor.g = mat.ambientColor.b = mat.ambientColor.r;
 						}
 					}
-					else if (what == "Kd ")
+					else if (what == "Kd")
 					{
 						line = line.substr(3);
-						LeftTrim(line);
 						std::istringstream sstream(line);
 						sstream >> mat.diffuseColor.r;
 						try
@@ -533,7 +519,6 @@ bool ObjLoader::LoadMaterial(const std::string& name, const std::string& dir)
 					else if (what == "Ks")
 					{
 						line = line.substr(3);
-						LeftTrim(line);
 						std::istringstream sstream(line);
 						sstream >> mat.specularColor.r;
 						try
@@ -549,20 +534,18 @@ bool ObjLoader::LoadMaterial(const std::string& name, const std::string& dir)
 				break;
 			case 'T': //Tf or Tr
 				{
-					std::string what = line.substr(0, 3);
-					if (what == "Tf ")
+					std::string what = line.substr(0, 2);
+					if (what == "Tf")
 					{
 						line = line.substr(3);
-						LeftTrim(line);
 
 						std::istringstream sstream(line);
 
 						// TODO: implement it!
 					}
-					else if (what == "Tr ")
+					else if (what == "Tr")
 					{
 						line = line.substr(3);
-						LeftTrim(line);
 
 						std::istringstream sstream(line);
 						sstream >> mat.dissolve;
@@ -572,19 +555,17 @@ bool ObjLoader::LoadMaterial(const std::string& name, const std::string& dir)
 				break;
 			case 'N': // Ns, Ni
 				{
-					std::string what = line.substr(0, 3);
-					if (what == "Ns ")
+					std::string what = line.substr(0, 2);
+					if (what == "Ns")
 					{	
 						line = line.substr(3);
-						LeftTrim(line);
 
 						std::istringstream sstream(line);
 						sstream >> mat.exponent;
 					}
-					else if (what == "Ni ")
+					else if (what == "Ni")
 					{
 						line = line.substr(3);
-						LeftTrim(line);
 
 						std::istringstream sstream(line);
 						sstream >> mat.refractionCoeff;
@@ -593,11 +574,10 @@ bool ObjLoader::LoadMaterial(const std::string& name, const std::string& dir)
 				break;
 			case 'd': //d
 				{
-					std::string what = line.substr(0, 2);
-					if (what == "d ")
+					std::string what = line.substr(0, 1);
+					if (what == "d")
 					{
 						line = line.substr(2);
-						LeftTrim(line);
 
 						std::istringstream sstream(line);
 						sstream >> mat.dissolve;
@@ -606,11 +586,10 @@ bool ObjLoader::LoadMaterial(const std::string& name, const std::string& dir)
 				break;
 			case 'i': // illum
 				{
-					std::string what = line.substr(0, 6);
-					if (what == "illum ")
+					std::string what = line.substr(0, 5);
+					if (what == "illum")
 					{
 						line = line.substr(6);
-						LeftTrim(line);
 						int i;
 						std::istringstream sstream(line);
 						sstream >> i;
@@ -620,29 +599,26 @@ bool ObjLoader::LoadMaterial(const std::string& name, const std::string& dir)
 				break;
 			case 'm': // map_Ka, map_Kd, map_Ks
 				{
-					std::string what = line.substr(0, 7);
-					if (what == "map_Ka ")
+					std::string what = line.substr(0, 6);
+					if (what == "map_Ka")
 					{	
 						line = line.substr(7);
-						LeftTrim(line);
 						mat.ambientTexture = line;
 					}
-					else if (what == "map_Kd ")
+					else if (what == "map_Kd")
 					{
 						line = line.substr(7);
-						LeftTrim(line);
 						mat.diffuseTexture = line;
 					}
-					else if (what == "map_Ks ")
+					else if (what == "map_Ks")
 					{
 						line = line.substr(7);
-						LeftTrim(line);
 						mat.specularTexture = line;
 					}
 				}
 				break;
 			case 'n':
-				if (line.substr(0, 7) == "newmtl ")
+				if (line.substr(0, 6) == "newmtl")
 				{
 					if (!mat.IsEmpty())
 					{
@@ -653,8 +629,6 @@ bool ObjLoader::LoadMaterial(const std::string& name, const std::string& dir)
 					mat.Clear();
 
 					line = line.substr(7);
-					LeftTrim(line);
-
 					mat.name = line;
 				}
 				break;
