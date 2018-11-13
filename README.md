@@ -78,3 +78,7 @@ More testing:
 And some new model for testing the features:
 
 ![Screenshot](img/newcarphong.png)
+
+Images generated while fixing some bugs in models loaded from obj files:
+
+![Screenshot](img/metallic angel.png)
