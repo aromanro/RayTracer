@@ -82,3 +82,6 @@ And some new model for testing the features:
 Images generated while fixing some bugs in models loaded from obj files:
 
 ![Screenshot](img/metallic_angel.png)
+
+![Screenshot](img/glass_angel.png)
+
