@@ -301,23 +301,73 @@ bool ObjLoader::Load(const std::string& name, bool center)
 	}
 
 	// not build the object out of polygons, by splitting them to triangles
+	// splits it 'triangle-fan' style
+
+	// it won't work for all polygons, works for convex ones and some concave ones
 
 	for (const auto& polygonpair : polygons)
 	{
 		const auto& polygon = polygonpair.first;
-		const std::string& matName = polygonpair.second;		
+		const std::string& matName = polygonpair.second;
 
-		const int indexvertex1 = std::get<0>(polygon[0]);
-		const int indextex1 = std::get<1>(polygon[0]);
-		const int indexnormal1 = std::get<2>(polygon[0]);
+		int startPoint = 0;
+		
+		// this walks around the polygon trying to find if it's concave, if it is, tries to find the best vertex to start splitting from
+		// if there is only one reflex interior angle, this works, if not, it's a matter of luck
+				
+		if (polygon.size() > 3)
+		{
+			double worstCosine = 0;
 
-		const int indexvertex2 = std::get<0>(polygon[1]);
-		const int indextex2 = std::get<1>(polygon[1]);
-		const int indexnormal2 = std::get<2>(polygon[1]);
+			for (int cp = 0; cp < polygon.size(); ++cp)
+			{
+				const int pp = (cp == 0 ? polygon.size() : cp) - 1;
+				const int np = (cp == polygon.size() - 1) ? 0 : cp + 1;
 
-		const int indexvertex3 = std::get<0>(polygon[2]);
-		const int indextex3 = std::get<1>(polygon[2]);
-		const int indexnormal3 = std::get<2>(polygon[2]);
+				const int indpp = std::get<0>(polygon[pp]);
+				if (indpp < 0 || indpp >= vertices.size()) break;
+
+				const int indcp = std::get<0>(polygon[cp]);
+				if (indcp < 0 || indcp >= vertices.size()) break;
+
+				const int indnp = std::get<0>(polygon[np]);
+				if (indnp < 0 || indnp >= vertices.size()) break;
+
+				const Vector3D<double> prevPoint = vertices[indpp];
+				const Vector3D<double> curPoint = vertices[indcp];
+				const Vector3D<double> nextPoint = vertices[indnp];
+
+				const Vector3D<double> edge1 = (curPoint - prevPoint).Normalize();
+				const Vector3D<double> edge2 = (nextPoint - curPoint).Normalize();
+
+				const double cosine = edge1 * edge2;
+				if (cosine < worstCosine)
+				{
+					worstCosine = cosine;
+					startPoint = cp;
+					break; // just pick up the first point for now, it should be the only one when the method works for sure
+				}
+			}
+		}
+
+		// from here splitting begins
+		// if the polygon is convex, from the first point
+		// if it's concave, from a point picked above
+
+		// a more general method would be 'ear clipping', but definitively I won't have patience for that, it's boring
+		// also it's worth looking into "Optimal convex decompositions" by Bernard Chazelle and David Dobkin - a concave polygon can be split into convex ones
+		
+		const int indexvertex1 = std::get<0>(polygon[startPoint]);
+		const int indextex1 = std::get<1>(polygon[startPoint]);
+		const int indexnormal1 = std::get<2>(polygon[startPoint]);
+
+		const int indexvertex2 = std::get<0>(polygon[(startPoint + 1) % polygon.size()]);
+		const int indextex2 = std::get<1>(polygon[(startPoint + 1) % polygon.size()]);
+		const int indexnormal2 = std::get<2>(polygon[(startPoint + 1) % polygon.size()]);
+
+		const int indexvertex3 = std::get<0>(polygon[(startPoint + 2) % polygon.size()]);
+		const int indextex3 = std::get<1>(polygon[(startPoint + 2) % polygon.size()]);
+		const int indexnormal3 = std::get<2>(polygon[(startPoint + 2) % polygon.size()]);
 
 		if (indexvertex1 < 0 || indexvertex1 >= vertices.size()) break;
 		if (indexvertex2 < 0 || indexvertex2 >= vertices.size()) break;
@@ -383,30 +433,20 @@ bool ObjLoader::Load(const std::string& name, bool center)
 
 		triangles.emplace_back(triangle);
 		
-		// the rest of the points - this assumes it's a convex polygons, it splits it in a 'triangle fan' style
-		// it won't work with all polygons out there in obj files
-		// so better use obj files that have only triangles or at most quads
-		// a better splitting cold be implemented, but for now I won't bother
-
-		// as an easy solution for a simple case, you may try each new vertex and check for already composed triangles, testing if it's not inside any of them
-		// if it is inside, drop every triangle you made for the current polygon and restart splitting starting from the current vertex
-		// this should work if only one vertex is the reason of concavity
-		// another way to find that vertex: just 'walk' around the polygon, checking the angle
-
-		// a more general method would be 'ear clipping', but definitively I won't have patience for that, it's boring
 	
 		for (int i = 3; i < polygon.size(); ++i)
 		{
-			const int nextIndexVertex = std::get<0>(polygon[i]);
+			const int ind = (startPoint + i) % polygon.size();
+
+			const int nextIndexVertex = std::get<0>(polygon[ind]);
 			if (nextIndexVertex < 0 || nextIndexVertex >= vertices.size()) 
 				break;
 
-			const int nextIndexNormal = std::get<2>(polygon[i]);
+			const int nextIndexNormal = std::get<2>(polygon[ind]);
 			if (nextIndexNormal < 0 || nextIndexNormal >= normals.size()) 
 				break;
 
-
-			const int nextIndexTex = std::get<1>(polygon[i]);
+			const int nextIndexTex = std::get<1>(polygon[ind]);
 
 			const Vector3D<double>& nextPoint = vertices[nextIndexVertex];
 			const Vector3D<double>& nextNormal = normals[nextIndexNormal];
