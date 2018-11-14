@@ -15,13 +15,13 @@
 #include "wx/wxprec.h"
 
 #ifdef __BORLANDC__
-	#pragma hdrstop
+#pragma hdrstop
 #endif
 
 // for all others, include the necessary headers (this file is usually all you
 // need because it includes almost all "standard" wxWidgets headers
 #ifndef WX_PRECOMP
-	#include "wx/wx.h"
+#include "wx/wx.h"
 #endif
 
 #include <wx/filename.h>
@@ -48,14 +48,14 @@ bool ObjLoader::Load(const std::string& name, bool center)
 
 	if (!infile) return false;
 
-	const std::string dir = std::string(dirName.GetPathWithSep().c_str());									
+	const std::string dir = std::string(dirName.GetPathWithSep().c_str());
 
 
 	std::vector<std::pair<double, double>> textureCoords;
 	std::vector<Vector3D<double>> normals;
 	std::vector<Vector3D<double>> vertices;
 
-	typedef std::vector<std::tuple<int, int, int>> Polygon;
+
 	std::vector<std::pair<Polygon, std::string>> polygons; // will be converted to triangles in the end
 
 	triangles.clear();
@@ -67,7 +67,7 @@ bool ObjLoader::Load(const std::string& name, bool center)
 	std::string curMaterial;
 
 	while (std::getline(infile, line))
-	{	
+	{
 		if (line.length() >= 2)
 		{
 			switch (line.at(0))
@@ -106,7 +106,7 @@ bool ObjLoader::Load(const std::string& name, bool center)
 					line = line.substr(2);
 
 					Vector3D<double> vertex;
-					
+
 					std::istringstream sstream(line);
 					sstream >> vertex.X >> vertex.Y >> vertex.Z;
 
@@ -118,76 +118,76 @@ bool ObjLoader::Load(const std::string& name, bool center)
 				break;
 
 			case 'f': // face - can be a triangle or in general, some polygon
+			{
+				line = line.substr(2);
+
+				std::istringstream sstream(line);
+				std::string token;
+
+				Polygon polygon;
+
+				while (std::getline(sstream, token, ' '))
 				{
-					line = line.substr(2);
+					// a 'token' contains info about the vertex
+					// index/index/index, where index starts from 1 and is
+					// first number: index for the vertex
+					// second: index for texture coordinate (can miss)
+					// third: index for the normal (can miss?)
 
-					std::istringstream sstream(line);
-					std::string token;
+					std::istringstream tokenstream(token);
 
-					Polygon polygon;
 
-					while (std::getline(sstream, token, ' '))
+					int indexvertex = 0;
+					int indextex = 0;
+					int indexnormal = 0;
+					std::string val;
+					int cnt = 0;
+					while (std::getline(tokenstream, val, '/'))
 					{
-						// a 'token' contains info about the vertex
-						// index/index/index, where index starts from 1 and is
-						// first number: index for the vertex
-						// second: index for texture coordinate (can miss)
-						// third: index for the normal (can miss?)
-
-						std::istringstream tokenstream(token);
-						
-
-						int indexvertex = 0;
-						int indextex = 0;
-						int indexnormal = 0;
-						std::string val;
-						int cnt = 0;
-						while (std::getline(tokenstream, val, '/'))
+						if (0 == cnt)
 						{
-							if (0 == cnt)
+							indexvertex = std::stoi(val);
+							// indices may be negative, in that case it indexes from current position backwards
+							if (indexvertex < 0) indexvertex = vertices.size() + indexvertex + 1; // +1 because there will be decremented later
+						}
+						else if (1 == cnt)
+						{
+							if (!val.empty())
 							{
-								indexvertex = std::stoi(val);
+								indextex = std::stoi(val);
+
 								// indices may be negative, in that case it indexes from current position backwards
-								if (indexvertex < 0) indexvertex = vertices.size() + indexvertex + 1; // +1 because there will be decremented later
+								if (indextex < 0) indextex = textureCoords.size() + indextex + 1; // +1 because there will be decremented later									
 							}
-							else if (1 == cnt)
+						}
+						else
+						{
+							if (!val.empty())
 							{
-								if (!val.empty())
-								{									
-									indextex = std::stoi(val);
-
-									// indices may be negative, in that case it indexes from current position backwards
-									if (indextex < 0) indextex = textureCoords.size() + indextex + 1; // +1 because there will be decremented later									
-								}
-							}
-							else
-							{
-								if (!val.empty())
-								{
-									indexnormal = std::stoi(val);
-									// indices may be negative, in that case it indexes from current position backwards
-									if (indexnormal < 0) indexnormal = normals.size() + indexnormal + 1; // +1 because there will be decremented later
-								}
-
-								break;
+								indexnormal = std::stoi(val);
+								// indices may be negative, in that case it indexes from current position backwards
+								if (indexnormal < 0) indexnormal = normals.size() + indexnormal + 1; // +1 because there will be decremented later
 							}
 
-							++cnt;
+							break;
 						}
 
-						--indexvertex;
-						--indextex;
-						--indexnormal;
-
-						if (indexvertex < 0 || indexnormal < 0) 
-							break;
-
-						polygon.emplace_back(std::make_tuple(indexvertex, indextex, indexnormal));
+						++cnt;
 					}
 
-					if (polygon.size() > 2) polygons.emplace_back(std::make_pair(polygon, curMaterial));
+					--indexvertex;
+					--indextex;
+					--indexnormal;
+
+					if (indexvertex < 0 || indexnormal < 0)
+						break;
+
+					polygon.emplace_back(std::make_tuple(indexvertex, indextex, indexnormal));
 				}
-				break;
+
+				if (polygon.size() > 2) polygons.emplace_back(std::make_pair(polygon, curMaterial));
+			}
+			break;
 
 			// can be more, materials, textures...
 			case 's':
@@ -209,7 +209,7 @@ bool ObjLoader::Load(const std::string& name, bool center)
 
 					curMaterial = line;
 				}
-					
+
 				break;
 			} // switch			
 		} // line length > 2
@@ -241,11 +241,11 @@ bool ObjLoader::Load(const std::string& name, bool center)
 
 
 	for (const auto& mat : materials)
-	{	
+	{
 		if (mat.second.diffuseTexture.empty())
 		{
 			auto tex = std::dynamic_pointer_cast<Textures::Texture>(std::make_shared<Textures::ColorTexture>((mat.second.IsTransparent() && mat.second.diffuseColor.VeryAbsorbing()) ? mat.second.specularColor : mat.second.diffuseColor));
-			
+
 			if (mat.second.IsTransparent()) materialsMap[mat.first] = std::make_shared<Materials::Dielectric>(mat.second.refractionCoeff <= 1. ? 1.5 : mat.second.refractionCoeff, tex);
 			else
 			{
@@ -253,7 +253,7 @@ bool ObjLoader::Load(const std::string& name, bool center)
 				{
 					std::shared_ptr<Textures::Texture> specTexture;
 
-					if (mat.second.specularTexture.empty()) 
+					if (mat.second.specularTexture.empty())
 						specTexture = std::dynamic_pointer_cast<Textures::Texture>(std::make_shared<Textures::ColorTexture>(mat.second.specularColor));
 					else
 					{
@@ -268,14 +268,14 @@ bool ObjLoader::Load(const std::string& name, bool center)
 				else materialsMap[mat.first] = std::make_shared<Materials::Lambertian>(tex);
 			}
 		}
-		else 
+		else
 		{
 			bool addSlashNeed = addSlash && mat.second.diffuseTexture.at(0) != '\\' && mat.second.diffuseTexture.at(0) != '/';
 			const std::string tname = dir + (addSlashNeed ? "\\" : "") + mat.second.diffuseTexture;
 			auto imTex = std::make_shared<Textures::ImageTexture>(tname);
 
 			auto tex = std::dynamic_pointer_cast<Textures::Texture>(imTex);
-					
+
 			if (mat.second.IsTransparent()) materialsMap[mat.first] = std::make_shared<Materials::Dielectric>(mat.second.refractionCoeff <= 1. ? 1.5 : mat.second.refractionCoeff, tex);
 			else
 			{
@@ -283,7 +283,7 @@ bool ObjLoader::Load(const std::string& name, bool center)
 				{
 					std::shared_ptr<Textures::Texture> specTexture;
 
-					if (mat.second.specularTexture.empty()) 
+					if (mat.second.specularTexture.empty())
 						specTexture = std::dynamic_pointer_cast<Textures::Texture>(std::make_shared<Textures::ColorTexture>(mat.second.specularColor));
 					else
 					{
@@ -307,48 +307,21 @@ bool ObjLoader::Load(const std::string& name, bool center)
 
 	for (const auto& polygonpair : polygons)
 	{
-		const auto& polygon = polygonpair.first;
+		Polygon polygon = polygonpair.first;
 		const std::string& matName = polygonpair.second;
 
+		std::shared_ptr<Materials::Material> material;
+		if (materialsMap.find(matName) != materialsMap.end())
+			material = materialsMap[matName];
+		else
+			material = WhiteMaterial;
+
+
 		int startPoint = 0;
-		
-		// this walks around the polygon trying to find if it's concave, if it is, tries to find the best vertex to start splitting from
+
 		// if there is only one reflex interior angle, this works, if not, it's a matter of luck
-				
-		if (polygon.size() > 3)
-		{
-			double worstCosine = 0;
 
-			for (int cp = 0; cp < polygon.size(); ++cp)
-			{
-				const int pp = (cp == 0 ? polygon.size() : cp) - 1;
-				const int np = (cp == polygon.size() - 1) ? 0 : cp + 1;
-
-				const int indpp = std::get<0>(polygon[pp]);
-				if (indpp < 0 || indpp >= vertices.size()) break;
-
-				const int indcp = std::get<0>(polygon[cp]);
-				if (indcp < 0 || indcp >= vertices.size()) break;
-
-				const int indnp = std::get<0>(polygon[np]);
-				if (indnp < 0 || indnp >= vertices.size()) break;
-
-				const Vector3D<double> prevPoint = vertices[indpp];
-				const Vector3D<double> curPoint = vertices[indcp];
-				const Vector3D<double> nextPoint = vertices[indnp];
-
-				const Vector3D<double> edge1 = (curPoint - prevPoint).Normalize();
-				const Vector3D<double> edge2 = (nextPoint - curPoint).Normalize();
-
-				const double cosine = edge1 * edge2;
-				if (cosine < worstCosine)
-				{
-					worstCosine = cosine;
-					startPoint = cp;
-					break; // just pick up the first point for now, it should be the only one when the method works for sure
-				}
-			}
-		}
+		IsConcave(polygon, vertices, startPoint);
 
 		// from here splitting begins
 		// if the polygon is convex, from the first point
@@ -356,7 +329,7 @@ bool ObjLoader::Load(const std::string& name, bool center)
 
 		// a more general method would be 'ear clipping', but definitively I won't have patience for that, it's boring
 		// also it's worth looking into "Optimal convex decompositions" by Bernard Chazelle and David Dobkin - a concave polygon can be split into convex ones
-		
+
 		const int indexvertex1 = std::get<0>(polygon[startPoint]);
 		const int indextex1 = std::get<1>(polygon[startPoint]);
 		const int indexnormal1 = std::get<2>(polygon[startPoint]);
@@ -385,13 +358,6 @@ bool ObjLoader::Load(const std::string& name, bool center)
 		int lastIndexTex = indextex3;
 		Vector3D<double> lastNormal(normals[indexnormal3]);
 
-		
-
-		std::shared_ptr<Materials::Material> material;
-		if (materialsMap.find(matName) != materialsMap.end())
-			material = materialsMap[matName];
-		else
-			material = WhiteMaterial;
 
 		std::shared_ptr<Objects::Triangle> triangle = std::make_shared<Objects::Triangle>(firstPoint, vertices[indexvertex2], lastPoint, firstNormal, normals[indexnormal2], lastNormal, material);
 
@@ -424,7 +390,7 @@ bool ObjLoader::Load(const std::string& name, bool center)
 			triangle->V3 = textureCoords[lastIndexTex].second;
 		}
 		else
-		{ 
+		{
 			triangle->U3 = -1;
 			triangle->V3 = -1;
 		}
@@ -432,18 +398,18 @@ bool ObjLoader::Load(const std::string& name, bool center)
 		triangle->SetUseInterpolation();
 
 		triangles.emplace_back(triangle);
-		
-	
+
+
 		for (int i = 3; i < polygon.size(); ++i)
 		{
 			const int ind = (startPoint + i) % polygon.size();
 
 			const int nextIndexVertex = std::get<0>(polygon[ind]);
-			if (nextIndexVertex < 0 || nextIndexVertex >= vertices.size()) 
+			if (nextIndexVertex < 0 || nextIndexVertex >= vertices.size())
 				break;
 
 			const int nextIndexNormal = std::get<2>(polygon[ind]);
-			if (nextIndexNormal < 0 || nextIndexNormal >= normals.size()) 
+			if (nextIndexNormal < 0 || nextIndexNormal >= normals.size())
 				break;
 
 			const int nextIndexTex = std::get<1>(polygon[ind]);
@@ -452,14 +418,14 @@ bool ObjLoader::Load(const std::string& name, bool center)
 			const Vector3D<double>& nextNormal = normals[nextIndexNormal];
 
 			triangle = std::make_shared<Objects::Triangle>(firstPoint, lastPoint, nextPoint, firstNormal, lastNormal, nextNormal, material);
-						
+
 			if (firstIndexTex >= 0)
 			{
 				triangle->U1 = textureCoords[firstIndexTex].first;
 				triangle->V1 = textureCoords[firstIndexTex].second;
 			}
 			else
-			{ 
+			{
 				triangle->U1 = -1;
 				triangle->V1 = -1;
 			}
@@ -470,7 +436,7 @@ bool ObjLoader::Load(const std::string& name, bool center)
 				triangle->V2 = textureCoords[lastIndexTex].second;
 			}
 			else
-			{ 
+			{
 				triangle->U2 = -1;
 				triangle->V2 = -1;
 			}
@@ -482,7 +448,7 @@ bool ObjLoader::Load(const std::string& name, bool center)
 				triangle->V3 = textureCoords[nextIndexTex].second;
 			}
 			else
-			{ 
+			{
 				triangle->U3 = -1;
 				triangle->V3 = -1;
 			}
@@ -501,6 +467,136 @@ bool ObjLoader::Load(const std::string& name, bool center)
 }
 
 
+
+bool ObjLoader::IsConcaveVertex(const Polygon& polygon, const std::vector<Vector3D<double>>& vertices, int cp, double& cosine)
+{
+	cosine = 0;
+	const int pp = (cp == 0 ? polygon.size() : cp) - 1;
+	const int np = (cp == polygon.size() - 1) ? 0 : cp + 1;
+
+	const int indpp = std::get<0>(polygon[pp]);
+	if (indpp < 0 || indpp >= vertices.size()) return false;
+
+	const int indcp = std::get<0>(polygon[cp]);
+	if (indcp < 0 || indcp >= vertices.size()) return false;
+
+	const int indnp = std::get<0>(polygon[np]);
+	if (indnp < 0 || indnp >= vertices.size()) return false;
+
+	const Vector3D<double> prevPoint = vertices[indpp];
+	const Vector3D<double> curPoint = vertices[indcp];
+	const Vector3D<double> nextPoint = vertices[indnp];
+
+	const Vector3D<double> edge1 = (curPoint - prevPoint).Normalize();
+	const Vector3D<double> edge2 = (nextPoint - curPoint).Normalize();
+
+	cosine = edge1 * edge2;
+
+	return cosine < 0;
+}
+
+bool ObjLoader::IsConcave(const Polygon& polygon, const std::vector<Vector3D<double>>& vertices, int& pointIndex)
+{
+	// this walks around the polygon trying to find if it's concave, if it is, tries to find the best vertex to start splitting from
+
+	if (polygon.size() > 3)
+	{
+		double worstCosine = 0;
+
+		for (int cp = pointIndex; cp < polygon.size(); ++cp)
+		{
+			double cosine;
+			if (!IsConcaveVertex(polygon, vertices, cp, cosine)) continue;
+
+			if (cosine < worstCosine)
+			{
+				worstCosine = cosine;
+				pointIndex = cp;
+				return true; // just pick up the first one
+			}
+		}
+
+		//if (worstCosine < 0) return true;
+	}
+
+	return false;
+}
+
+bool ObjLoader::AddTriangle(int ind1, int ind2, int ind3, const Polygon& polygon, const std::vector<Vector3D<double>>& vertices, const std::vector<Vector3D<double>>& normals, const std::vector<std::pair<double, double>>& textureCoords, std::shared_ptr<Materials::Material> material, std::vector<std::shared_ptr<Objects::Triangle>>& triangles)
+{
+	const int indexvertex1 = std::get<0>(polygon[ind1]);
+	const int indextex1 = std::get<1>(polygon[ind1]);
+	const int indexnormal1 = std::get<2>(polygon[ind1]);
+
+	const int indexvertex2 = std::get<0>(polygon[ind2]);
+	const int indextex2 = std::get<1>(polygon[ind2]);
+	const int indexnormal2 = std::get<2>(polygon[ind2]);
+
+	const int indexvertex3 = std::get<0>(polygon[ind3]);
+	const int indextex3 = std::get<1>(polygon[ind3]);
+	const int indexnormal3 = std::get<2>(polygon[ind3]);
+
+	if (indexvertex1 < 0 || indexvertex1 >= vertices.size()) return false;
+	if (indexvertex2 < 0 || indexvertex2 >= vertices.size()) return false;
+	if (indexvertex3 < 0 || indexvertex3 >= vertices.size()) return false;
+
+	if (indexnormal1 < 0 || indexnormal1 >= normals.size()) return false;
+	if (indexnormal2 < 0 || indexnormal2 >= normals.size()) return false;
+	if (indexnormal3 < 0 || indexnormal3 >= normals.size()) return false;
+
+	const Vector3D<double> firstPoint = vertices[indexvertex1];
+	const int firstIndexTex = indextex1;
+	const Vector3D<double> firstNormal = normals[indexnormal1];
+
+	Vector3D<double> lastPoint(vertices[indexvertex3]);
+	int lastIndexTex = indextex3;
+	Vector3D<double> lastNormal(normals[indexnormal3]);
+
+	std::shared_ptr<Objects::Triangle> triangle = std::make_shared<Objects::Triangle>(firstPoint, vertices[indexvertex2], lastPoint, firstNormal, normals[indexnormal2], lastNormal, material);
+
+	if (firstIndexTex >= 0)
+	{
+		triangle->U1 = textureCoords[firstIndexTex].first;
+		triangle->V1 = textureCoords[firstIndexTex].second;
+	}
+	else
+	{
+		triangle->U1 = -1;
+		triangle->V1 = -1;
+	}
+
+	if (indextex2 >= 0)
+	{
+		triangle->U2 = textureCoords[indextex2].first;
+		triangle->V2 = textureCoords[indextex2].second;
+	}
+	else
+	{
+		triangle->U2 = -1;
+		triangle->V2 = -1;
+	}
+
+
+	if (lastIndexTex >= 0)
+	{
+		triangle->U3 = textureCoords[lastIndexTex].first;
+		triangle->V3 = textureCoords[lastIndexTex].second;
+	}
+	else
+	{
+		triangle->U3 = -1;
+		triangle->V3 = -1;
+	}
+
+	triangle->SetUseInterpolation();
+
+	triangles.emplace_back(triangle);
+
+	return true;
+}
+
+
+
 void ObjLoader::LeftTrim(std::string& line)
 {
 	line.erase(line.begin(), std::find_if(line.begin(), line.end(), [](int c) { return !std::isspace(c); }));
@@ -517,146 +613,146 @@ bool ObjLoader::LoadMaterial(const std::string& name, const std::string& dir)
 
 	std::string line;
 	while (std::getline(infile, line))
-	{	
+	{
 		LeftTrim(line);
 
 		if (line.length() >= 2)
-		{			
+		{
 			switch (line.at(0))
 			{
 			case 'K': // Ka, Kd, Ks
+			{
+				std::string what = line.substr(0, 2);
+				if (what == "Ka")
 				{
-					std::string what = line.substr(0, 2);
-					if (what == "Ka")
-					{
-						line = line.substr(3);
-						std::istringstream sstream(line);
+					line = line.substr(3);
+					std::istringstream sstream(line);
 
-						sstream >> mat.ambientColor.r;
-						try
-						{
-							sstream >> mat.ambientColor.g >> mat.ambientColor.b;
-						}
-						catch (...)
-						{
-							mat.ambientColor.g = mat.ambientColor.b = mat.ambientColor.r;
-						}
-					}
-					else if (what == "Kd")
+					sstream >> mat.ambientColor.r;
+					try
 					{
-						line = line.substr(3);
-						std::istringstream sstream(line);
-						sstream >> mat.diffuseColor.r;
-						try
-						{
-							sstream >> mat.diffuseColor.g >> mat.diffuseColor.b;
-						}
-						catch (...)
-						{
-							mat.diffuseColor.g = mat.diffuseColor.b = mat.diffuseColor.r;
-						}
+						sstream >> mat.ambientColor.g >> mat.ambientColor.b;
 					}
-					else if (what == "Ks")
+					catch (...)
 					{
-						line = line.substr(3);
-						std::istringstream sstream(line);
-						sstream >> mat.specularColor.r;
-						try
-						{
-							sstream >> mat.specularColor.g >> mat.specularColor.b;
-						}
-						catch (...)
-						{
-							mat.specularColor.g = mat.specularColor.b = mat.specularColor.r;
-						}
+						mat.ambientColor.g = mat.ambientColor.b = mat.ambientColor.r;
 					}
 				}
-				break;
+				else if (what == "Kd")
+				{
+					line = line.substr(3);
+					std::istringstream sstream(line);
+					sstream >> mat.diffuseColor.r;
+					try
+					{
+						sstream >> mat.diffuseColor.g >> mat.diffuseColor.b;
+					}
+					catch (...)
+					{
+						mat.diffuseColor.g = mat.diffuseColor.b = mat.diffuseColor.r;
+					}
+				}
+				else if (what == "Ks")
+				{
+					line = line.substr(3);
+					std::istringstream sstream(line);
+					sstream >> mat.specularColor.r;
+					try
+					{
+						sstream >> mat.specularColor.g >> mat.specularColor.b;
+					}
+					catch (...)
+					{
+						mat.specularColor.g = mat.specularColor.b = mat.specularColor.r;
+					}
+				}
+			}
+			break;
 			case 'T': //Tf or Tr
+			{
+				std::string what = line.substr(0, 2);
+				if (what == "Tf")
 				{
-					std::string what = line.substr(0, 2);
-					if (what == "Tf")
-					{
-						line = line.substr(3);
+					line = line.substr(3);
 
-						std::istringstream sstream(line);
+					std::istringstream sstream(line);
 
-						// TODO: implement it!
-					}
-					else if (what == "Tr")
-					{
-						line = line.substr(3);
-
-						std::istringstream sstream(line);
-						sstream >> mat.dissolve;
-						mat.dissolve = 1. - mat.dissolve;
-					}
+					// TODO: implement it!
 				}
-				break;
+				else if (what == "Tr")
+				{
+					line = line.substr(3);
+
+					std::istringstream sstream(line);
+					sstream >> mat.dissolve;
+					mat.dissolve = 1. - mat.dissolve;
+				}
+			}
+			break;
 			case 'N': // Ns, Ni
+			{
+				std::string what = line.substr(0, 2);
+				if (what == "Ns")
 				{
-					std::string what = line.substr(0, 2);
-					if (what == "Ns")
-					{	
-						line = line.substr(3);
+					line = line.substr(3);
 
-						std::istringstream sstream(line);
-						sstream >> mat.exponent;
-					}
-					else if (what == "Ni")
-					{
-						line = line.substr(3);
-
-						std::istringstream sstream(line);
-						sstream >> mat.refractionCoeff;
-					}
+					std::istringstream sstream(line);
+					sstream >> mat.exponent;
 				}
-				break;
+				else if (what == "Ni")
+				{
+					line = line.substr(3);
+
+					std::istringstream sstream(line);
+					sstream >> mat.refractionCoeff;
+				}
+			}
+			break;
 			case 'd': //d
+			{
+				std::string what = line.substr(0, 1);
+				if (what == "d")
 				{
-					std::string what = line.substr(0, 1);
-					if (what == "d")
-					{
-						line = line.substr(2);
+					line = line.substr(2);
 
-						std::istringstream sstream(line);
-						sstream >> mat.dissolve;
-					}
+					std::istringstream sstream(line);
+					sstream >> mat.dissolve;
 				}
-				break;
+			}
+			break;
 			case 'i': // illum
+			{
+				std::string what = line.substr(0, 5);
+				if (what == "illum")
 				{
-					std::string what = line.substr(0, 5);
-					if (what == "illum")
-					{
-						line = line.substr(6);
-						int i;
-						std::istringstream sstream(line);
-						sstream >> i;
-						mat.illumination = Material::Illumination(i);
-					}
+					line = line.substr(6);
+					int i;
+					std::istringstream sstream(line);
+					sstream >> i;
+					mat.illumination = Material::Illumination(i);
 				}
-				break;
+			}
+			break;
 			case 'm': // map_Ka, map_Kd, map_Ks
+			{
+				std::string what = line.substr(0, 6);
+				if (what == "map_Ka")
 				{
-					std::string what = line.substr(0, 6);
-					if (what == "map_Ka")
-					{	
-						line = line.substr(7);
-						mat.ambientTexture = line;
-					}
-					else if (what == "map_Kd")
-					{
-						line = line.substr(7);
-						mat.diffuseTexture = line;
-					}
-					else if (what == "map_Ks")
-					{
-						line = line.substr(7);
-						mat.specularTexture = line;
-					}
+					line = line.substr(7);
+					mat.ambientTexture = line;
 				}
-				break;
+				else if (what == "map_Kd")
+				{
+					line = line.substr(7);
+					mat.diffuseTexture = line;
+				}
+				else if (what == "map_Ks")
+				{
+					line = line.substr(7);
+					mat.specularTexture = line;
+				}
+			}
+			break;
 			case 'n':
 				if (line.substr(0, 6) == "newmtl")
 				{
