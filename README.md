@@ -4,7 +4,7 @@ A ray tracing program
 Mainly based on 'Ray Tracing' books from Peter Shirley: http://in1weekend.blogspot.com/2016/01/ray-tracing-in-one-weekend.html
 I skipped the boring (for me) texture generation part and also the motion bluring, I preffered to go further enhancing the materials and loading obj files.
 
-Info coming soon on the Computational Physics Blog: https://compphys.go.ro
+Some more info is on Computational Physics Blog: https://compphys.go.ro/ray-tracing/
 
 Some papers that were used:
 
