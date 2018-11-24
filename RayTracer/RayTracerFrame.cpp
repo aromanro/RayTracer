@@ -45,6 +45,8 @@
 
 #include "RayTracerApp.h"
 
+
+
 wxDECLARE_APP(RayTracerApp);
 
 void FillRandomScene(Scene& scene, const Options& options)
@@ -421,8 +423,15 @@ void FillOtherScene(Scene& scene, const Options& options)
 
 	if (options.localIlluminationOther)
 	{
+#ifdef RECORD_MOVIE
+		// move the light out of the scene and make it strong, for the effect
+		auto lightTex = std::dynamic_pointer_cast<Textures::Texture>(std::make_shared<Textures::ColorTexture>(Color(30, 30, 30)));
+		auto light = std::make_shared<Objects::Sphere>(Vector3D<double>(6, 3.9, 2), 0.4, std::make_shared<Materials::Lambertian>(lightTex));
+#else
 		auto lightTex = std::dynamic_pointer_cast<Textures::Texture>(std::make_shared<Textures::ColorTexture>(Color(25, 25, 25)));
 		auto light = std::make_shared<Objects::Sphere>(Vector3D<double>(6, 2, 2), 0.4, std::make_shared<Materials::Lambertian>(lightTex));
+#endif		
+		
 		scene.objects.emplace_back(light);
 		scene.AddPriorityObject(light);
 	}
@@ -510,6 +519,48 @@ void FillOtherScene(Scene& scene, const Options& options)
 	
 		scene.objects.emplace_back(object);
 	}
+
+#ifdef RECORD_MOVIE
+	ObjLoader angelLoader;
+	angelLoader.Load("C:\\Work\\Blog\\Docs\\RayTracing\\Models\\AngelLucy\\Alucy.obj");
+
+	auto glassAngel = std::make_shared<Objects::VisibleObjectComposite>();
+	auto glassmat = std::make_shared<Materials::Dielectric>(1.5);
+
+	for (const auto& triangle : angelLoader.triangles)
+	{
+		triangle->SetMaterial(glassmat);
+		glassAngel->objects.emplace_back(triangle);		
+	}
+	glassAngel->Scale(0.003);
+
+	const Vector3D<double> Oy(0, 1, 0);
+
+	glassAngel->RotateAround(Oy, (90. - options.positionXOther * 8.) * M_PI / 180.);
+	glassAngel->Translate(Vector3D<double>(5, 1, -3));
+	
+	scene.objects.emplace_back(glassAngel);
+
+	angelLoader.Load("C:\\Work\\Blog\\Docs\\RayTracing\\Models\\AngelLucy\\Alucy.obj");
+
+
+
+	auto metallicAngel = std::make_shared<Objects::VisibleObjectComposite>();
+	const auto mirrorMaterial = std::make_shared<Materials::Metal>(std::dynamic_pointer_cast<Textures::Texture>(std::make_shared<Textures::ColorTexture>(Color(0.8, 0.85, 0.88))));
+
+	for (const auto& triangle : angelLoader.triangles)
+	{
+		triangle->SetMaterial(mirrorMaterial);
+		metallicAngel->objects.emplace_back(triangle);		
+	}
+
+	metallicAngel->Scale(0.003);
+
+	metallicAngel->RotateAround(Oy, (220. + options.positionXOther * 8.) * M_PI / 180.);
+	metallicAngel->Translate(Vector3D<double>(5, 1, 3));
+	
+	scene.objects.emplace_back(metallicAngel);
+#endif
 }
 
 
@@ -558,6 +609,18 @@ RayTracerFrame::RayTracerFrame(const wxString& title, const wxPoint& pos, const 
 
 	CreateStatusBar();
 	SetStatusText("Welcome to RayTracer!");
+
+#ifdef RECORD_MOVIE
+	for (int i = 0; i < 15 * 30; ++i)
+	{
+		wxString fname = wxString::Format("C:\\temp\\frame%06d.jpg", i);
+		if (!wxFileName::Exists(fname))
+		{
+			frameNo = i;
+			break;
+		}
+	}
+#endif
 }
 
 
@@ -838,6 +901,23 @@ void RayTracerFrame::OnTimer(wxTimerEvent& WXUNUSED(event))
 
 
 		Refresh();
+
+#ifdef RECORD_MOVIE
+		wxString fname = wxString::Format("C:\\temp\\frame%06d.jpg", frameNo);
+		bitmap.ConvertToImage().SaveFile(fname);
+
+		// now start next frame computation
+		if (++frameNo < 15 * 30)
+		{
+			// first adjust options for the next frame	
+			RayTracerApp& app = wxGetApp();
+
+			app.options.positionXOther -= 0.05;
+			app.options.Save();
+
+			Compute();
+		}
+#endif
 	}
 }
 

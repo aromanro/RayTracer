@@ -55,7 +55,7 @@ namespace BVH
 
 			tmin = mmax(t0, tmin);
 			tmax = mmin(t1, tmax);
-			if (tmax <= tmin) return false;
+			if (tmax < tmin) return false;
 
 
 			t0 = (m_min.Y - ray.getOrigin().Y) * ray.getInvDir().Y;
@@ -64,7 +64,7 @@ namespace BVH
 
 			tmin = mmax(t0, tmin);
 			tmax = mmin(t1, tmax);
-			if (tmax <= tmin) return false;
+			if (tmax < tmin) return false;
 
 
 			t0 = (m_min.Z - ray.getOrigin().Z) * ray.getInvDir().Z;
@@ -74,7 +74,7 @@ namespace BVH
 			tmin = mmax(t0, tmin);
 			tmax = mmin(t1, tmax);
 			
-			return tmax > tmin;
+			return tmax >= tmin;
 		}
 
 		void Translate(const Vector3D<double>& t)

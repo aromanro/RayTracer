@@ -25,6 +25,9 @@
 
 #include "Color.h"
 
+
+//#define RECORD_MOVIE
+
 class RayTracerFrame : public wxFrame
 {
 public:
@@ -39,6 +42,10 @@ private:
 
 	std::vector<std::vector<Color>> result;
 	wxBitmap bitmap;
+
+#ifdef RECORD_MOVIE
+	int frameNo = 0;
+#endif
 
 	bool isFinished() const;
 	void StopThreads(bool cancel = false);
