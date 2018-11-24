@@ -24,6 +24,9 @@ Also importance sampling with composite objects has some issues. I know why they
 
 Obj loader is very basic, it seems to work for some cases.
 
+An animation generated with the program:
+
+[![Program video](https://img.youtube.com/vi/3Q8dKi9WyLM/0.jpg)](https://youtu.be/3Q8dKi9WyLM)
 
 Some images obtained while implementing it:
 
