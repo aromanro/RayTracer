@@ -43,6 +43,10 @@
 #include "Options.h"
 #include "OptionsFrame.h"
 
+#include "wx/aboutdlg.h"
+#include "wx/statline.h"
+#include "wx/generic/aboutdlgg.h"
+
 #include "RayTracerApp.h"
 
 
@@ -931,7 +935,24 @@ void RayTracerFrame::OnExit(wxCommandEvent& /*event*/)
 
 void RayTracerFrame::OnAbout(wxCommandEvent& /*event*/)
 {
-	wxMessageBox("RayTracer ver 1.0", "About RayTracer", wxOK | wxICON_INFORMATION);
+	wxAboutDialogInfo info;
+
+	info.SetName("Ray Tracer");
+
+	static const int majorVer = 1;
+	static const int minorVer = 0;
+	wxString verStr = wxString::Format("%d.%d", majorVer, minorVer);
+	info.SetVersion(verStr,	wxString::Format("Version %s", verStr));
+
+	info.SetDescription("   Ray Tracer Application   ");
+	info.SetLicense("GNU GPL v3.0, see LICENSE file for details");
+
+	info.AddDeveloper("Adrian Roman");
+
+	info.SetWebSite("https://github.com/aromanro/RayTracer", "GitHub repository");
+
+
+	wxAboutBox(info, this);	
 }
 
 
