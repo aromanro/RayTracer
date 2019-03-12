@@ -90,29 +90,14 @@ namespace BVH
 		{
 			if (boundingBox.Intersects(ray, minr, maxr))
 			{
-				PointInfo info1, info2;
-
-				const bool hit1 = child1->Hit(ray, info1, minr, maxr, rcount, random);
-				const bool hit2 = child2 ? child2->Hit(ray, info2, minr, maxr, rcount, random) : false;
-
-				if (hit1 && hit2)
+				if (child1->Hit(ray, info, minr, maxr, rcount, random))
 				{
-					if (info1.distance < info2.distance)
-						info = info1;
-					else info = info2;
+					if (child2) child2->Hit(ray, info, minr, info.distance, rcount, random);
 
 					return true;
 				}
-				else if (hit1)
-				{
-					info = info1;
-					return true;
-				}
-				else if (hit2)
-				{
-					info = info2;
-					return true;
-				}
+				else if (child2)
+					return child2->Hit(ray, info, minr, maxr, rcount, random);				
 			}
 
 			return false;

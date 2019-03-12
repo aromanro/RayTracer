@@ -28,18 +28,19 @@ namespace Objects {
 			if (root) return root->Hit(ray, info, minr, maxr, rcount, random);
 
 			bool wasHit = false;
-			PointInfo oinfo;
-			oinfo.distance = DBL_MAX;
-			info.distance = DBL_MAX;
+
+			PointInfo oinfo, hitInfo;
+			hitInfo.distance = oinfo.distance = maxr;
 
 			for (const auto& obj : objects)
-				if (obj->Hit(ray, oinfo, minr, maxr, rcount, random))
+				if (obj->Hit(ray, oinfo, minr, hitInfo.distance, rcount, random))
 				{
 					wasHit = true;
-					if (oinfo.distance < info.distance)
-						info = oinfo;
+					if (oinfo.distance < hitInfo.distance)
+						hitInfo = oinfo;
 				}
 
+			if (wasHit) info = hitInfo;
 
 			return wasHit;
 		}
