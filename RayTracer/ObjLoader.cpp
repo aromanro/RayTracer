@@ -50,11 +50,9 @@ bool ObjLoader::Load(const std::string& name, bool center)
 
 	const std::string dir = std::string(dirName.GetPathWithSep().c_str());
 
-
 	std::vector<std::pair<double, double>> textureCoords;
 	std::vector<Vector3D<double>> normals;
 	std::vector<Vector3D<double>> vertices;
-
 
 	std::vector<std::pair<Polygon, std::string>> polygons; // will be converted to triangles in the end
 
@@ -222,7 +220,6 @@ bool ObjLoader::Load(const std::string& name, bool center)
 		centerCoord /= vertices.size();
 		for (auto& vertex : vertices)
 			vertex -= centerCoord;
-
 	}
 
 
@@ -300,7 +297,7 @@ bool ObjLoader::Load(const std::string& name, bool center)
 		}
 	}
 
-	// not build the object out of polygons, by splitting them to triangles
+	// now build the object out of polygons, by splitting them to triangles
 	// splits it 'triangle-fan' style
 
 	// it won't work for all polygons, works for convex ones and some concave ones
