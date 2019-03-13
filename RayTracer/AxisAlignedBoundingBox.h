@@ -53,8 +53,8 @@ namespace BVH
 			double t1 = (m_max.X - ray.getOrigin().X) * ray.getInvDir().X;
 			if (ray.getInvDir().X < 0) std::swap(t0, t1);
 
-			tmin = mmax(t0, tmin);
-			tmax = mmin(t1, tmax);
+			tmin = mmax(tmin, t0);
+			tmax = mmin(tmax, t1);
 			if (tmax < tmin) return false;
 
 
@@ -62,8 +62,8 @@ namespace BVH
 			t1 = (m_max.Y - ray.getOrigin().Y) * ray.getInvDir().Y;
 			if (ray.getInvDir().Y < 0) std::swap(t0, t1);
 
-			tmin = mmax(t0, tmin);
-			tmax = mmin(t1, tmax);
+			tmin = mmax(tmin, t0);
+			tmax = mmin(tmax, t1);
 			if (tmax < tmin) return false;
 
 
@@ -71,8 +71,8 @@ namespace BVH
 			t1 = (m_max.Z - ray.getOrigin().Z) * ray.getInvDir().Z;
 			if (ray.getInvDir().Z < 0) std::swap(t0, t1);
 
-			tmin = mmax(t0, tmin);
-			tmax = mmin(t1, tmax);
+			tmin = mmax(tmin, t0);
+			tmax = mmin(tmax, t1);
 			
 			return tmax >= tmin;
 		}
