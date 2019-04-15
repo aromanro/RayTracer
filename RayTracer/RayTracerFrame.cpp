@@ -673,14 +673,12 @@ void RayTracerFrame::OnOptions(wxCommandEvent& /*event*/)
 {
 	RayTracerApp& app = wxGetApp();
 
-	OptionsFrame *optionsFrame = new OptionsFrame(app.options, "Options", this);
-	if (wxID_OK == optionsFrame->ShowModal())
+	OptionsFrame optionsFrame(app.options, "Options", this);
+	if (wxID_OK == optionsFrame.ShowModal())
 	{
-		app.options = optionsFrame->options;
+		app.options = optionsFrame.options;
 		app.options.Save();
 	}
-
-	delete optionsFrame;
 }
 
 void RayTracerFrame::Compute()
