@@ -142,6 +142,8 @@ namespace Objects {
 		double U1, V1, U2, V2, U3, V3;
 
 	protected:
+		void Init();
+
 		bool threeNormals;
 
 		double area;
