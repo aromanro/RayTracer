@@ -147,12 +147,13 @@ namespace PDFs
 
 		virtual Vector3D<double> Generate(Random& rnd, Materials::ScatterInfo* info) override;
 
+
+	protected:
 		inline static double Schlick(const double val, double cosine)
 		{
 			return val + (1. - val) * pow(1. - cosine, 5.);
 		}
 
-	protected:
 		inline Vector3D<double> GetSpecularReflected(const Vector3D<double>& incident, const Vector3D<double>& h, double kh) const
 		{
 			return incident + 2. * kh * h;
