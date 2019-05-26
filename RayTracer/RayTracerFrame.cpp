@@ -689,12 +689,9 @@ void RayTracerFrame::Compute()
 
 	SetTitle("Computing - RayTracer");
 
-	//computeOptions = currentOptions;
-
 	runningThreads = 1;
 
 	timer.Start(100);
-
 
 	RayTracerApp& app = wxGetApp();
 	Options options = app.options;

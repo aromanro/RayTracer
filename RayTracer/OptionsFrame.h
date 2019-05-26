@@ -51,8 +51,6 @@ protected:
 	wxPanel* CreateCornellBoxSettingsPage(wxBookCtrlBase* parent);
 	wxPanel* CreateOtherSettingsPage(wxBookCtrlBase* parent);
 
-
-
 	wxDECLARE_EVENT_TABLE();
 };
 
