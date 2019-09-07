@@ -1,5 +1,7 @@
 #pragma once
 
+#include <memory>
+
 #include "Color.h"
 #include "Vector3D.h"
 
