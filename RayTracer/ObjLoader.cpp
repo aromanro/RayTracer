@@ -331,13 +331,13 @@ bool ObjLoader::Load(const std::string& name, bool center)
 		const int indextex1 = std::get<1>(polygon[startPoint]);
 		const int indexnormal1 = std::get<2>(polygon[startPoint]);
 
-		const int indexvertex2 = std::get<0>(polygon[(startPoint + 1) % polygon.size()]);
-		const int indextex2 = std::get<1>(polygon[(startPoint + 1) % polygon.size()]);
-		const int indexnormal2 = std::get<2>(polygon[(startPoint + 1) % polygon.size()]);
+		const int indexvertex2 = std::get<0>(polygon[(startPoint + 1ULL) % polygon.size()]);
+		const int indextex2 = std::get<1>(polygon[(startPoint + 1ULL) % polygon.size()]);
+		const int indexnormal2 = std::get<2>(polygon[(startPoint + 1ULL) % polygon.size()]);
 
-		const int indexvertex3 = std::get<0>(polygon[(startPoint + 2) % polygon.size()]);
-		const int indextex3 = std::get<1>(polygon[(startPoint + 2) % polygon.size()]);
-		const int indexnormal3 = std::get<2>(polygon[(startPoint + 2) % polygon.size()]);
+		const int indexvertex3 = std::get<0>(polygon[(startPoint + 2ULL) % polygon.size()]);
+		const int indextex3 = std::get<1>(polygon[(startPoint + 2ULL) % polygon.size()]);
+		const int indexnormal3 = std::get<2>(polygon[(startPoint + 2ULL) % polygon.size()]);
 
 		if (indexvertex1 < 0 || indexvertex1 >= vertices.size()) break;
 		if (indexvertex2 < 0 || indexvertex2 >= vertices.size()) break;
@@ -399,7 +399,7 @@ bool ObjLoader::Load(const std::string& name, bool center)
 
 		for (int i = 3; i < polygon.size(); ++i)
 		{
-			const int ind = (startPoint + i) % polygon.size();
+			const size_t ind = (static_cast<size_t>(startPoint) + i) % polygon.size();
 
 			const int nextIndexVertex = std::get<0>(polygon[ind]);
 			if (nextIndexVertex < 0 || nextIndexVertex >= vertices.size())

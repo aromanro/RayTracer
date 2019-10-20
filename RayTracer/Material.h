@@ -23,7 +23,7 @@ namespace Materials {
 	public:
 		~ScatterInfo() { delete pdf; }
 
-		bool isSpecular;
+		bool isSpecular = false;
 		Ray specularRay;
 		Color atten;
 		

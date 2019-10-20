@@ -33,7 +33,7 @@ public:
 
 		// WARNING: there can be Ns and d textures as well, but I ignore them for now
 
-		typedef enum {
+		enum class Illumination {
 			constant = 0, // Kd color
 			diffuse, // Lambertian shading
 			blinn,    // actually Blinn-Phong diffuse and specular combined
@@ -45,14 +45,14 @@ public:
 			reflectionNoRayTrace,
 			transparentNoRayTrace,
 			castShadows
-		} Illumination;
+		};
 		
-		Illumination illumination; // illum
+		Illumination illumination = Illumination::blinn; // illum
 	
 		double dissolve = 1.; // d - dissolve factor, 1 fully opaque - for OpenGL it would be alpha
 		double refractionCoeff = 0.; // Ni = optical density, glass = 1.5, 1. no refraction
 
-		bool IsSpecular() const { return exponent > 0 && (illumination == blinn || illumination == reflective) && (!specularColor.VeryAbsorbing() || !specularTexture.empty()); }
+		bool IsSpecular() const { return exponent > 0 && (illumination == Illumination::blinn || illumination == Illumination::reflective) && (!specularColor.VeryAbsorbing() || !specularTexture.empty()); }
 		
 
 		bool IsTransparent() const
@@ -76,7 +76,7 @@ public:
 			diffuseTexture.clear();
 			specularTexture.clear();
 
-			illumination = blinn;
+			illumination = Illumination::blinn;
 
 			dissolve = 1;
 			refractionCoeff = 0;

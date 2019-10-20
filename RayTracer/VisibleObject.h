@@ -22,7 +22,7 @@ namespace Objects {
 class PointInfo
 {
 public:
-	PointInfo() : distance(0), u(0), v(0), material(NULL) {}
+	PointInfo() : distance(0), u(0), v(0), material(nullptr), object(nullptr) {}
 
 	double distance;
 	Vector3D<double> normal;

@@ -126,7 +126,7 @@ void FillRandomScene(Scene& scene, const Options& options)
 		
 		if (exists)
 		{
-			auto skybox = std::make_shared<Objects::SkyBox>(Vector3D<double>(13-10000, 2-10000, 3-10000), Vector3D<double>(13+10000, 2+10000, 3+10000));
+			auto skybox = std::make_shared<Objects::SkyBox>(Vector3D<double>(13.-10000, 2.-10000, 3.-10000), Vector3D<double>(13.+10000, 2.+10000, 3.+10000));
 			skybox->Load(frontFile, backFile, topFile, bottomFile, leftFile, rightFile);		
 			scene.skyBox = skybox;
 		}
@@ -478,7 +478,7 @@ void FillOtherScene(Scene& scene, const Options& options)
 		
 		if (exists)
 		{
-			auto skybox = std::make_shared<Objects::SkyBox>(Vector3D<double>(13-10000, 2-10000, 3-10000), Vector3D<double>(13+10000, 2+10000, 3+10000));
+			auto skybox = std::make_shared<Objects::SkyBox>(Vector3D<double>(13.-10000, 2.-10000, 3.-10000), Vector3D<double>(13.+10000, 2.+10000, 3.+10000));
 			skybox->Load(frontFile, backFile, topFile, bottomFile, leftFile, rightFile);		
 			scene.skyBox = skybox;
 		}
@@ -836,7 +836,7 @@ void RayTracerFrame::Compute()
 		for (int i = 0; i < nx; ++i)
 			for (int j = 0; j < ny; ++j)
 			{
-				image[i][j] /= samples * nrThreads;
+				image[i][j] /= static_cast<double>(samples) * nrThreads;
 				image[i][j].Clamp();
 			}
 

@@ -63,11 +63,10 @@ namespace Transforms
 	class TranslateAction : public Objects::VisibleObject
 	{
 		public:
-			TranslateAction() {};
+			TranslateAction() : obj(nullptr), offlen(0) {};
 			TranslateAction(const std::shared_ptr<Objects::VisibleObject>& o, const Vector3D<double>& off)
-				: obj(o), offset(off)
+				: obj(o), offset(off), offlen(off.Length())
 			{
-				offlen = off.Length();
 			}
 
 			virtual bool IsComposite() const override { return obj->IsComposite(); }
@@ -155,7 +154,7 @@ namespace Transforms
 				for (int j = 0; j <= 1; ++j)
 					for (int k = 0; k <= 1; ++k)
 					{
-						Vector3D<double> corner(i * box.min().X + (1 - i) * box.max().X, j * box.min().Y + (1 - j) * box.max().Y, k * box.min().Z + (1 - k) * box.max().Z);
+						Vector3D<double> corner(i * box.min().X + (1LL - i) * box.max().X, j * box.min().Y + (1LL - j) * box.max().Y, k * box.min().Z + (1LL - k) * box.max().Z);
 						corner = corner.RotateAround(YAxis, angle);
 
 						if (corner.X > Max.X) Max.X = corner.X;
