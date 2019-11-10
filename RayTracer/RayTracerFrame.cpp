@@ -710,10 +710,11 @@ void RayTracerFrame::Compute()
 
 		std::vector<std::future<std::vector<std::vector<Color>>>> tasks(nrThreads);
 
+		Random initialSeed;
 
 		std::vector<Random> randomEngines;
 		for (int i = 0; i < nrThreads; ++i)
-			randomEngines.emplace_back(Random(43 * i * i + 371 * i + 3));
+			randomEngines.emplace_back(Random(static_cast<int>(initialSeed.getZeroOne() * 1E5)));
 
 		Scene scene;
 
