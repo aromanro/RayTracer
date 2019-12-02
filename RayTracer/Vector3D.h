@@ -38,6 +38,16 @@ public:
 
 	template<typename O, typename A> Vector3D RotateAround(const Vector3D<O>& other, A angle) const;
 	template<typename O, typename A> Vector3D RotateTowards(const Vector3D<O>& other, A angle) const;
+
+	double getTheta() const
+	{
+		return acos(Z / Length());
+	}
+
+	double getPhi() const
+	{
+		return atan(Y / X);
+	}
 };
 
 template<typename T> Vector3D<T> operator*(T o, const Vector3D<T>& t) { return t*o; }
