@@ -1,5 +1,7 @@
 #pragma once
 
+#include <tuple>
+
 template<typename T> class Vector3D
 {
 public:
