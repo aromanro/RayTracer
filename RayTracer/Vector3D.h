@@ -43,12 +43,15 @@ public:
 
 	double getTheta() const
 	{
-		return acos(Z / Length());
+		double cosTheta = Z / Length();
+		if (isnan(cosTheta) || isinf(cosTheta) || cosTheta > 1. || cosTheta < -1) cosTheta = (cosTheta < 0 ? -1 : 1);
+
+		return acos(cosTheta);
 	}
 
 	double getPhi() const
 	{
-		return atan(Y / X);
+		return atan2(Y, X);
 	}
 };
 
