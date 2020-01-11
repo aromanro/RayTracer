@@ -676,7 +676,9 @@ void RayTracerFrame::OnOptions(wxCommandEvent& /*event*/)
 	OptionsFrame optionsFrame(app.options, "Options", this);
 	if (wxID_OK == optionsFrame.ShowModal())
 	{
+		app.options.Close();
 		app.options = optionsFrame.options;
+		app.options.Open();
 		app.options.Save();
 	}
 }

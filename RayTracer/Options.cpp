@@ -18,10 +18,6 @@ Options::Options()
 }
 
 
-Options::~Options()
-{
-}
-
 
 void Options::Open()
 {
