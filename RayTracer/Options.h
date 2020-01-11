@@ -11,6 +11,97 @@ class Options
 {
 public:
 	Options();
+
+	// avoid double deletion of m_fileconfig at destruction if copied
+	Options(const Options& other)
+		:
+		nrThreads(other.nrThreads),
+		nrSamples(other.nrSamples),
+		recursivityStop(other.recursivityStop),
+		scene(other.scene),
+		jitter(other.jitter),
+		depthOfField(other.depthOfField),
+		localIllumination(other.localIllumination),
+		sky(other.sky),
+		skyBoxDirName(other.skyBoxDirName),
+		textureFileName(other.textureFileName),
+		mirrorOnWall(other.mirrorOnWall),
+		addMirrorToImportanceSampling(other.addMirrorToImportanceSampling),
+		addSmallObjectToImportanceSampling(other.addSmallObjectToImportanceSampling),
+		boxContent(other.boxContent),
+		objFileName(other.objFileName),
+		scale(other.scale),
+		rotateX(other.rotateX),
+		rotateY(other.rotateY),
+		rotateZ(other.rotateZ),
+		positionX(other.positionX),
+		positionY(other.positionY),
+		positionZ(other.positionZ),
+		objMaterial(other.objMaterial),
+		depthOfFieldOther(other.depthOfFieldOther),
+		localIlluminationOther(other.localIlluminationOther),
+		skyOther(other.skyOther),
+		skyBoxDirNameOther(other.skyBoxDirNameOther),
+		floorOther(other.floorOther),
+		objFileNameOther(other.objFileNameOther),
+		scaleOther(other.scaleOther),
+		rotateXOther(other.rotateXOther),
+		rotateYOther(other.rotateYOther),
+		rotateZOther(other.rotateZOther),
+		positionXOther(other.positionXOther),
+		positionYOther(other.positionYOther),
+		positionZOther(other.positionZOther),
+		objMaterialOther(other.objMaterialOther),
+		m_fileconfig(nullptr)
+	{
+	}
+
+	Options& operator=(const Options& other)
+	{
+		nrThreads = other.nrThreads;
+		nrSamples = other.nrSamples;
+		recursivityStop = other.recursivityStop;
+		scene = other.scene;
+		jitter = other.jitter;
+		depthOfField = other.depthOfField;
+		localIllumination = other.localIllumination;
+		sky = other.sky;
+		skyBoxDirName = other.skyBoxDirName;
+		textureFileName = other.textureFileName;
+		mirrorOnWall = other.mirrorOnWall;
+		addMirrorToImportanceSampling = other.addMirrorToImportanceSampling;
+		addSmallObjectToImportanceSampling = other.addSmallObjectToImportanceSampling;
+		boxContent = other.boxContent;
+		objFileName = other.objFileName;
+		scale = other.scale;
+		rotateX = other.rotateX;
+		rotateY = other.rotateY;
+		rotateZ = other.rotateZ;
+		positionX = other.positionX;
+		positionY = other.positionY;
+		positionZ = other.positionZ;
+		objMaterial = other.objMaterial;
+		depthOfFieldOther = other.depthOfFieldOther;
+		localIlluminationOther = other.localIlluminationOther;
+		skyOther = other.skyOther;
+		skyBoxDirNameOther = other.skyBoxDirNameOther;
+		floorOther = other.floorOther;
+		objFileNameOther = other.objFileNameOther;
+		scaleOther = other.scaleOther;
+		rotateXOther = other.rotateXOther;
+		rotateYOther = other.rotateYOther;
+		rotateZOther = other.rotateZOther;
+		positionXOther = other.positionXOther;
+		positionYOther = other.positionYOther;
+		positionZOther = other.positionZOther;
+		objMaterialOther = other.objMaterialOther;
+
+		m_fileconfig = nullptr;
+
+		return *this;
+	}
+
+
 	~Options();
 
 	void Load();
