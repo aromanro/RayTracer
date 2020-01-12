@@ -45,6 +45,7 @@ void Options::Close()
 
 void Options::Load()
 {
+	Open();
 	wxConfigBase *conf=wxConfigBase::Get(false);
 	if (conf)
 	{
@@ -92,10 +93,12 @@ void Options::Load()
 		positionZOther = conf->ReadDouble("/positionZOther", 0.);
 		objMaterialOther = conf->ReadLong("/objMaterialOther", 0);
 	}
+	Close();
 }
 
 void Options::Save()
 {
+	Open();
 	wxConfigBase *conf=wxConfigBase::Get(false);
 	if (conf)
 	{
@@ -146,4 +149,5 @@ void Options::Save()
 
 	if (m_fileconfig)
 		m_fileconfig->Flush();
+	Close();
 }

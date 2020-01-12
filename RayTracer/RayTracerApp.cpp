@@ -11,7 +11,6 @@ bool RayTracerApp::OnInit()
 
 	wxInitAllImageHandlers();
 
-	options.Open();
 	options.Load();
 
 	frame = new RayTracerFrame("RayTracer", wxPoint(50, 50), wxSize(1024, 800));
@@ -22,7 +21,5 @@ bool RayTracerApp::OnInit()
 
 int RayTracerApp::OnExit()
 {
-	options.Close();
-
 	return wxApp::OnExit();
 }

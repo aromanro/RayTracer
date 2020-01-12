@@ -110,9 +110,6 @@ public:
 	void Load();
 	void Save();
 
-	void Open();
-	void Close();
-
 
 	// general options
 	int nrThreads;
@@ -175,6 +172,9 @@ public:
 	int objMaterialOther; // 0 - original, 1 - make metal, 2 - make transparent
 
 protected:
+	void Open();
+	void Close();
+
 	wxFileConfig *m_fileconfig;
 };
 
