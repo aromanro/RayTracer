@@ -4,6 +4,7 @@
 
 namespace Materials
 {
+	const double epsilon = 1E-5;
 
 	Material::Material(const std::shared_ptr<Textures::Texture>& texture)
 		: albedo(texture)
@@ -35,7 +36,7 @@ namespace Materials
 		if (fuzzy) reflected += fuzzy * random.getRandomInUnitSphere();
 
 		scatterInfo.isSpecular = true;
-		scatterInfo.specularRay = Ray(info.position + 1E-5 * normal, reflected);
+		scatterInfo.specularRay = Ray(info.position + epsilon * normal, reflected);
 		scatterInfo.atten = albedo->Value(info.u, info.v, info.position);
 		
 		return info.normal * reflected > 0;
@@ -85,12 +86,12 @@ namespace Materials
 			Vector3D<double> reflected = Reflect(incidentRay.getDirection(), outNormal);
 			if (fuzzy) reflected += fuzzy * random.getRandomInUnitSphere();
 
-			scatterInfo.specularRay = Ray(info.position + 1E-5 * outNormal, reflected);
+			scatterInfo.specularRay = Ray(info.position + epsilon * outNormal, reflected);
 		}
 		else
 		{
 			if (fuzzy) refracted += fuzzy * random.getRandomInUnitSphere();
-			scatterInfo.specularRay = Ray(info.position - 1E-5 * outNormal, refracted);
+			scatterInfo.specularRay = Ray(info.position - epsilon * outNormal, refracted);
 		}
 
 		return true;
@@ -124,7 +125,7 @@ namespace Materials
 			{
 				dir = scatterInfo.pdf->Generate(random, &scatterInfo);
 			}
-			scatterInfo.specularRay = Ray(info.position + 1E-5 * info.normal, dir);
+			scatterInfo.specularRay = Ray(info.position + epsilon * info.normal, dir);
 		}
 
 		return true;
