@@ -60,6 +60,7 @@ void Options::Load()
 		localIllumination = conf->ReadBool("/localIllumination", true);
 		sky = conf->ReadLong("/sky", 0);
 		skyBoxDirName = conf->Read("/skyBox", "");
+		skySphereFileName = conf->Read("/skySphere", "");
 		textureFileName = conf->Read("/textureSphere", "");
 
 		// Cornell Box
@@ -83,6 +84,7 @@ void Options::Load()
 		skyOther = conf->ReadLong("/skyOther", 0);
 		floorOther = conf->ReadBool("/floorOther", false);
 		skyBoxDirNameOther = conf->Read("/skyBoxOther", "");
+		skySphereFileNameOther = conf->Read("/skySphereOther", "");
 		objFileNameOther = conf->Read("/objFileOther", "");
 		scaleOther = conf->ReadDouble("/scaleOther", 1.);
 		rotateXOther = conf->ReadLong("/rotateXOther", 0);
@@ -113,6 +115,7 @@ void Options::Save()
 		conf->Write("/localIllumination", localIllumination);
 		conf->Write("/sky", static_cast<long int>(sky));
 		conf->Write("/skyBox", skyBoxDirName);
+		conf->Write("/skySphere", skySphereFileName);
 		conf->Write("/textureSphere", textureFileName);
 
 		// Cornell Box
@@ -135,6 +138,7 @@ void Options::Save()
 		conf->Write("/localIlluminationOther", localIlluminationOther);
 		conf->Write("/skyOther", static_cast<long int>(skyOther));
 		conf->Write("/skyBoxOther", skyBoxDirNameOther);
+		conf->Write("/skySphereOther", skySphereFileNameOther);
 		conf->Write("/floorOther", floorOther);
 		conf->Write("/objFileOther", objFileNameOther);
 		conf->Write("/scaleOther", scaleOther);

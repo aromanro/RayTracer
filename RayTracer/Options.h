@@ -29,6 +29,7 @@ public:
 		localIllumination(other.localIllumination),
 		sky(other.sky),
 		skyBoxDirName(other.skyBoxDirName),
+		skySphereFileName(other.skySphereFileName),
 		textureFileName(other.textureFileName),
 		mirrorOnWall(other.mirrorOnWall),
 		addMirrorToImportanceSampling(other.addMirrorToImportanceSampling),
@@ -47,6 +48,7 @@ public:
 		localIlluminationOther(other.localIlluminationOther),
 		skyOther(other.skyOther),
 		skyBoxDirNameOther(other.skyBoxDirNameOther),
+		skySphereFileNameOther(other.skySphereFileNameOther),
 		floorOther(other.floorOther),
 		objFileNameOther(other.objFileNameOther),
 		scaleOther(other.scaleOther),
@@ -72,6 +74,7 @@ public:
 		localIllumination = other.localIllumination;
 		sky = other.sky;
 		skyBoxDirName = other.skyBoxDirName;
+		skySphereFileName = other.skySphereFileName;
 		textureFileName = other.textureFileName;
 		mirrorOnWall = other.mirrorOnWall;
 		addMirrorToImportanceSampling = other.addMirrorToImportanceSampling;
@@ -89,6 +92,7 @@ public:
 		depthOfFieldOther = other.depthOfFieldOther;
 		localIlluminationOther = other.localIlluminationOther;
 		skyOther = other.skyOther;
+		skySphereFileNameOther = other.skySphereFileNameOther;
 		skyBoxDirNameOther = other.skyBoxDirNameOther;
 		floorOther = other.floorOther;
 		objFileNameOther = other.objFileNameOther;
@@ -125,6 +129,7 @@ public:
 	bool localIllumination;
 	int sky; // 0 - blue, 1 - black, 2 - skybox
 	wxString skyBoxDirName;
+	wxString skySphereFileName;
 	wxString textureFileName;
 
 
@@ -154,6 +159,7 @@ public:
 	bool localIlluminationOther;
 	int skyOther; // 0 - blue, 1 - black, 2 - skybox
 	wxString skyBoxDirNameOther;
+	wxString skySphereFileNameOther;
 	bool floorOther;
 
 	wxString objFileNameOther;
