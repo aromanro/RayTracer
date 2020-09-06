@@ -41,7 +41,7 @@ namespace Objects {
 			{
 				info.distance = dist;
 				info.position = ray(dist);
-				info.normal = (info.position - center).Normalize();
+				info.normal = getNormal(info);
 				info.material = material.get();
 				info.object = this;
 
@@ -55,7 +55,7 @@ namespace Objects {
 			{
 				info.distance = dist;
 				info.position = ray(dist);
-				info.normal = (info.position - center).Normalize();
+				info.normal = getNormal(info);
 				info.material = material.get();
 				info.object = this;
 

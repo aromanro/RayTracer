@@ -137,6 +137,18 @@ namespace Objects {
 				useInterpolation = false;
 		}
 
+		virtual const Vector3D<double> getNormal(const PointInfo& info) const override
+		{
+			if (threeNormals)
+			{
+				const double w = 1. - info.u - info.v;
+				
+				return (w * normal1 + info.u * normal2 + info.v * normal3).Normalize();
+			}
+			
+			return normal;
+		}
+
 		Vector3D<double> A, B, C;
 
 		double U1, V1, U2, V2, U3, V3;

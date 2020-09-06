@@ -161,6 +161,13 @@ namespace Objects {
 			return boundary->BoundingBox(box);
 		}
 
+		virtual const Vector3D<double> getNormal(const PointInfo& info) const override
+		{
+			static const Vector3D<double> normal(0, 0, 1);
+
+			return normal;
+		}
+
 		virtual bool Hit(const Ray& ray, PointInfo& info, double minr, double maxr, unsigned rcount, Random& random) const override
 		{
 			if (!boundary) return false;
@@ -187,7 +194,7 @@ namespace Objects {
 					if (hitDist < distInside)
 					{
 						info.distance = info1.distance + hitDist;
-						info.normal = Vector3D<double>(0, 0, 1);
+						info.normal = getNormal(info);
 						info.position = ray(info.distance);
 						info.material = isotropic.get();
 						info.object = this;

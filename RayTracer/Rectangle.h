@@ -26,6 +26,13 @@ namespace Objects
 			ConstructBoundingBox();
 		};
 
+		virtual const Vector3D<double> getNormal(const PointInfo& info) const override
+		{
+			static const Vector3D<double> normal(0, 0, 1);
+
+			return normal;
+		}
+
 		virtual bool Hit(const Ray& ray, PointInfo& info, double minr, double maxr, unsigned rcount, Random& random) const override
 		{
 			const double t = (m_z - ray.getOrigin().Z) * ray.getInvDir().Z;
@@ -36,13 +43,11 @@ namespace Objects
 
 			if (x < m_x0 || x > m_x1 || y < m_y0 || y > m_y1) return false;
 
-			static const Vector3D<double> normal(0, 0, 1);
-
 			info.distance = t;
 			info.position = ray(t);
 			info.material = material.get();
 			info.object = this;
-			info.normal = normal;
+			info.normal = getNormal(info);
 
 			info.u = (x - m_x0) * invdim1;
 			info.v = (y - m_y0) * invdim2;
@@ -132,6 +137,13 @@ namespace Objects
 			ConstructBoundingBox();
 		};
 
+		virtual const Vector3D<double> getNormal(const PointInfo& info) const override
+		{
+			static const Vector3D<double> normal(0, 1, 0);
+
+			return normal;
+		}
+
 		virtual bool Hit(const Ray& ray, PointInfo& info, double minr, double maxr, unsigned rcount, Random& random) const override
 		{
 			const double t = (m_y - ray.getOrigin().Y) * ray.getInvDir().Y;
@@ -142,14 +154,11 @@ namespace Objects
 
 			if (x < m_x0 || x > m_x1 || z < m_z0 || z > m_z1) return false;
 
-
-			static const Vector3D<double> normal(0, 1, 0);
-
 			info.distance = t;
 			info.position = ray(t);
 			info.material = material.get();
 			info.object = this;
-			info.normal = normal;
+			info.normal = getNormal(info);
 
 			info.u = (x - m_x0) * invdim1;
 			info.v = (z - m_z0) * invdim2;
@@ -239,6 +248,13 @@ namespace Objects
 			ConstructBoundingBox();
 		};
 
+		virtual const Vector3D<double> getNormal(const PointInfo& info) const override
+		{
+			static const Vector3D<double> normal(1, 0, 0);
+
+			return normal;
+		}
+
 		virtual bool Hit(const Ray& ray, PointInfo& info, double minr, double maxr, unsigned rcount, Random& random) const override
 		{
 			const double t = (m_x - ray.getOrigin().X) * ray.getInvDir().X;
@@ -250,13 +266,11 @@ namespace Objects
 			if (y < m_y0 || y > m_y1 || z < m_z0 || z > m_z1) return false;
 
 
-			static const Vector3D<double> normal(1, 0, 0);
-
 			info.distance = t;
 			info.position = ray(t);
 			info.material = material.get();
 			info.object = this;
-			info.normal = normal;
+			info.normal = getNormal(info);
 
 			info.u = (y - m_y0) * invdim1;
 			info.v = (z - m_z0) * invdim2;
@@ -556,5 +570,17 @@ namespace Objects
 		Vector3D<double> m_p1, m_p2;
 	};
 
+
+
+	// TODO: not implemented yet, implement it!
+	// use ContantMedium for it
+	// the 'inside' will be actually outside, so there will be no Beer-Lambert
+	// but it can be implemented if needed
+
+	class SkySphere : public InvertedSphere
+	{
+	public:
+
+	};
 
 }

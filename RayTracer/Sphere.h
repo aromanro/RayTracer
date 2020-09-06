@@ -99,6 +99,11 @@ namespace Objects
 			return onb.LocalToGlobal(RandomToSphere(radius, d2, rnd));
 		}
 
+		virtual const Vector3D<double> getNormal(const PointInfo& info) const override
+		{
+			return (info.position - center).Normalize();
+		}
+
 	protected:
 		static inline Vector3D<double> RandomToSphere(double Radius, double dist2, Random& rnd)
 		{
@@ -121,6 +126,16 @@ namespace Objects
 		double R2;
 
 		double startTheta, startPhi;
+	};
+
+
+	class InvertedSphere : public Sphere
+	{
+	public:
+		virtual const Vector3D<double> getNormal(const PointInfo& info) const override
+		{
+			return -getNormal(info);
+		}
 	};
 
 }

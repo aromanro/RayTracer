@@ -65,12 +65,7 @@ namespace Objects {
 		info.material = material.get();
 		info.object = this;
 		
-		if (threeNormals)
-		{
-			const double w = 1. - u - v;
-			info.normal = (w * normal1 + u * normal2 + v * normal3).Normalize();
-		}
-		else info.normal = normal;
+		info.normal = getNormal(info);
 
 		if (useInterpolation)
 			std::tie(info.u, info.v) = Interpolate(info, std::make_pair(U1, V1), std::make_pair(U2, V2), std::make_pair(U3, V3));
