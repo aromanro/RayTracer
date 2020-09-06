@@ -484,6 +484,7 @@ void FillOtherScene(Scene& scene, const Options& options)
 		}
 	}
 
+
 	if (!options.objFileNameOther.empty() && wxFileName::Exists(options.objFileNameOther))
 	{
 		ObjLoader loader;

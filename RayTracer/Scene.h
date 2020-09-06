@@ -22,6 +22,12 @@ public:
 			if (skyBox->Hit(ray, info, 1E-5, DBL_MAX, 1, random))
 				return info.material->Emitted(info);	
 		}
+		else if (skySphere)
+		{
+			PointInfo info;
+			if (skySphere->Hit(ray, info, 1E-5, DBL_MAX, 1, random))
+				return info.material->Emitted(info);
+		}
 		else if (blackSky) return Color(0, 0, 0); // black sky
 		
 		const Vector3D<double>& dir = ray.getDirection();
@@ -115,6 +121,7 @@ public:
 
 
 	std::shared_ptr<Objects::SkyBox> skyBox;
+	std::shared_ptr<Objects::SkySphere> skySphere;
 
 	bool blackSky;
 

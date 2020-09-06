@@ -141,7 +141,7 @@ namespace Objects
 
 		virtual const Vector3D<double> getNormal(const PointInfo& info) const override
 		{
-			return -getNormal(info);
+			return -Sphere::getNormal(info);
 		}
 	};
 
