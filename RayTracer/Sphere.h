@@ -157,7 +157,7 @@ namespace Objects
 	{
 	public:
 		SkySphere(const Vector3D<double>& position, double R)
-			: InvertedSphere(position, R, std::make_shared<Materials::Isotropic>())
+			: InvertedSphere(position, R, std::make_shared<Materials::Lambertian>())
 		{
 		}
 
@@ -167,7 +167,7 @@ namespace Objects
 			{
 				auto tf = std::make_shared<Textures::ImageTexture>(texName);
 
-				SetMaterial(std::make_shared<Materials::Isotropic>(tf));
+				SetMaterial(std::make_shared<Materials::Lambertian>(tf));
 			}
 			catch (...)
 			{

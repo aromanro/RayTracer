@@ -484,6 +484,14 @@ void FillOtherScene(Scene& scene, const Options& options)
 		}
 	}
 
+	// for testing
+	/*
+	auto skysphere = std::make_shared<Objects::SkySphere>(Vector3D<double>(0, 0, 0), 10000);
+	if (skysphere->Load("C:\\Path to texture\\texture_file.png"))
+	{
+		scene.skySphere = skysphere;
+	}
+	*/
 
 	if (!options.objFileNameOther.empty() && wxFileName::Exists(options.objFileNameOther))
 	{
