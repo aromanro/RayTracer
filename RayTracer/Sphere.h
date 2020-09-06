@@ -5,6 +5,8 @@
 
 #include "VisibleObject.h"
 #include "OrthoNormalBasis.h"
+#include "Material.h"
+#include "ImageTexture.h"
 
 namespace Materials {
 	class Material;
@@ -132,10 +134,47 @@ namespace Objects
 	class InvertedSphere : public Sphere
 	{
 	public:
+		InvertedSphere(const Vector3D<double>& position, double R, const std::shared_ptr<Materials::Material>& m)
+			: Sphere(position, R, m)
+		{
+		}
+
 		virtual const Vector3D<double> getNormal(const PointInfo& info) const override
 		{
 			return -getNormal(info);
 		}
 	};
 
+
+
+
+	// TODO: not tested yet, probably does not work!
+	// use ContantMedium for it
+	// the 'inside' will be actually outside, so there will be no Beer-Lambert
+	// but it can be implemented if needed
+
+	class SkySphere : public InvertedSphere
+	{
+	public:
+		SkySphere(const Vector3D<double>& position, double R)
+			: InvertedSphere(position, R, std::make_shared<Materials::Isotropic>())
+		{
+		}
+
+		bool Load(const std::string& texName)
+		{
+			try
+			{
+				auto tf = std::make_shared<Textures::ImageTexture>(texName);
+
+				SetMaterial(std::make_shared<Materials::Isotropic>(tf));
+			}
+			catch (...)
+			{
+				return false;
+			}
+
+			return true;
+		}
+	};
 }

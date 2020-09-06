@@ -570,17 +570,4 @@ namespace Objects
 		Vector3D<double> m_p1, m_p2;
 	};
 
-
-
-	// TODO: not implemented yet, implement it!
-	// use ContantMedium for it
-	// the 'inside' will be actually outside, so there will be no Beer-Lambert
-	// but it can be implemented if needed
-
-	class SkySphere : public InvertedSphere
-	{
-	public:
-
-	};
-
 }
