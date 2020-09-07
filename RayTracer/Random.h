@@ -37,6 +37,20 @@ public:
 		return getRandomInUnitSphere().Normalize();
 	}
 
+	inline Vector3D<double> getRandomInHemisphere(const Vector3D<double>& normal) 
+	{
+		Vector3D<double> res = getRandomInUnitSphere();
+		if (res * normal > 0.0) 
+			return -res;
+
+		return res;
+	}
+
+	inline Vector3D<double> getRandomOnHemisphere(const Vector3D<double>& normal)
+	{
+		return getRandomInHemisphere(normal).Normalize();
+	}
+
 	inline Vector3D<double> getRandomCosineDirection()
 	{
 		const double r1 = getZeroOne();
