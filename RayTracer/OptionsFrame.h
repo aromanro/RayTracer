@@ -35,6 +35,8 @@ protected:
 	void OnClose(wxCloseEvent& event);
 	void OnSkyboxChoose(wxCommandEvent& event);
 	void OnSkyboxClear(wxCommandEvent& event);
+	void OnSkySphereChoose(wxCommandEvent& event);
+	void OnSkySphereClear(wxCommandEvent& event);
 	void OnSphereTexChoose(wxCommandEvent& event);
 	void OnSphereTexClear(wxCommandEvent& event);
 	void OnObjectChoose(wxCommandEvent& event);
@@ -42,6 +44,8 @@ protected:
 	void OnChoiceContent(wxCommandEvent& event);
 	void OnSkyboxChooseOther(wxCommandEvent& event);
 	void OnSkyboxClearOther(wxCommandEvent& event);
+	void OnSkySphereChooseOther(wxCommandEvent& event);
+	void OnSkySphereClearOther(wxCommandEvent& event);
 	void OnObjectChooseOther(wxCommandEvent& event);
 	void OnObjectClearOther(wxCommandEvent& event);
 

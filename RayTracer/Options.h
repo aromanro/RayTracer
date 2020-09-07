@@ -127,7 +127,7 @@ public:
 	// 'one weekend' options
 	bool depthOfField;
 	bool localIllumination;
-	int sky; // 0 - blue, 1 - black, 2 - skybox
+	int sky; // 0 - blue, 1 - black, 2 - skybox, 3 - skysphere
 	wxString skyBoxDirName;
 	wxString skySphereFileName;
 	wxString textureFileName;
@@ -157,7 +157,7 @@ public:
 	// Other
 	bool depthOfFieldOther;
 	bool localIlluminationOther;
-	int skyOther; // 0 - blue, 1 - black, 2 - skybox
+	int skyOther; // 0 - blue, 1 - black, 2 - skybox, 3 - skysphere
 	wxString skyBoxDirNameOther;
 	wxString skySphereFileNameOther;
 	bool floorOther;

@@ -27,6 +27,10 @@
 #define ID_SPHERETEX_CLEAR 213
 #define ID_SPHERETEX 214
 
+#define ID_SKYSPHERE_CHOOSE 248
+#define ID_SKYSPHERE_CLEAR 249
+#define ID_SKYSPHERE 250
+
 #define ID_MIRROR 215
 #define ID_MIRROR_SAMPLING 216
 #define ID_SMALLOBJ_SAMPLING 217
@@ -51,6 +55,10 @@
 #define ID_SKYBOXDIR_CLEAR_OTHER 234
 #define ID_SKYBOXDIR_OTHER 235
 #define ID_FLOOR_OTHER 236
+
+#define ID_SKYSPHERE_CHOOSE_OTHER 251
+#define ID_SKYSPHERE_CLEAR_OTHER 252
+#define ID_SKYSPHERE_OTHER 253
 
 
 #define ID_OBJECT_CHOOSE_OTHER 237
@@ -78,12 +86,16 @@ EVT_BUTTON(ID_SKYBOXDIR_CHOOSE, OptionsFrame::OnSkyboxChoose)
 EVT_BUTTON(ID_SKYBOXDIR_CLEAR, OptionsFrame::OnSkyboxClear) 
 EVT_BUTTON(ID_SPHERETEX_CHOOSE, OptionsFrame::OnSphereTexChoose) 
 EVT_BUTTON(ID_SPHERETEX_CLEAR, OptionsFrame::OnSphereTexClear) 
-EVT_BUTTON(ID_OBJECT_CHOOSE, OptionsFrame::OnObjectChoose) 
+EVT_BUTTON(ID_SKYSPHERE_CHOOSE, OptionsFrame::OnSkySphereChoose)
+EVT_BUTTON(ID_SKYSPHERE_CLEAR, OptionsFrame::OnSkySphereClear)
+EVT_BUTTON(ID_OBJECT_CHOOSE, OptionsFrame::OnObjectChoose)
 EVT_BUTTON(ID_OBJECT_CLEAR, OptionsFrame::OnObjectClear) 
 EVT_CHOICE(ID_CONTENT, OptionsFrame::OnChoiceContent)
 EVT_BUTTON(ID_SKYBOXDIR_CHOOSE_OTHER, OptionsFrame::OnSkyboxChooseOther) 
 EVT_BUTTON(ID_SKYBOXDIR_CLEAR_OTHER, OptionsFrame::OnSkyboxClearOther) 
-EVT_BUTTON(ID_OBJECT_CHOOSE_OTHER, OptionsFrame::OnObjectChooseOther) 
+EVT_BUTTON(ID_SKYSPHERE_CHOOSE_OTHER, OptionsFrame::OnSkySphereChooseOther)
+EVT_BUTTON(ID_SKYSPHERE_CLEAR_OTHER, OptionsFrame::OnSkySphereClearOther)
+EVT_BUTTON(ID_OBJECT_CHOOSE_OTHER, OptionsFrame::OnObjectChooseOther)
 EVT_BUTTON(ID_OBJECT_CLEAR_OTHER, OptionsFrame::OnObjectClearOther) 
 wxEND_EVENT_TABLE()
 
@@ -256,9 +268,9 @@ wxPanel* OptionsFrame::CreateInOneWeekendSettingsPage(wxBookCtrlBase* parent)
 	wxStaticText* label = new wxStaticText(panel, wxID_STATIC, "Sky:", wxDefaultPosition, wxSize(50, -1), wxALIGN_RIGHT);
 	itemSizer->Add(label, 0, wxALIGN_RIGHT|wxALIGN_CENTER_VERTICAL|wxALL, 5);
 
-	const wxString strings[3] = { "Blue", "Black", "Sky Box" };
+	const wxString strings[] = { "Blue", "Black", "Sky Box", "Sky Sphere" };
 
-	wxChoice* skyChoice = new wxChoice(panel, ID_SKY, wxDefaultPosition, wxSize(60, -1), 3, strings, 0);
+	wxChoice* skyChoice = new wxChoice(panel, ID_SKY, wxDefaultPosition, wxSize(60, -1), sizeof(strings) / sizeof(wxString), strings, 0);
 	skyChoice->SetSelection(options.sky);
 	itemSizer->Add(skyChoice, 1, wxALIGN_RIGHT|wxALIGN_CENTER_VERTICAL|wxALL | wxGROW, 5);
 
@@ -284,6 +296,25 @@ wxPanel* OptionsFrame::CreateInOneWeekendSettingsPage(wxBookCtrlBase* parent)
 	item0->Add(itemSizer, 1, wxALL | wxGROW, 0);
 
 
+	itemSizer = new wxBoxSizer(wxHORIZONTAL);
+
+	label = new wxStaticText(panel, wxID_STATIC, "Sky Sphere:", wxDefaultPosition, wxSize(50, -1), wxALIGN_RIGHT);
+	itemSizer->Add(label, 0, wxALIGN_RIGHT | wxALIGN_CENTER_VERTICAL | wxALL, 5);
+
+	button = new wxButton(panel, ID_SKYSPHERE_CHOOSE, "Choose", wxDefaultPosition, wxSize(70, -1));
+	itemSizer->Add(button, 0, wxALIGN_RIGHT | wxALIGN_CENTER_VERTICAL | wxALL, 5);
+
+	button = new wxButton(panel, ID_SKYSPHERE_CLEAR, "Clear", wxDefaultPosition, wxSize(70, -1));
+	itemSizer->Add(button, 0, wxALIGN_RIGHT | wxALIGN_CENTER_VERTICAL | wxALL, 5);
+
+
+	wxTextCtrl* editSkySphere = new wxTextCtrl(panel, ID_SKYSPHERE, options.skySphereFileName, wxDefaultPosition, wxSize(100, -1), wxTE_READONLY | wxALIGN_LEFT);
+
+	itemSizer->Add(editSkySphere, 1, wxALIGN_RIGHT | wxALIGN_CENTER_VERTICAL | wxALL | wxGROW, 5);
+
+	item0->Add(itemSizer, 1, wxALL | wxGROW, 0);
+
+
 
 	itemSizer = new wxBoxSizer(wxHORIZONTAL);
 
@@ -297,7 +328,7 @@ wxPanel* OptionsFrame::CreateInOneWeekendSettingsPage(wxBookCtrlBase* parent)
 	itemSizer->Add(button, 0, wxALIGN_RIGHT|wxALIGN_CENTER_VERTICAL|wxALL, 5);
 
 
-	wxTextCtrl* editTexture = new wxTextCtrl(panel, ID_SPHERETEX, options.skyBoxDirName, wxDefaultPosition, wxSize(100, -1), wxTE_READONLY | wxALIGN_LEFT);
+	wxTextCtrl* editTexture = new wxTextCtrl(panel, ID_SPHERETEX, options.textureFileName, wxDefaultPosition, wxSize(100, -1), wxTE_READONLY | wxALIGN_LEFT);
 	
 	itemSizer->Add(editTexture, 1, wxALIGN_RIGHT|wxALIGN_CENTER_VERTICAL|wxALL | wxGROW, 5);
 
@@ -316,6 +347,7 @@ wxPanel* OptionsFrame::CreateInOneWeekendSettingsPage(wxBookCtrlBase* parent)
 	skyChoice->SetValidator(wxGenericValidator(&options.sky));
 
 	editSkyBox->SetValidator(wxGenericValidator(&options.skyBoxDirName));
+	editSkySphere->SetValidator(wxGenericValidator(&options.skySphereFileName));
 	editTexture->SetValidator(wxGenericValidator(&options.textureFileName));
 
 	topSizer->Add(item0, 0, wxALL | wxGROW, 5);
@@ -350,6 +382,32 @@ void OptionsFrame::OnSkyboxClear(wxCommandEvent& /*event*/)
 	options.skyBoxDirName.Clear();
 	TransferDataToWindow();
 }
+
+void OptionsFrame::OnSkySphereChoose(wxCommandEvent& /*event*/)
+{
+	TransferDataFromWindow();
+	wxFileDialog openFileDialog(this, _("Open File As _?"), wxEmptyString, wxEmptyString, _("Jpeg Files (*.jpg)|*.jpg|PNG files (*.png)|*.png|TIF files (*.tif)|*.tif|TGA files (*.tga)|*.tga|All files (*.*)|*.*"), wxFD_OPEN | wxFD_FILE_MUST_EXIST);
+
+	if (openFileDialog.ShowModal() == wxID_OK)
+	{
+		const wxString path = openFileDialog.GetPath();
+		const wxFileName fileName(path);
+
+		if (fileName.Exists())
+		{
+			options.skySphereFileName = path;
+			TransferDataToWindow();
+		}
+	}
+}
+
+void OptionsFrame::OnSkySphereClear(wxCommandEvent& /*event*/)
+{
+	TransferDataFromWindow();
+	options.skySphereFileName.Clear();
+	TransferDataToWindow();
+}
+
 
 void OptionsFrame::OnSphereTexChoose(wxCommandEvent& /*event*/)
 {
@@ -645,9 +703,9 @@ wxPanel* OptionsFrame::CreateOtherSettingsPage(wxBookCtrlBase* parent)
 	wxStaticText* label = new wxStaticText(panel, wxID_STATIC, "Sky:", wxDefaultPosition, wxSize(50, -1), wxALIGN_RIGHT);
 	itemSizer->Add(label, 0, wxALIGN_RIGHT|wxALIGN_CENTER_VERTICAL|wxALL, 5);
 
-	const wxString strings[3] = { "Blue", "Black", "Sky Box" };
+	const wxString strings[] = { "Blue", "Black", "Sky Box", "Sky Sphere" };
 
-	wxChoice* skyChoice = new wxChoice(panel, ID_SKY, wxDefaultPosition, wxSize(60, -1), 3, strings, 0);
+	wxChoice* skyChoice = new wxChoice(panel, ID_SKY, wxDefaultPosition, wxSize(60, -1), sizeof(strings) / sizeof(wxString), strings, 0);
 	skyChoice->SetSelection(options.skyOther);
 	itemSizer->Add(skyChoice, 1, wxALIGN_RIGHT|wxALIGN_CENTER_VERTICAL|wxALL | wxGROW, 5);
 
@@ -673,6 +731,23 @@ wxPanel* OptionsFrame::CreateOtherSettingsPage(wxBookCtrlBase* parent)
 	item0->Add(itemSizer, 1, wxALL | wxGROW, 0);
 
 
+	itemSizer = new wxBoxSizer(wxHORIZONTAL);
+
+	label = new wxStaticText(panel, wxID_STATIC, "Sky Sphere:", wxDefaultPosition, wxSize(50, -1), wxALIGN_RIGHT);
+	itemSizer->Add(label, 0, wxALIGN_RIGHT | wxALIGN_CENTER_VERTICAL | wxALL, 5);
+
+	button = new wxButton(panel, ID_SKYSPHERE_CHOOSE_OTHER, "Choose", wxDefaultPosition, wxSize(70, -1));
+	itemSizer->Add(button, 0, wxALIGN_RIGHT | wxALIGN_CENTER_VERTICAL | wxALL, 5);
+
+	button = new wxButton(panel, ID_SKYSPHERE_CLEAR_OTHER, "Clear", wxDefaultPosition, wxSize(70, -1));
+	itemSizer->Add(button, 0, wxALIGN_RIGHT | wxALIGN_CENTER_VERTICAL | wxALL, 5);
+
+
+	wxTextCtrl* editSkySphere = new wxTextCtrl(panel, ID_SKYSPHERE_OTHER, options.skySphereFileNameOther, wxDefaultPosition, wxSize(100, -1), wxTE_READONLY | wxALIGN_LEFT);
+
+	itemSizer->Add(editSkySphere, 1, wxALIGN_RIGHT | wxALIGN_CENTER_VERTICAL | wxALL | wxGROW, 5);
+
+	item0->Add(itemSizer, 1, wxALL | wxGROW, 0);
 
 
 
@@ -783,7 +858,9 @@ wxPanel* OptionsFrame::CreateOtherSettingsPage(wxBookCtrlBase* parent)
 
 	skyChoice->SetValidator(wxGenericValidator(&options.skyOther));
 
+
 	editSkyBox->SetValidator(wxGenericValidator(&options.skyBoxDirNameOther));
+	editSkySphere->SetValidator(wxGenericValidator(&options.skySphereFileNameOther));
 
 	checkBoxFloor->SetValidator(wxGenericValidator(&options.floorOther));
 
@@ -858,6 +935,31 @@ void OptionsFrame::OnSkyboxClearOther(wxCommandEvent& /*event*/)
 	TransferDataToWindow();
 }
 
+
+void OptionsFrame::OnSkySphereChooseOther(wxCommandEvent& /*event*/)
+{
+	TransferDataFromWindow();
+	wxFileDialog openFileDialog(this, _("Open File As _?"), wxEmptyString, wxEmptyString, _("Jpeg Files (*.jpg)|*.jpg|PNG files (*.png)|*.png|TIF files (*.tif)|*.tif|TGA files (*.tga)|*.tga|All files (*.*)|*.*"), wxFD_OPEN | wxFD_FILE_MUST_EXIST);
+
+	if (openFileDialog.ShowModal() == wxID_OK)
+	{
+		const wxString path = openFileDialog.GetPath();
+		const wxFileName fileName(path);
+
+		if (fileName.Exists())
+		{
+			options.skySphereFileNameOther = path;
+			TransferDataToWindow();
+		}
+	}
+}
+
+void OptionsFrame::OnSkySphereClearOther(wxCommandEvent& /*event*/)
+{
+	TransferDataFromWindow();
+	options.skySphereFileNameOther.Clear();
+	TransferDataToWindow();
+}
 
 void OptionsFrame::OnObjectChooseOther(wxCommandEvent& /*event*/)
 {
