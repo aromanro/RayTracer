@@ -137,7 +137,7 @@ namespace Objects {
 				useInterpolation = false;
 		}
 
-		virtual const Vector3D<double> getNormal(const PointInfo& info) const override
+		inline const Vector3D<double> getNormal(const PointInfo& info) const
 		{
 			if (threeNormals)
 			{

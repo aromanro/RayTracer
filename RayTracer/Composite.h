@@ -161,7 +161,7 @@ namespace Objects {
 			return boundary->BoundingBox(box);
 		}
 
-		virtual const Vector3D<double> getNormal(const PointInfo& info) const override
+		inline const Vector3D<double> getNormal(const PointInfo& info) const
 		{
 			static const Vector3D<double> normal(0, 0, 1);
 

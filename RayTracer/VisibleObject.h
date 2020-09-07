@@ -90,8 +90,6 @@ namespace Objects {
 
 			return true;
 		}
-
-		virtual const Vector3D<double> getNormal(const PointInfo& info) const = 0;
 	};
 
 }

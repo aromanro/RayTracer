@@ -101,7 +101,7 @@ namespace Objects
 			return onb.LocalToGlobal(RandomToSphere(radius, d2, rnd));
 		}
 
-		virtual const Vector3D<double> getNormal(const PointInfo& info) const override
+		inline const Vector3D<double> getNormal(const PointInfo& info) const
 		{
 			return (info.position - center).Normalize();
 		}
@@ -139,7 +139,7 @@ namespace Objects
 		{
 		}
 
-		virtual const Vector3D<double> getNormal(const PointInfo& info) const override
+		inline const Vector3D<double> getNormal(const PointInfo& info) const
 		{
 			return -Sphere::getNormal(info);
 		}

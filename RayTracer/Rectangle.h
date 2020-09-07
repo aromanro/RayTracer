@@ -26,7 +26,7 @@ namespace Objects
 			ConstructBoundingBox();
 		};
 
-		virtual const Vector3D<double> getNormal(const PointInfo& info) const override
+		inline const Vector3D<double> getNormal(const PointInfo& info) const
 		{
 			static const Vector3D<double> normal(0, 0, 1);
 
@@ -137,7 +137,7 @@ namespace Objects
 			ConstructBoundingBox();
 		};
 
-		virtual const Vector3D<double> getNormal(const PointInfo& info) const override
+		inline const Vector3D<double> getNormal(const PointInfo& info) const
 		{
 			static const Vector3D<double> normal(0, 1, 0);
 
@@ -248,7 +248,7 @@ namespace Objects
 			ConstructBoundingBox();
 		};
 
-		virtual const Vector3D<double> getNormal(const PointInfo& info) const override
+		inline const Vector3D<double> getNormal(const PointInfo& info) const
 		{
 			static const Vector3D<double> normal(1, 0, 0);
 
