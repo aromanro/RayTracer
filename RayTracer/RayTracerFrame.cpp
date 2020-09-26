@@ -33,6 +33,7 @@
 #include "Material.h"
 #include "Scene.h"
 #include "ImageTexture.h"
+#include "Perlin.h"
 #include "Rectangle.h"
 #include "Actions.h"
 
@@ -57,10 +58,15 @@ void FillRandomScene(Scene& scene, const Options& options)
 {
 	Random random;
 
-	auto checker = std::make_shared<Materials::Lambertian>(std::dynamic_pointer_cast<Textures::Texture>(std::make_shared<Textures::CheckerTexture>(
-		std::dynamic_pointer_cast<Textures::Texture>(std::make_shared<Textures::ColorTexture>(Color(0., 0.1, 0.3))),
-		std::dynamic_pointer_cast<Textures::Texture>(std::make_shared<Textures::ColorTexture>(Color(0.9, 0.9, 0.9))))));
-	scene.objects.emplace_back(std::make_shared<Objects::RectangleXZ>(-100, 100, -100, 100, 0, checker));
+	//auto floorTexture = std::make_shared<Materials::Lambertian>(std::dynamic_pointer_cast<Textures::Texture>(std::make_shared<Textures::CheckerTexture>(
+	//	std::dynamic_pointer_cast<Textures::Texture>(std::make_shared<Textures::ColorTexture>(Color(0., 0.1, 0.3))),
+	//	std::dynamic_pointer_cast<Textures::Texture>(std::make_shared<Textures::ColorTexture>(Color(0.9, 0.9, 0.9))))));
+	
+	auto floorTexture = std::make_shared<Materials::Lambertian>(std::dynamic_pointer_cast<Textures::Texture>(std::make_shared<Textures::PerlinMarbleTexture>(
+		random
+		)));
+	
+	scene.objects.emplace_back(std::make_shared<Objects::RectangleXZ>(-100, 100, -100, 100, 0, floorTexture));
 
 
 	scene.objects.emplace_back(std::make_shared<Objects::Sphere>(Vector3D<double>(0, 1, 0), 1, std::make_shared<Materials::Dielectric>(1.5)));

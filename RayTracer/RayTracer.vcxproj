@@ -172,6 +172,7 @@
     <ClInclude Include="Options.h" />
     <ClInclude Include="OptionsFrame.h" />
     <ClInclude Include="OrthoNormalBasis.h" />
+    <ClInclude Include="Perlin.h" />
     <ClInclude Include="ProbabilityDistributionFunction.h" />
     <ClInclude Include="Random.h" />
     <ClInclude Include="Ray.h" />
