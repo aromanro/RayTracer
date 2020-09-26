@@ -63,7 +63,7 @@ void FillRandomScene(Scene& scene, const Options& options)
 	//	std::dynamic_pointer_cast<Textures::Texture>(std::make_shared<Textures::ColorTexture>(Color(0.9, 0.9, 0.9))))));
 	
 	auto floorTexture = std::make_shared<Materials::Lambertian>(std::dynamic_pointer_cast<Textures::Texture>(std::make_shared<Textures::PerlinMarbleTexture>(
-		random
+		random, 512, Color(1., 1., 1.), 4.
 		)));
 	
 	scene.objects.emplace_back(std::make_shared<Objects::RectangleXZ>(-100, 100, -100, 100, 0, floorTexture));
