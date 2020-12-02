@@ -136,7 +136,7 @@ void FillRandomScene(Scene& scene, const Options& options)
 		{
 			auto skybox = std::make_shared<Objects::SkyBox>(Vector3D<double>(13. - 10000, 2. - 10000, 3. - 10000), Vector3D<double>(13. + 10000, 2. + 10000, 3. + 10000));
 			skybox->Load(frontFile, backFile, topFile, bottomFile, leftFile, rightFile);
-			scene.skyBox = skybox;
+			scene.sky = skybox;
 		}
 	}
 	else if (3 == options.sky && !options.skySphereFileName.empty() && wxFileName::Exists(options.skySphereFileName))
@@ -146,7 +146,7 @@ void FillRandomScene(Scene& scene, const Options& options)
 		auto skysphere = std::make_shared<Objects::SkySphere>(Vector3D<double>(0, 0, 0), 10000);
 		if (skysphere->Load(std::string(options.skySphereFileName.c_str())))
 		{
-			scene.skySphere = skysphere;
+			scene.sky = skysphere;
 		}
 	}
 	else if (1 == options.sky)
@@ -505,7 +505,7 @@ void FillOtherScene(Scene& scene, const Options& options)
 		{
 			auto skybox = std::make_shared<Objects::SkyBox>(Vector3D<double>(13. - 10000, 2. - 10000, 3. - 10000), Vector3D<double>(13. + 10000, 2. + 10000, 3. + 10000));
 			skybox->Load(frontFile, backFile, topFile, bottomFile, leftFile, rightFile);
-			scene.skyBox = skybox;
+			scene.sky = skybox;
 		}
 	}
 	else if (3 == options.skyOther && !options.skySphereFileNameOther.empty() && wxFileName::Exists(options.skySphereFileNameOther))
@@ -514,7 +514,7 @@ void FillOtherScene(Scene& scene, const Options& options)
 		auto skysphere = std::make_shared<Objects::SkySphere>(Vector3D<double>(0, 0, 0), 10000);
 		if (skysphere->Load(std::string(options.skySphereFileNameOther.c_str())))
 		{
-			scene.skySphere = skysphere;
+			scene.sky = skysphere;
 		}
 	}
 	else if (1 == options.skyOther)

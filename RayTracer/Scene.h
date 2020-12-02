@@ -16,17 +16,11 @@ public:
 
 	inline Color BackgroundColor(const Ray& ray, Random& random)
 	{
-		if (skyBox)
+		if (sky)
 		{
 			PointInfo info;
-			if (skyBox->Hit(ray, info, 1E-5, DBL_MAX, 1, random))
+			if (sky->Hit(ray, info, 1E-5, DBL_MAX, 1, random))
 				return info.material->Emitted(info);	
-		}
-		else if (skySphere)
-		{
-			PointInfo info;
-			if (skySphere->Hit(ray, info, 1E-5, DBL_MAX, 1, random))
-				return info.material->Emitted(info);
 		}
 		else if (blackSky) return Color(0, 0, 0); // black sky
 		
@@ -120,8 +114,7 @@ public:
 	}
 
 
-	std::shared_ptr<Objects::SkyBox> skyBox;
-	std::shared_ptr<Objects::SkySphere> skySphere;
+	std::shared_ptr<Objects::VisibleObject> sky;
 
 	bool blackSky;
 
