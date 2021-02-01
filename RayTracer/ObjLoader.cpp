@@ -465,9 +465,9 @@ bool ObjLoader::Load(const std::string& name, bool center)
 
 
 
-bool ObjLoader::IsConcaveVertex(const Polygon& polygon, const std::vector<Vector3D<double>>& vertices, int cp, double& cosine)
+bool ObjLoader::IsConcaveVertex(const Polygon& polygon, const std::vector<Vector3D<double>>& vertices, int cp, double& sine)
 {
-	cosine = 0;
+	sine = 0;
 	const int pp = (cp == 0 ? polygon.size() : cp) - 1;
 	const int np = (cp == polygon.size() - 1) ? 0 : cp + 1;
 
@@ -484,12 +484,12 @@ bool ObjLoader::IsConcaveVertex(const Polygon& polygon, const std::vector<Vector
 	const Vector3D<double> curPoint = vertices[indcp];
 	const Vector3D<double> nextPoint = vertices[indnp];
 
-	const Vector3D<double> edge1 = (curPoint - prevPoint).Normalize();
+	const Vector3D<double> edge1 = (prevPoint - curPoint).Normalize();
 	const Vector3D<double> edge2 = (nextPoint - curPoint).Normalize();
 
-	cosine = edge1 * edge2;
+	sine = (edge1 % edge2).Length();
 
-	return cosine < 0;
+	return sine < 0;
 }
 
 bool ObjLoader::IsConcave(const Polygon& polygon, const std::vector<Vector3D<double>>& vertices, int& pointIndex)
@@ -498,22 +498,22 @@ bool ObjLoader::IsConcave(const Polygon& polygon, const std::vector<Vector3D<dou
 
 	if (polygon.size() > 3)
 	{
-		double worstCosine = 0;
+		double worstSine = 0;
 
 		for (int cp = pointIndex; cp < polygon.size(); ++cp)
 		{
-			double cosine;
-			if (!IsConcaveVertex(polygon, vertices, cp, cosine)) continue;
+			double sine;
+			if (!IsConcaveVertex(polygon, vertices, cp, sine)) continue;
 
-			if (cosine < worstCosine)
+			if (sine < worstSine)
 			{
-				worstCosine = cosine;
+				worstSine = sine;
 				pointIndex = cp;
 				return true; // just pick up the first one
 			}
 		}
 
-		//if (worstCosine < 0) return true;
+		//if (worstSine < 0) return true;
 	}
 
 	return false;
