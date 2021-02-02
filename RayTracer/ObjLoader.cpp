@@ -320,6 +320,7 @@ bool ObjLoader::Load(const std::string& name, bool center)
 
 		IsConcave(polygon, vertices, startPoint);
 
+
 		// from here splitting begins
 		// if the polygon is convex, from the first point
 		// if it's concave, from a point picked above
@@ -396,7 +397,6 @@ bool ObjLoader::Load(const std::string& name, bool center)
 
 		triangles.emplace_back(triangle);
 
-
 		for (int i = 3; i < polygon.size(); ++i)
 		{
 			const size_t ind = (static_cast<size_t>(startPoint) + i) % polygon.size();
@@ -415,6 +415,7 @@ bool ObjLoader::Load(const std::string& name, bool center)
 			const Vector3D<double>& nextNormal = normals[nextIndexNormal];
 
 			triangle = std::make_shared<Objects::Triangle>(firstPoint, lastPoint, nextPoint, firstNormal, lastNormal, nextNormal, material);
+
 
 			if (firstIndexTex >= 0)
 			{
@@ -500,17 +501,52 @@ bool ObjLoader::IsConcave(const Polygon& polygon, const std::vector<Vector3D<dou
 	{
 		double worstSine = 0;
 
+//#define CHECK_WINDING 1
+#ifdef CHECK_WINDING
+		int concave = 0;
 		for (int cp = pointIndex; cp < polygon.size(); ++cp)
 		{
 			double sine;
-			if (!IsConcaveVertex(polygon, vertices, cp, sine)) continue;
-
-			if (sine < worstSine)
+			if (IsConcaveVertex(polygon, vertices, cp, sine))
 			{
-				worstSine = sine;
-				pointIndex = cp;
-				return true; // just pick up the first one
+				++concave;
+				if (concave > polygon.size() / 2)
+					break;
 			}
+		}
+#endif
+
+
+		for (int cp = pointIndex; cp < polygon.size(); ++cp)
+		{
+			double sine;
+
+#ifdef CHECK_WINDING
+			if (concave > polygon.size() / 2)
+			{
+				if (IsConcaveVertex(polygon, vertices, cp, sine)) continue;
+
+				if (sine > worstSine)
+				{
+					worstSine = sine;
+					pointIndex = cp;
+					return true; // just pick up the first one
+				}
+			}
+			else
+			{
+#endif
+				if (!IsConcaveVertex(polygon, vertices, cp, sine)) continue;
+
+				if (sine < worstSine)
+				{
+					worstSine = sine;
+					pointIndex = cp;
+					return true; // just pick up the first one
+				}
+#ifdef CHECK_WINDING
+			}
+#endif
 		}
 
 		//if (worstSine < 0) return true;
