@@ -88,3 +88,7 @@ Images generated while fixing some bugs in models loaded from obj files:
 
 ![Screenshot](img/glass_angel.png)
 
+And one after some later changes, when I also added procedural textures:
+
+![Screenshot](img/marble.png)
+
