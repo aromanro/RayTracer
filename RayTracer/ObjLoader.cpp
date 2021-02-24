@@ -145,8 +145,9 @@ bool ObjLoader::Load(const std::string& name, bool center)
 						if (0 == cnt)
 						{
 							indexvertex = std::stoi(val);
-							// indices may be negative, in that case it indexes from current position backwards
-							if (indexvertex < 0) indexvertex = vertices.size() + indexvertex + 1; // +1 because there will be decremented later
+							// indices may be negative, in that case it indexes from last position backwards
+							if (indexvertex < 0)
+								indexvertex = vertices.size() + indexvertex + 1; // +1 because there will be decremented later
 						}
 						else if (1 == cnt)
 						{
@@ -154,8 +155,9 @@ bool ObjLoader::Load(const std::string& name, bool center)
 							{
 								indextex = std::stoi(val);
 
-								// indices may be negative, in that case it indexes from current position backwards
-								if (indextex < 0) indextex = textureCoords.size() + indextex + 1; // +1 because there will be decremented later									
+								// indices may be negative, in that case it indexes from last position backwards
+								if (indextex < 0)
+									indextex = textureCoords.size() + indextex + 1; // +1 because there will be decremented later
 							}
 						}
 						else
@@ -163,8 +165,9 @@ bool ObjLoader::Load(const std::string& name, bool center)
 							if (!val.empty())
 							{
 								indexnormal = std::stoi(val);
-								// indices may be negative, in that case it indexes from current position backwards
-								if (indexnormal < 0) indexnormal = normals.size() + indexnormal + 1; // +1 because there will be decremented later
+								// indices may be negative, in that case it indexes from last position backwards
+								if (indexnormal < 0)
+									indexnormal = normals.size() + indexnormal + 1; // +1 because there will be decremented later
 							}
 
 							break;
@@ -355,7 +358,6 @@ bool ObjLoader::Load(const std::string& name, bool center)
 		Vector3D<double> lastPoint(vertices[indexvertex3]);
 		int lastIndexTex = indextex3;
 		Vector3D<double> lastNormal(normals[indexnormal3]);
-
 
 		std::shared_ptr<Objects::Triangle> triangle = std::make_shared<Objects::Triangle>(firstPoint, vertices[indexvertex2], lastPoint, firstNormal, normals[indexnormal2], lastNormal, material);
 
