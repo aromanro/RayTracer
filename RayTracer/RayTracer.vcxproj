@@ -148,6 +148,7 @@
     <ClCompile Include="Color.cpp" />
     <ClCompile Include="ImageTexture.cpp" />
     <ClCompile Include="Material.cpp" />
+    <ClCompile Include="NormalsTexture.cpp" />
     <ClCompile Include="ObjLoader.cpp" />
     <ClCompile Include="Options.cpp" />
     <ClCompile Include="OptionsFrame.cpp" />
@@ -168,6 +169,7 @@
     <ClInclude Include="Composite.h" />
     <ClInclude Include="ImageTexture.h" />
     <ClInclude Include="Material.h" />
+    <ClInclude Include="NormalsTexture.h" />
     <ClInclude Include="ObjLoader.h" />
     <ClInclude Include="Options.h" />
     <ClInclude Include="OptionsFrame.h" />

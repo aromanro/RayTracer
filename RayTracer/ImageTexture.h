@@ -16,7 +16,7 @@ namespace Textures
 		ImageTexture(const std::string& name);
 		virtual ~ImageTexture();
 
-		bool Load(const std::string& name);
+		virtual bool Load(const std::string& name);
 
 		virtual Color Value(double u, double v, const Vector3D<double>& pos) const override;
 
