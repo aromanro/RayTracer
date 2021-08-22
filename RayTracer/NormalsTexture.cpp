@@ -1,33 +1,16 @@
 #include "NormalsTexture.h"
 
 
-#define wxNEEDS_DECL_BEFORE_TEMPLATE
-
-// For compilers that support precompilation, includes "wx/wx.h".
-#include "wx/wxprec.h"
-
-#ifdef __BORLANDC__
-#pragma hdrstop
-#endif
-
-// for all others, include the necessary headers (this file is usually all you
-// need because it includes almost all "standard" wxWidgets headers
-#ifndef WX_PRECOMP
-#include "wx/wx.h"
-#endif
-
-#include <wx/rawbmp.h>
-
 namespace Textures
 {
 
 	NormalsTexture::NormalsTexture()
-		: ImageTexture()
+		: ImageTexture(), bumpParam(2.)
 	{
 	}
 
 	NormalsTexture::NormalsTexture(const std::string& name)
-		: ImageTexture()
+		: ImageTexture(), bumpParam(2.)
 	{
 		Load(name);
 	}
@@ -65,7 +48,6 @@ namespace Textures
 		wxImagePixelData::Iterator p(data);
 		p.Offset(data, 0, 0);
 
-
 		Height = image.GetHeight();
 		Width = image.GetWidth();
 
@@ -75,7 +57,39 @@ namespace Textures
 		{
 			// convert to a normal map using a Sobel operator, as in SolarSystem project
 
+			for (int y = 0; y < data.GetHeight(); ++y)
+			{
+				for (int x = 0; x < data.GetWidth(); ++x)
+				{
+					const double top = GetPixelValue(data, p, x, y + 1);
+					const double bottom = GetPixelValue(data, p, x, y - 1);
+					const double left = GetPixelValue(data, p, x - 1, y);
+					const double right = GetPixelValue(data, p, x + 1, y);
 
+					const double topLeft = GetPixelValue(data, p, x - 1, y + 1);
+					const double bottomLeft = GetPixelValue(data, p, x - 1, y - 1);
+					const double topRight = GetPixelValue(data, p, x + 1, y + 1);
+					const double bottomRight = GetPixelValue(data, p, x + 1, y - 1);
+
+					// Sobel
+					const double dX = topRight - topLeft + 2. * (right - left) + bottomRight - bottomLeft;
+					const double dY = bottomLeft - topLeft + 2. * (bottom - top) + bottomRight - topRight;
+
+					const double dZ = bumpParam; // make it smaller to increase the slope 
+
+					Vector3D<double> v(-dX, -dY, dZ);
+					v = v.Normalize();
+
+					// now convert to RGB
+					const double R = 0.5 * (1. + v.X);
+					const double G = 0.5 * (1. + v.Y);
+					const double B = 0.5 * (1. + v.Y);
+
+					imageData[y][x].r = R;
+					imageData[y][x].g = G;
+					imageData[y][x].b = B;
+				}
+			}
 		}
 		else
 		{
@@ -99,4 +113,24 @@ namespace Textures
 
 		return true;
 	}
+
+
+	double NormalsTexture::GetPixelValue(const wxImagePixelData& data, wxImagePixelData::Iterator& p, int x, int y) const
+	{
+		const int width = data.GetWidth();
+		const int height = data.GetHeight();
+
+		if (x < 0) x += width;
+		else if (x >= width) x -= width;
+
+		if (y < 0) y += height;
+		else if (y >= height) y -= height;
+
+		p.Offset(data, x, y);
+
+		return (static_cast<double>(p.Red()) + static_cast<double>(p.Green()) + static_cast<double>(p.Blue())) / (3. * 255.);
+
+		return 0.;
+	}
+
 }
