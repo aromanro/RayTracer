@@ -64,9 +64,12 @@ namespace Textures
 			std::iota(permY.begin(), permY.end(), 0);
 			std::iota(permZ.begin(), permZ.end(), 0);
 
-			std::random_shuffle(permX.begin(), permX.end());
-			std::random_shuffle(permY.begin(), permY.end());
-			std::random_shuffle(permZ.begin(), permZ.end());
+			std::random_device rd;
+			std::mt19937 g(rd());
+
+			std::shuffle(permX.begin(), permX.end(), g);
+			std::shuffle(permY.begin(), permY.end(), g);
+			std::shuffle(permZ.begin(), permZ.end(), g);
 		}
 
 
@@ -116,7 +119,6 @@ namespace Textures
 		std::vector<size_t> permX;
 		std::vector<size_t> permY;
 		std::vector<size_t> permZ;
-
 	};
 
 	

@@ -9,25 +9,7 @@
 
 #define _MATH_DEFINES_DEFINED
 
-#define wxNEEDS_DECL_BEFORE_TEMPLATE
-
-// For compilers that support precompilation, includes "wx/wx.h".
-#include "wx/wxprec.h"
-
-#ifdef __BORLANDC__
-#pragma hdrstop
-#endif
-
-// for all others, include the necessary headers (this file is usually all you
-// need because it includes almost all "standard" wxWidgets headers
-#ifndef WX_PRECOMP
-#include "wx/wx.h"
-#endif
-
-#include <wx/filename.h>
-
-
-
+#include <filesystem>
 
 
 ObjLoader::ObjLoader()
@@ -42,13 +24,13 @@ ObjLoader::~ObjLoader()
 
 bool ObjLoader::Load(const std::string& name, bool center)
 {
-	wxFileName dirName(name);
+	std::filesystem::path dirName(name);
 
 	std::ifstream infile(name);
 
 	if (!infile) return false;
 
-	const std::string dir = std::string(dirName.GetPathWithSep().c_str());
+	const std::string dir = dirName.remove_filename().string();
 
 	std::vector<std::pair<double, double>> textureCoords;
 	std::vector<Vector3D<double>> normals;
@@ -135,9 +117,10 @@ bool ObjLoader::Load(const std::string& name, bool center)
 					std::istringstream tokenstream(token);
 
 
-					int indexvertex = 0;
-					int indextex = 0;
-					int indexnormal = 0;
+					size_t indexvertex = 0;
+					size_t indextex = 0;
+					size_t indexnormal = 0;
+
 					std::string val;
 					int cnt = 0;
 					while (std::getline(tokenstream, val, '/'))
@@ -220,7 +203,7 @@ bool ObjLoader::Load(const std::string& name, bool center)
 
 	if (center) // center the object in origin
 	{
-		centerCoord /= vertices.size();
+		centerCoord /= static_cast<double>(vertices.size());
 		for (auto& vertex : vertices)
 			vertex -= centerCoord;
 	}
@@ -331,17 +314,17 @@ bool ObjLoader::Load(const std::string& name, bool center)
 		// a more general method would be 'ear clipping', but definitively I won't have patience for that, it's boring
 		// also it's worth looking into "Optimal convex decompositions" by Bernard Chazelle and David Dobkin - a concave polygon can be split into convex ones
 
-		const int indexvertex1 = std::get<0>(polygon[startPoint]);
-		const int indextex1 = std::get<1>(polygon[startPoint]);
-		const int indexnormal1 = std::get<2>(polygon[startPoint]);
+		const size_t indexvertex1 = std::get<0>(polygon[startPoint]);
+		const size_t indextex1 = std::get<1>(polygon[startPoint]);
+		const size_t indexnormal1 = std::get<2>(polygon[startPoint]);
 
-		const int indexvertex2 = std::get<0>(polygon[(startPoint + 1ULL) % polygon.size()]);
-		const int indextex2 = std::get<1>(polygon[(startPoint + 1ULL) % polygon.size()]);
-		const int indexnormal2 = std::get<2>(polygon[(startPoint + 1ULL) % polygon.size()]);
+		const size_t indexvertex2 = std::get<0>(polygon[(startPoint + 1ULL) % polygon.size()]);
+		const size_t indextex2 = std::get<1>(polygon[(startPoint + 1ULL) % polygon.size()]);
+		const size_t indexnormal2 = std::get<2>(polygon[(startPoint + 1ULL) % polygon.size()]);
 
-		const int indexvertex3 = std::get<0>(polygon[(startPoint + 2ULL) % polygon.size()]);
-		const int indextex3 = std::get<1>(polygon[(startPoint + 2ULL) % polygon.size()]);
-		const int indexnormal3 = std::get<2>(polygon[(startPoint + 2ULL) % polygon.size()]);
+		const size_t indexvertex3 = std::get<0>(polygon[(startPoint + 2ULL) % polygon.size()]);
+		const size_t indextex3 = std::get<1>(polygon[(startPoint + 2ULL) % polygon.size()]);
+		const size_t indexnormal3 = std::get<2>(polygon[(startPoint + 2ULL) % polygon.size()]);
 
 		if (indexvertex1 < 0 || indexvertex1 >= vertices.size()) break;
 		if (indexvertex2 < 0 || indexvertex2 >= vertices.size()) break;
@@ -352,11 +335,11 @@ bool ObjLoader::Load(const std::string& name, bool center)
 		if (indexnormal3 < 0 || indexnormal3 >= normals.size()) break;
 
 		const Vector3D<double> firstPoint = vertices[indexvertex1];
-		const int firstIndexTex = indextex1;
+		const size_t firstIndexTex = indextex1;
 		const Vector3D<double> firstNormal = normals[indexnormal1];
 
 		Vector3D<double> lastPoint(vertices[indexvertex3]);
-		int lastIndexTex = indextex3;
+		size_t lastIndexTex = indextex3;
 		Vector3D<double> lastNormal(normals[indexnormal3]);
 
 		std::shared_ptr<Objects::Triangle> triangle = std::make_shared<Objects::Triangle>(firstPoint, vertices[indexvertex2], lastPoint, firstNormal, normals[indexnormal2], lastNormal, material);
@@ -403,15 +386,15 @@ bool ObjLoader::Load(const std::string& name, bool center)
 		{
 			const size_t ind = (static_cast<size_t>(startPoint) + i) % polygon.size();
 
-			const int nextIndexVertex = std::get<0>(polygon[ind]);
+			const size_t nextIndexVertex = std::get<0>(polygon[ind]);
 			if (nextIndexVertex < 0 || nextIndexVertex >= vertices.size())
 				break;
 
-			const int nextIndexNormal = std::get<2>(polygon[ind]);
+			const size_t nextIndexNormal = std::get<2>(polygon[ind]);
 			if (nextIndexNormal < 0 || nextIndexNormal >= normals.size())
 				break;
 
-			const int nextIndexTex = std::get<1>(polygon[ind]);
+			const size_t nextIndexTex = std::get<1>(polygon[ind]);
 
 			const Vector3D<double>& nextPoint = vertices[nextIndexVertex];
 			const Vector3D<double>& nextNormal = normals[nextIndexNormal];
@@ -471,16 +454,16 @@ bool ObjLoader::Load(const std::string& name, bool center)
 bool ObjLoader::IsConcaveVertex(const Polygon& polygon, const std::vector<Vector3D<double>>& vertices, int cp, double& sine)
 {
 	sine = 0;
-	const int pp = (cp == 0 ? polygon.size() : cp) - 1;
-	const int np = (cp == polygon.size() - 1) ? 0 : cp + 1;
+	const size_t pp = (cp == 0 ? polygon.size() : cp) - 1;
+	const size_t np = (cp == polygon.size() - 1) ? 0 : cp + 1;
 
-	const int indpp = std::get<0>(polygon[pp]);
+	const size_t indpp = std::get<0>(polygon[pp]);
 	if (indpp < 0 || indpp >= vertices.size()) return false;
 
-	const int indcp = std::get<0>(polygon[cp]);
+	const size_t indcp = std::get<0>(polygon[cp]);
 	if (indcp < 0 || indcp >= vertices.size()) return false;
 
-	const int indnp = std::get<0>(polygon[np]);
+	const size_t indnp = std::get<0>(polygon[np]);
 	if (indnp < 0 || indnp >= vertices.size()) return false;
 
 	const Vector3D<double> prevPoint = vertices[indpp];
@@ -559,17 +542,17 @@ bool ObjLoader::IsConcave(const Polygon& polygon, const std::vector<Vector3D<dou
 
 bool ObjLoader::AddTriangle(int ind1, int ind2, int ind3, const Polygon& polygon, const std::vector<Vector3D<double>>& vertices, const std::vector<Vector3D<double>>& normals, const std::vector<std::pair<double, double>>& textureCoords, std::shared_ptr<Materials::Material> material, std::vector<std::shared_ptr<Objects::Triangle>>& triangles)
 {
-	const int indexvertex1 = std::get<0>(polygon[ind1]);
-	const int indextex1 = std::get<1>(polygon[ind1]);
-	const int indexnormal1 = std::get<2>(polygon[ind1]);
+	const size_t indexvertex1 = std::get<0>(polygon[ind1]);
+	const size_t indextex1 = std::get<1>(polygon[ind1]);
+	const size_t indexnormal1 = std::get<2>(polygon[ind1]);
 
-	const int indexvertex2 = std::get<0>(polygon[ind2]);
-	const int indextex2 = std::get<1>(polygon[ind2]);
-	const int indexnormal2 = std::get<2>(polygon[ind2]);
+	const size_t indexvertex2 = std::get<0>(polygon[ind2]);
+	const size_t indextex2 = std::get<1>(polygon[ind2]);
+	const size_t indexnormal2 = std::get<2>(polygon[ind2]);
 
-	const int indexvertex3 = std::get<0>(polygon[ind3]);
-	const int indextex3 = std::get<1>(polygon[ind3]);
-	const int indexnormal3 = std::get<2>(polygon[ind3]);
+	const size_t indexvertex3 = std::get<0>(polygon[ind3]);
+	const size_t indextex3 = std::get<1>(polygon[ind3]);
+	const size_t indexnormal3 = std::get<2>(polygon[ind3]);
 
 	if (indexvertex1 < 0 || indexvertex1 >= vertices.size()) return false;
 	if (indexvertex2 < 0 || indexvertex2 >= vertices.size()) return false;
@@ -580,11 +563,11 @@ bool ObjLoader::AddTriangle(int ind1, int ind2, int ind3, const Polygon& polygon
 	if (indexnormal3 < 0 || indexnormal3 >= normals.size()) return false;
 
 	const Vector3D<double> firstPoint = vertices[indexvertex1];
-	const int firstIndexTex = indextex1;
+	const size_t firstIndexTex = indextex1;
 	const Vector3D<double> firstNormal = normals[indexnormal1];
 
 	Vector3D<double> lastPoint(vertices[indexvertex3]);
-	int lastIndexTex = indextex3;
+	size_t lastIndexTex = indextex3;
 	Vector3D<double> lastNormal(normals[indexnormal3]);
 
 	std::shared_ptr<Objects::Triangle> triangle = std::make_shared<Objects::Triangle>(firstPoint, vertices[indexvertex2], lastPoint, firstNormal, normals[indexnormal2], lastNormal, material);

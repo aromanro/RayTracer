@@ -8,7 +8,7 @@
 class ObjLoader
 {
 public:
-	typedef std::vector<std::tuple<int, int, int>> Polygon;
+	typedef std::vector<std::tuple<size_t, size_t, size_t>> Polygon;
 
 	class Material
 	{
