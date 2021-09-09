@@ -42,7 +42,7 @@ public:
 		ClampVal(b);
 	}
 
-	double max() const
+	double Max() const
 	{
 		return r > g && r > b ? r : g > b ? g : b;
 	}
