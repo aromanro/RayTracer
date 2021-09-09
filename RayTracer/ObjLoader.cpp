@@ -117,9 +117,9 @@ bool ObjLoader::Load(const std::string& name, bool center)
 					std::istringstream tokenstream(token);
 
 
-					size_t indexvertex = 0;
-					size_t indextex = 0;
-					size_t indexnormal = 0;
+					long long int indexvertex = 0;
+					long long int indextex = 0;
+					long long int indexnormal = 0;
 
 					std::string val;
 					int cnt = 0;
@@ -326,13 +326,13 @@ bool ObjLoader::Load(const std::string& name, bool center)
 		const size_t indextex3 = std::get<1>(polygon[(startPoint + 2ULL) % polygon.size()]);
 		const size_t indexnormal3 = std::get<2>(polygon[(startPoint + 2ULL) % polygon.size()]);
 
-		if (indexvertex1 < 0 || indexvertex1 >= vertices.size()) break;
-		if (indexvertex2 < 0 || indexvertex2 >= vertices.size()) break;
-		if (indexvertex3 < 0 || indexvertex3 >= vertices.size()) break;
+		if (indexvertex1 >= vertices.size()) break;
+		if (indexvertex2 >= vertices.size()) break;
+		if (indexvertex3 >= vertices.size()) break;
 
-		if (indexnormal1 < 0 || indexnormal1 >= normals.size()) break;
-		if (indexnormal2 < 0 || indexnormal2 >= normals.size()) break;
-		if (indexnormal3 < 0 || indexnormal3 >= normals.size()) break;
+		if (indexnormal1 >= normals.size()) break;
+		if (indexnormal2 >= normals.size()) break;
+		if (indexnormal3 >= normals.size()) break;
 
 		const Vector3D<double> firstPoint = vertices[indexvertex1];
 		const size_t firstIndexTex = indextex1;
@@ -387,11 +387,11 @@ bool ObjLoader::Load(const std::string& name, bool center)
 			const size_t ind = (static_cast<size_t>(startPoint) + i) % polygon.size();
 
 			const size_t nextIndexVertex = std::get<0>(polygon[ind]);
-			if (nextIndexVertex < 0 || nextIndexVertex >= vertices.size())
+			if (nextIndexVertex >= vertices.size())
 				break;
 
 			const size_t nextIndexNormal = std::get<2>(polygon[ind]);
-			if (nextIndexNormal < 0 || nextIndexNormal >= normals.size())
+			if (nextIndexNormal >= normals.size())
 				break;
 
 			const size_t nextIndexTex = std::get<1>(polygon[ind]);
