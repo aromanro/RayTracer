@@ -797,9 +797,9 @@ void RayTracerFrame::Compute()
 
 		for (int t = 0; t < nrThreads; ++t)
 		{
-			tasks[t] = std::async(std::launch::async, [t, samples, jitter, nx, ny, &camera, &scene, &randomEngines, distMax]()->std::vector<std::vector<Color>>
+			Random& random = randomEngines[t];
+			tasks[t] = std::async(std::launch::async, [samples, jitter, nx, ny, &camera, &scene, &random, distMax]()->std::vector<std::vector<Color>>
 			{
-				Random &random = randomEngines[t];
 				std::vector<std::vector<Color>> results(nx);
 				for (int i = 0; i < nx; ++i) results[i].resize(ny);
 
