@@ -4,6 +4,7 @@
 #include "Color.h"
 #include "AxisAlignedBoundingBox.h"
 #include "Random.h"
+#include "Texture.h"
 
 #include <vector>
 #include <memory>
@@ -71,8 +72,11 @@ namespace Objects {
 	protected:
 		VisibleObjectMaterial() {};
 		VisibleObjectMaterial(const std::shared_ptr<Materials::Material>& m) : material(m) {};
+		VisibleObjectMaterial(const std::shared_ptr<Textures::Texture>& t) : normals(t) {};
+		VisibleObjectMaterial(const std::shared_ptr<Materials::Material>& m, const std::shared_ptr<Textures::Texture>& t) : material(m), normals(t) {};
 
 		std::shared_ptr<Materials::Material> material;
+		std::shared_ptr<Textures::Texture> normals; // for normal mapping
 	};
 
 
@@ -81,6 +85,8 @@ namespace Objects {
 	protected:
 		VisibleObjectElementary() {};
 		VisibleObjectElementary(const std::shared_ptr<Materials::Material>& m) : VisibleObjectMaterial(m) {};
+		VisibleObjectElementary(const std::shared_ptr<Textures::Texture>& t) : VisibleObjectMaterial(t) {};
+		VisibleObjectElementary(const std::shared_ptr<Materials::Material>& m, const std::shared_ptr<Textures::Texture>& t) : VisibleObjectMaterial(m, t) {};
 
 		BVH::AxisAlignedBoundingBox boundingBox;
 	public:
