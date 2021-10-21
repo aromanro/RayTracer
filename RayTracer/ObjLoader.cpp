@@ -806,7 +806,8 @@ bool ObjLoader::LoadMaterial(const std::string& name, const std::string& dir)
 				}
 				else if (what == "map_bump") // bump mapping, this probably should be implemented
 				{
-					// TODO: implement it 
+					line = line.substr(9);
+					mat.bumpTexture = line;
 				}
 			}
 			break;
@@ -830,7 +831,8 @@ bool ObjLoader::LoadMaterial(const std::string& name, const std::string& dir)
 				std::string what = line.substr(0, 4);
 				if (what == "bump") // bump, see above map_bump, it's the same thing
 				{
-					// TODO: implement it
+					line = line.substr(5);
+					mat.bumpTexture = line;
 				}
 			}
 			break;
