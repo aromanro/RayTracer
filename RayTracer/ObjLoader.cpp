@@ -486,7 +486,7 @@ bool ObjLoader::IsConcave(const Polygon& polygon, const std::vector<Vector3D<dou
 	{
 		double worstSine = 0;
 
-//#define CHECK_WINDING 1
+		//#define CHECK_WINDING 1
 #ifdef CHECK_WINDING
 		int concave = 0;
 		for (int cp = pointIndex; cp < polygon.size(); ++cp)
@@ -641,61 +641,88 @@ bool ObjLoader::LoadMaterial(const std::string& name, const std::string& dir)
 			case 'K': // Ka, Kd, Ks
 			{
 				std::string what = line.substr(0, 2);
-				if (what == "Ka")
+				if (what == "Ka") // ambient reflectivity
 				{
+					// TODO: can actually be not ony 'Ka r g b' but also 'Ka spectral file.rfl factor' or 'Ka xyz x y z'
 					line = line.substr(3);
-					std::istringstream sstream(line);
 
-					sstream >> mat.ambientColor.r;
-					try
+					// so check the prefix
+					if (line.substr(0, 3) != "xyz" && line.substr(0, 8) != "spectral")
 					{
-						sstream >> mat.ambientColor.g >> mat.ambientColor.b;
+						std::istringstream sstream(line);
+
+						sstream >> mat.ambientColor.r;
+						try
+						{
+							sstream >> mat.ambientColor.g >> mat.ambientColor.b;
+						}
+						catch (...)
+						{
+							mat.ambientColor.g = mat.ambientColor.b = mat.ambientColor.r;
+						}
 					}
-					catch (...)
-					{
-						mat.ambientColor.g = mat.ambientColor.b = mat.ambientColor.r;
-					}
+					// else not implemented yet
 				}
-				else if (what == "Kd")
+				else if (what == "Kd") // diffuse reflectivity
 				{
+					// TODO: for Kd is as above
 					line = line.substr(3);
-					std::istringstream sstream(line);
-					sstream >> mat.diffuseColor.r;
-					try
+
+					// so check the prefix
+					if (line.substr(0, 3) != "xyz" && line.substr(0, 8) != "spectral")
 					{
-						sstream >> mat.diffuseColor.g >> mat.diffuseColor.b;
+						std::istringstream sstream(line);
+						sstream >> mat.diffuseColor.r;
+						try
+						{
+							sstream >> mat.diffuseColor.g >> mat.diffuseColor.b;
+						}
+						catch (...)
+						{
+							mat.diffuseColor.g = mat.diffuseColor.b = mat.diffuseColor.r;
+						}
 					}
-					catch (...)
-					{
-						mat.diffuseColor.g = mat.diffuseColor.b = mat.diffuseColor.r;
-					}
+					// else not implemented yet
 				}
-				else if (what == "Ks")
+				else if (what == "Ks") // specular reflectivity
 				{
+					// TODO: for Ks is as above
 					line = line.substr(3);
-					std::istringstream sstream(line);
-					sstream >> mat.specularColor.r;
-					try
+
+					// so check the prefix
+					if (line.substr(0, 3) != "xyz" && line.substr(0, 8) != "spectral")
 					{
-						sstream >> mat.specularColor.g >> mat.specularColor.b;
+						std::istringstream sstream(line);
+						sstream >> mat.specularColor.r;
+						try
+						{
+							sstream >> mat.specularColor.g >> mat.specularColor.b;
+						}
+						catch (...)
+						{
+							mat.specularColor.g = mat.specularColor.b = mat.specularColor.r;
+						}
 					}
-					catch (...)
-					{
-						mat.specularColor.g = mat.specularColor.b = mat.specularColor.r;
-					}
+					// else not implemented yet
 				}
 			}
 			break;
 			case 'T': //Tf or Tr
 			{
 				std::string what = line.substr(0, 2);
-				if (what == "Tf")
+				if (what == "Tf") // transmission filter
 				{
+					// TODO: again, for Tf is as above
 					line = line.substr(3);
 
-					std::istringstream sstream(line);
+					// so check the prefix
+					if (line.substr(0, 3) != "xyz" && line.substr(0, 8) != "spectral")
+					{
+						std::istringstream sstream(line);
 
-					// TODO: implement it!
+						// TODO: implement it!
+					}
+					// else not implemented yet
 				}
 				else if (what == "Tr")
 				{
@@ -710,14 +737,14 @@ bool ObjLoader::LoadMaterial(const std::string& name, const std::string& dir)
 			case 'N': // Ns, Ni
 			{
 				std::string what = line.substr(0, 2);
-				if (what == "Ns")
+				if (what == "Ns") // specular exponent
 				{
 					line = line.substr(3);
 
 					std::istringstream sstream(line);
 					sstream >> mat.exponent;
 				}
-				else if (what == "Ni")
+				else if (what == "Ni") // optical density
 				{
 					line = line.substr(3);
 
@@ -726,10 +753,10 @@ bool ObjLoader::LoadMaterial(const std::string& name, const std::string& dir)
 				}
 			}
 			break;
-			case 'd': //d
+			case 'd': //d = dissolve 
 			{
 				std::string what = line.substr(0, 1);
-				if (what == "d")
+				if (what == "d") // halo factor
 				{
 					line = line.substr(2);
 
@@ -754,20 +781,32 @@ bool ObjLoader::LoadMaterial(const std::string& name, const std::string& dir)
 			case 'm': // map_Ka, map_Kd, map_Ks
 			{
 				std::string what = line.substr(0, 6);
-				if (what == "map_Ka")
+				if (what == "map_Ka") // material ambient is multiplied by the texture value
 				{
 					line = line.substr(7);
 					mat.ambientTexture = line;
 				}
-				else if (what == "map_Kd")
+				else if (what == "map_Kd") // material diffuse is multiplied by the texture value
 				{
 					line = line.substr(7);
 					mat.diffuseTexture = line;
 				}
-				else if (what == "map_Ks")
+				else if (what == "map_Ks") // material specular is multiplied by the texture value
 				{
 					line = line.substr(7);
 					mat.specularTexture = line;
+				}
+				else if (what == "map_Ns") // material specular exponent is multiplied by the texture value
+				{
+					// TODO: implement it?
+				}
+				else if (what == "map_d") // material dissolve is multiplied by the texture value
+				{
+					// TODO: implement it? 
+				}
+				else if (what == "map_bump") // bump mapping, this probably should be implemented
+				{
+					// TODO: implement it 
 				}
 			}
 			break;
@@ -786,6 +825,15 @@ bool ObjLoader::LoadMaterial(const std::string& name, const std::string& dir)
 					mat.name = line;
 				}
 				break;
+			case 'b':
+			{
+				std::string what = line.substr(0, 4);
+				if (what == "bump") // bump, see above map_bump, it's the same thing
+				{
+					// TODO: implement it
+				}
+			}
+			break;
 			}
 		}
 	}
