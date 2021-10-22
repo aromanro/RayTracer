@@ -30,9 +30,9 @@ public:
 		std::string diffuseTexture; // map_Kd
 		std::string specularTexture; // map_Ks
 
-		std::string bumpTexture;
-
-		// WARNING: there can be Ns and d textures as well, but I ignore them for now
+		std::string exponentTexture; // map_Ns
+		std::string dissolveTexture; // map_d
+		std::string bumpTexture; // map_bump or bump
 
 		enum class Illumination {
 			constant = 0, // Kd color

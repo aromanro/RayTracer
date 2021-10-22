@@ -798,11 +798,13 @@ bool ObjLoader::LoadMaterial(const std::string& name, const std::string& dir)
 				}
 				else if (what == "map_Ns") // material specular exponent is multiplied by the texture value
 				{
-					// TODO: implement it?
+					line = line.substr(7);
+					mat.exponentTexture = line;
 				}
 				else if (what == "map_d") // material dissolve is multiplied by the texture value
 				{
-					// TODO: implement it? 
+					line = line.substr(6);
+					mat.dissolveTexture = line;
 				}
 				else if (what == "map_bump") // bump mapping, this probably should be implemented
 				{
