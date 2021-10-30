@@ -20,6 +20,8 @@ namespace Textures
 
 		virtual Color Value(double u, double v, const Vector3D<double>& pos) const override;
 
+		void MultiplyWith(const Color& color);
+
 		int Width;
 		int Height;
 

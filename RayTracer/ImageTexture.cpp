@@ -79,6 +79,17 @@ namespace Textures
 		return true;
 	}
 
+	void ImageTexture::MultiplyWith(const Color& color)
+	{
+		for (int line = 0; line < Height; ++line)
+			for (int col = 0; col < Width; ++col)
+			{
+				imageData[line][col].r *= color.r;
+				imageData[line][col].g *= color.g;
+				imageData[line][col].b *= color.b;
+			}
+	}
+
 
 	Color ImageTexture::Value(double u, double v, const Vector3D<double>& pos) const
 	{

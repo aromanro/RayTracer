@@ -26,6 +26,8 @@ public:
 
 		double exponent = 0; // Ns specular exponent - big value, stronger highlight
 
+		// NOTE: The ambient from the 'obj' is not used
+
 		std::string ambientTexture; // map_Ka
 		std::string diffuseTexture; // map_Kd
 		std::string specularTexture; // map_Ks

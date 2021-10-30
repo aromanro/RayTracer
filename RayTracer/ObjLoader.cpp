@@ -243,6 +243,7 @@ bool ObjLoader::Load(const std::string& name, bool center)
 						bool addSlashNeed = addSlash && mat.second.specularTexture.at(0) != '\\' && mat.second.specularTexture.at(0) != '/';
 						const std::string tname = dir + (addSlashNeed ? "\\" : "") + mat.second.specularTexture;
 						specTexture = std::make_shared<Textures::ImageTexture>(tname);
+						std::dynamic_pointer_cast<Textures::ImageTexture>(specTexture)->MultiplyWith(mat.second.specularColor);
 					}
 
 					const double exponent = mat.second.exponent / 10.;
@@ -256,6 +257,7 @@ bool ObjLoader::Load(const std::string& name, bool center)
 			bool addSlashNeed = addSlash && mat.second.diffuseTexture.at(0) != '\\' && mat.second.diffuseTexture.at(0) != '/';
 			const std::string tname = dir + (addSlashNeed ? "\\" : "") + mat.second.diffuseTexture;
 			auto imTex = std::make_shared<Textures::ImageTexture>(tname);
+			imTex->MultiplyWith(mat.second.diffuseColor);
 
 			auto tex = std::dynamic_pointer_cast<Textures::Texture>(imTex);
 
@@ -273,9 +275,10 @@ bool ObjLoader::Load(const std::string& name, bool center)
 						addSlashNeed = addSlash && mat.second.specularTexture.at(0) != '\\' && mat.second.specularTexture.at(0) != '/';
 						const std::string tname = dir + (addSlashNeed ? "\\" : "") + mat.second.specularTexture;
 						specTexture = std::make_shared<Textures::ImageTexture>(tname);
+						std::dynamic_pointer_cast<Textures::ImageTexture>(specTexture)->MultiplyWith(mat.second.specularColor);
 					}
 
-					const double exponent = mat.second.exponent / 10.;
+					const double exponent = mat.second.exponent /*/ 10.*/;
 					materialsMap[mat.first] = std::make_shared<Materials::AnisotropicPhong>(exponent, exponent, tex, specTexture);
 				}
 				else materialsMap[mat.first] = std::make_shared<Materials::Lambertian>(tex);
