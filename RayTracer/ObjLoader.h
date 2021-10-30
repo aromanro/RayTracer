@@ -21,6 +21,7 @@ public:
 		Color ambientColor;  //Ka
 		Color diffuseColor;  //Kd
 		Color specularColor; //Ks
+		Color emissionColor; //Ke
 
 		Color transmColor; // Tf - transmission filter
 
@@ -35,6 +36,8 @@ public:
 		std::string exponentTexture; // map_Ns
 		std::string dissolveTexture; // map_d
 		std::string bumpTexture; // map_bump or bump
+
+		std::string glowTexture; // map_Ke
 
 		enum class Illumination {
 			constant = 0, // Kd color
@@ -72,6 +75,7 @@ public:
 			diffuseColor = Color(0.3, 0.3, 0.3);
 			specularColor = Color(0.6, 0.6, 0.6);
 			transmColor = Color();
+			emissionColor = Color();
 
 			exponent = 0;
 
@@ -82,6 +86,7 @@ public:
 			exponentTexture.clear();
 			dissolveTexture.clear();
 			bumpTexture.clear();
+			glowTexture.clear();
 
 			illumination = Illumination::blinn;
 

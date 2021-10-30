@@ -708,6 +708,27 @@ bool ObjLoader::LoadMaterial(const std::string& name, const std::string& dir)
 					}
 					// else not implemented yet
 				}
+				else if (what == "Ke") // emission color
+				{
+					// TODO: for Ke is as above
+					line = line.substr(3);
+
+					// so check the prefix
+					if (line.substr(0, 3) != "xyz" && line.substr(0, 8) != "spectral")
+					{
+						std::istringstream sstream(line);
+						sstream >> mat.emissionColor.r;
+						try
+						{
+							sstream >> mat.emissionColor.g >> mat.emissionColor.b;
+						}
+						catch (...)
+						{
+							mat.emissionColor.g = mat.emissionColor.b = mat.emissionColor.r;
+						}
+					}
+					// else not implemented yet
+				}
 			}
 			break;
 			case 'T': //Tf or Tr
@@ -798,6 +819,11 @@ bool ObjLoader::LoadMaterial(const std::string& name, const std::string& dir)
 				{
 					line = line.substr(7);
 					mat.specularTexture = line;
+				}
+				else if (what == "map_Ke") // material emission color is multiplied by the texture value
+				{
+					line = line.substr(7);
+					mat.glowTexture = line;
 				}
 				else if (what == "map_Ns") // material specular exponent is multiplied by the texture value
 				{
