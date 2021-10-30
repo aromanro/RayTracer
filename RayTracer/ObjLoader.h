@@ -77,6 +77,10 @@ public:
 			diffuseTexture.clear();
 			specularTexture.clear();
 
+			exponentTexture.clear();
+			dissolveTexture.clear();
+			bumpTexture.clear();
+
 			illumination = Illumination::blinn;
 
 			dissolve = 1;
