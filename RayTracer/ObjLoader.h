@@ -71,13 +71,13 @@ public:
 		{
 			name.clear();
 			
+			illumination = Illumination::blinn;
+
 			ambientColor = Color(0.1, 0.1, 0.1);
 			diffuseColor = Color(0.3, 0.3, 0.3);
 			specularColor = Color(0.6, 0.6, 0.6);
 			transmColor = Color();
 			emissionColor = Color();
-
-			exponent = 0;
 
 			ambientTexture.clear();
 			diffuseTexture.clear();
@@ -88,8 +88,8 @@ public:
 			bumpTexture.clear();
 			glowTexture.clear();
 
-			illumination = Illumination::blinn;
 
+			exponent = 0;
 			dissolve = 1;
 			refractionCoeff = 0;
 		}
