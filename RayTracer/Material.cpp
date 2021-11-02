@@ -116,7 +116,18 @@ namespace Materials
 		scatterInfo.atten = scatterInfo.diffuseColor = albedo->Value(info.u, info.v, info.position);
 		scatterInfo.specularColor = specular->Value(info.u, info.v, info.position);
 
-		scatterInfo.pdf = new PDFs::AnisotropicPhongPDF(incidentRay.getDirection(), info.normal, nu, nv);		
+		if (exponent)
+		{
+			// TODO: I still have to find such material
+			const Color c = exponent->Value(info.u, info.v, info.position);
+			const double e = (c.r + c.g + c.b) / 3.;
+			if (e > 0)
+				scatterInfo.pdf = new PDFs::AnisotropicPhongPDF(incidentRay.getDirection(), info.normal, e * nu, e * nv);
+			else
+				scatterInfo.pdf = new PDFs::AnisotropicPhongPDF(incidentRay.getDirection(), info.normal, nu, nv);
+		}
+		else
+			scatterInfo.pdf = new PDFs::AnisotropicPhongPDF(incidentRay.getDirection(), info.normal, nu, nv);		
 
 		if (scatterInfo.isSpecular) 
 		{

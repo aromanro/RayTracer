@@ -81,6 +81,7 @@ namespace Textures
 
 	void ImageTexture::MultiplyWith(const Color& color)
 	{
+		if (color.TotalAbsorbant()) return; // some obj files seem to have (0, 0, 0) for colors and they do have a map, probably in such case the values should not be multiplied
 		for (int line = 0; line < Height; ++line)
 			for (int col = 0; col < Width; ++col)
 			{

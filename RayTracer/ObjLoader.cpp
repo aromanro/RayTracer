@@ -235,19 +235,28 @@ bool ObjLoader::Load(const std::string& name, bool center)
 				if (mat.second.IsSpecular())
 				{
 					std::shared_ptr<Textures::Texture> specTexture;
+					bool addSlashNeed = addSlash && mat.second.specularTexture.at(0) != '\\' && mat.second.specularTexture.at(0) != '/';
 
 					if (mat.second.specularTexture.empty())
 						specTexture = std::dynamic_pointer_cast<Textures::Texture>(std::make_shared<Textures::ColorTexture>(mat.second.specularColor));
 					else
 					{
-						bool addSlashNeed = addSlash && mat.second.specularTexture.at(0) != '\\' && mat.second.specularTexture.at(0) != '/';
 						const std::string tname = dir + (addSlashNeed ? "\\" : "") + mat.second.specularTexture;
 						specTexture = std::make_shared<Textures::ImageTexture>(tname);
 						std::dynamic_pointer_cast<Textures::ImageTexture>(specTexture)->MultiplyWith(mat.second.specularColor);
 					}
 
-					const double exponent = mat.second.exponent / 10.;
-					materialsMap[mat.first] = std::make_shared<Materials::AnisotropicPhong>(exponent, exponent, tex, specTexture);
+					const double exponent = mat.second.exponent /*/ 10.*/;
+
+					if (mat.second.exponentTexture.empty())
+						materialsMap[mat.first] = std::make_shared<Materials::AnisotropicPhong>(exponent, exponent, tex, specTexture);
+					else
+					{
+						const std::string tname = dir + (addSlashNeed ? "\\" : "") + mat.second.exponentTexture;
+						std::shared_ptr<Textures::Texture> expTexture = std::make_shared<Textures::ImageTexture>(tname);
+
+						materialsMap[mat.first] = std::make_shared<Materials::AnisotropicPhong>(exponent, exponent, tex, specTexture, expTexture);
+					}
 				}
 				else materialsMap[mat.first] = std::make_shared<Materials::Lambertian>(tex);
 			}
@@ -268,18 +277,28 @@ bool ObjLoader::Load(const std::string& name, bool center)
 				{
 					std::shared_ptr<Textures::Texture> specTexture;
 
+					addSlashNeed = addSlash && mat.second.specularTexture.at(0) != '\\' && mat.second.specularTexture.at(0) != '/';
+
 					if (mat.second.specularTexture.empty())
 						specTexture = std::dynamic_pointer_cast<Textures::Texture>(std::make_shared<Textures::ColorTexture>(mat.second.specularColor));
 					else
 					{
-						addSlashNeed = addSlash && mat.second.specularTexture.at(0) != '\\' && mat.second.specularTexture.at(0) != '/';
 						const std::string tname = dir + (addSlashNeed ? "\\" : "") + mat.second.specularTexture;
 						specTexture = std::make_shared<Textures::ImageTexture>(tname);
 						std::dynamic_pointer_cast<Textures::ImageTexture>(specTexture)->MultiplyWith(mat.second.specularColor);
 					}
 
-					const double exponent = mat.second.exponent /*/ 10.*/;
-					materialsMap[mat.first] = std::make_shared<Materials::AnisotropicPhong>(exponent, exponent, tex, specTexture);
+					const double exponent = mat.second.exponent/*/ 10.*/;
+
+					if (mat.second.exponentTexture.empty())
+						materialsMap[mat.first] = std::make_shared<Materials::AnisotropicPhong>(exponent, exponent, tex, specTexture);
+					else
+					{
+						const std::string tname = dir + (addSlashNeed ? "\\" : "") + mat.second.exponentTexture;
+						std::shared_ptr<Textures::Texture> expTexture = std::make_shared<Textures::ImageTexture>(tname);
+
+						materialsMap[mat.first] = std::make_shared<Materials::AnisotropicPhong>(exponent, exponent, tex, specTexture, expTexture);
+					}
 				}
 				else materialsMap[mat.first] = std::make_shared<Materials::Lambertian>(tex);
 			}

@@ -164,7 +164,8 @@ namespace Materials {
 	class AnisotropicPhong : public Material
 	{
 	public:
-		AnisotropicPhong(double Nu, double Nv, const std::shared_ptr<Textures::Texture>& diffuseTexture = nullptr, const std::shared_ptr<Textures::Texture>& specularTexture = nullptr) : Material(diffuseTexture), specular(specularTexture), nu(Nu), nv(Nv) {}
+		AnisotropicPhong(double Nu, double Nv, const std::shared_ptr<Textures::Texture>& diffuseTexture = nullptr, const std::shared_ptr<Textures::Texture>& specularTexture = nullptr, const std::shared_ptr<Textures::Texture>& exponentTexture = nullptr) 
+			: Material(diffuseTexture), specular(specularTexture), exponent(exponentTexture), nu(Nu), nv(Nv) {}
 
 		virtual bool Scatter(const Ray& incidentRay, const PointInfo& info, ScatterInfo& scatterInfo, Random& random) override;
 
@@ -180,6 +181,7 @@ namespace Materials {
 
 	protected:
 		std::shared_ptr<Textures::Texture> specular;
+		std::shared_ptr<Textures::Texture> exponent;
 
 		// exponents - for nu=nv it's similar with Phong 
 		double nu;
