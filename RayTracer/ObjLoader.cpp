@@ -890,6 +890,20 @@ bool ObjLoader::LoadMaterial(const std::string& name, const std::string& dir)
 		}
 	}
 
+	// ambient texture and color are not used in this program, but set the empty values from the diffuse nevertheless
+	if (mat.ambientTexture.empty())
+		mat.ambientTexture = mat.diffuseTexture;
+
+	if (mat.ambientColor.TotalAbsorbant())
+		mat.ambientColor = mat.diffuseColor;
+
+	// the diffuse color and textures are used, in case they are empty set them from the ambient, maybe those are set to be used instead
+	if (mat.diffuseTexture.empty())
+		mat.diffuseTexture = mat.diffuseTexture;
+
+	if (mat.diffuseColor.TotalAbsorbant())
+		mat.diffuseColor = mat.ambientColor;
+
 
 	if (!mat.IsEmpty() && materials.find(mat.name) != materials.end())
 		materials[mat.name] = mat;
