@@ -235,13 +235,12 @@ bool ObjLoader::Load(const std::string& name, bool center)
 				if (mat.second.IsSpecular())
 				{
 					std::shared_ptr<Textures::Texture> specTexture;
-					bool addSlashNeed = addSlash && mat.second.specularTexture.at(0) != '\\' && mat.second.specularTexture.at(0) != '/';
 
 					if (mat.second.specularTexture.empty())
 						specTexture = std::dynamic_pointer_cast<Textures::Texture>(std::make_shared<Textures::ColorTexture>(mat.second.specularColor));
 					else
 					{
-						const std::string tname = dir + (addSlashNeed ? "\\" : "") + mat.second.specularTexture;
+						const std::string tname = dir + (addSlash ? "\\" : "") + mat.second.specularTexture;
 						specTexture = std::make_shared<Textures::ImageTexture>(tname);
 						std::dynamic_pointer_cast<Textures::ImageTexture>(specTexture)->MultiplyWith(mat.second.specularColor);
 					}
@@ -252,7 +251,7 @@ bool ObjLoader::Load(const std::string& name, bool center)
 						materialsMap[mat.first] = std::make_shared<Materials::AnisotropicPhong>(exponent, exponent, tex, specTexture);
 					else
 					{
-						const std::string tname = dir + (addSlashNeed ? "\\" : "") + mat.second.exponentTexture;
+						const std::string tname = dir + (addSlash ? "\\" : "") + mat.second.exponentTexture;
 						std::shared_ptr<Textures::Texture> expTexture = std::make_shared<Textures::ImageTexture>(tname);
 
 						materialsMap[mat.first] = std::make_shared<Materials::AnisotropicPhong>(exponent, exponent, tex, specTexture, expTexture);
@@ -263,8 +262,7 @@ bool ObjLoader::Load(const std::string& name, bool center)
 		}
 		else
 		{
-			bool addSlashNeed = addSlash && mat.second.diffuseTexture.at(0) != '\\' && mat.second.diffuseTexture.at(0) != '/';
-			const std::string tname = dir + (addSlashNeed ? "\\" : "") + mat.second.diffuseTexture;
+			const std::string tname = dir + (addSlash ? "\\" : "") + mat.second.diffuseTexture;
 			auto imTex = std::make_shared<Textures::ImageTexture>(tname);
 			imTex->MultiplyWith(mat.second.diffuseColor);
 
@@ -277,13 +275,12 @@ bool ObjLoader::Load(const std::string& name, bool center)
 				{
 					std::shared_ptr<Textures::Texture> specTexture;
 
-					addSlashNeed = addSlash && mat.second.specularTexture.at(0) != '\\' && mat.second.specularTexture.at(0) != '/';
 
 					if (mat.second.specularTexture.empty())
 						specTexture = std::dynamic_pointer_cast<Textures::Texture>(std::make_shared<Textures::ColorTexture>(mat.second.specularColor));
 					else
 					{
-						const std::string tname = dir + (addSlashNeed ? "\\" : "") + mat.second.specularTexture;
+						const std::string tname = dir + (addSlash ? "\\" : "") + mat.second.specularTexture;
 						specTexture = std::make_shared<Textures::ImageTexture>(tname);
 						std::dynamic_pointer_cast<Textures::ImageTexture>(specTexture)->MultiplyWith(mat.second.specularColor);
 					}
@@ -294,7 +291,7 @@ bool ObjLoader::Load(const std::string& name, bool center)
 						materialsMap[mat.first] = std::make_shared<Materials::AnisotropicPhong>(exponent, exponent, tex, specTexture);
 					else
 					{
-						const std::string tname = dir + (addSlashNeed ? "\\" : "") + mat.second.exponentTexture;
+						const std::string tname = dir + (addSlash ? "\\" : "") + mat.second.exponentTexture;
 						std::shared_ptr<Textures::Texture> expTexture = std::make_shared<Textures::ImageTexture>(tname);
 
 						materialsMap[mat.first] = std::make_shared<Materials::AnisotropicPhong>(exponent, exponent, tex, specTexture, expTexture);
@@ -827,36 +824,57 @@ bool ObjLoader::LoadMaterial(const std::string& name, const std::string& dir)
 				if (what == "map_Ka") // material ambient is multiplied by the texture value
 				{
 					line = line.substr(7);
+					if (line.at(0) == '\\' || line.at(0) == '/')
+						line = line.substr(1);
+					std::replace(line.begin(), line.end(), '/', '\\');
 					mat.ambientTexture = line;
 				}
 				else if (what == "map_Kd") // material diffuse is multiplied by the texture value
 				{
 					line = line.substr(7);
+					if (line.at(0) == '\\' || line.at(0) == '/')
+						line = line.substr(1);
+					std::replace(line.begin(), line.end(), '/', '\\');
 					mat.diffuseTexture = line;
 				}
 				else if (what == "map_Ks") // material specular is multiplied by the texture value
 				{
 					line = line.substr(7);
+					if (line.at(0) == '\\' || line.at(0) == '/')
+						line = line.substr(1);
+					std::replace(line.begin(), line.end(), '/', '\\');
 					mat.specularTexture = line;
 				}
 				else if (what == "map_Ke") // material emission color is multiplied by the texture value
 				{
 					line = line.substr(7);
+					if (line.at(0) == '\\' || line.at(0) == '/')
+						line = line.substr(1);
+					std::replace(line.begin(), line.end(), '/', '\\');
 					mat.glowTexture = line;
 				}
 				else if (what == "map_Ns") // material specular exponent is multiplied by the texture value
 				{
 					line = line.substr(7);
+					if (line.at(0) == '\\' || line.at(0) == '/')
+						line = line.substr(1);
+					std::replace(line.begin(), line.end(), '/', '\\');
 					mat.exponentTexture = line;
 				}
 				else if (what == "map_d") // material dissolve is multiplied by the texture value
 				{
 					line = line.substr(6);
+					if (line.at(0) == '\\' || line.at(0) == '/')
+						line = line.substr(1);
+					std::replace(line.begin(), line.end(), '/', '\\');
 					mat.dissolveTexture = line;
 				}
 				else if (what == "map_bump") // bump mapping, this probably should be implemented
 				{
 					line = line.substr(9);
+					if (line.at(0) == '\\' || line.at(0) == '/')
+						line = line.substr(1);
+					std::replace(line.begin(), line.end(), '/', '\\');
 					mat.bumpTexture = line;
 				}
 			}
