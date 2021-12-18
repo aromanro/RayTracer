@@ -162,6 +162,7 @@
     <ClCompile Include="RayTracerApp.cpp" />
     <ClCompile Include="RayTracerFrame.cpp" />
     <ClCompile Include="Sphere.cpp" />
+    <ClCompile Include="TexturesCache.cpp" />
     <ClCompile Include="Triangle.cpp" />
   </ItemGroup>
   <ItemGroup>
@@ -188,6 +189,7 @@
     <ClInclude Include="Scene.h" />
     <ClInclude Include="Sphere.h" />
     <ClInclude Include="Texture.h" />
+    <ClInclude Include="TexturesCache.h" />
     <ClInclude Include="Triangle.h" />
     <ClInclude Include="Vector3D.h" />
     <ClInclude Include="Vertex.h" />

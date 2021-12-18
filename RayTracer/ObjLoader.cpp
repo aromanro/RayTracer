@@ -2,6 +2,8 @@
 #include "Material.h"
 #include "ImageTexture.h"
 
+#include "TexturesCache.h"
+
 #include <fstream>
 #include <sstream>
 #include <cctype>
@@ -211,6 +213,7 @@ bool ObjLoader::Load(const std::string& name, bool center)
 
 	// from here start building the object from the info loaded from the .obj file
 
+	TexturesCache texturesCache;
 
 	// first, create the materials
 
@@ -241,8 +244,7 @@ bool ObjLoader::Load(const std::string& name, bool center)
 					else
 					{
 						const std::string tname = dir + (addSlash ? "\\" : "") + mat.second.specularTexture;
-						specTexture = std::make_shared<Textures::ImageTexture>(tname);
-						std::dynamic_pointer_cast<Textures::ImageTexture>(specTexture)->MultiplyWith(mat.second.specularColor);
+						specTexture = texturesCache.Get(tname, mat.second.specularColor);
 					}
 
 					const double exponent = mat.second.exponent /*/ 10.*/;
@@ -252,7 +254,7 @@ bool ObjLoader::Load(const std::string& name, bool center)
 					else
 					{
 						const std::string tname = dir + (addSlash ? "\\" : "") + mat.second.exponentTexture;
-						std::shared_ptr<Textures::Texture> expTexture = std::make_shared<Textures::ImageTexture>(tname);
+						std::shared_ptr<Textures::Texture> expTexture = texturesCache.Get(tname, Color());
 
 						materialsMap[mat.first] = std::make_shared<Materials::AnisotropicPhong>(exponent, exponent, tex, specTexture, expTexture);
 					}
@@ -263,10 +265,7 @@ bool ObjLoader::Load(const std::string& name, bool center)
 		else
 		{
 			const std::string tname = dir + (addSlash ? "\\" : "") + mat.second.diffuseTexture;
-			auto imTex = std::make_shared<Textures::ImageTexture>(tname);
-			imTex->MultiplyWith(mat.second.diffuseColor);
-
-			auto tex = std::dynamic_pointer_cast<Textures::Texture>(imTex);
+			auto tex = texturesCache.Get(tname, mat.second.diffuseColor);
 
 			if (mat.second.IsTransparent()) materialsMap[mat.first] = std::make_shared<Materials::Dielectric>(mat.second.refractionCoeff <= 1. ? 1.5 : mat.second.refractionCoeff, tex);
 			else
@@ -281,8 +280,7 @@ bool ObjLoader::Load(const std::string& name, bool center)
 					else
 					{
 						const std::string tname = dir + (addSlash ? "\\" : "") + mat.second.specularTexture;
-						specTexture = std::make_shared<Textures::ImageTexture>(tname);
-						std::dynamic_pointer_cast<Textures::ImageTexture>(specTexture)->MultiplyWith(mat.second.specularColor);
+						specTexture = texturesCache.Get(tname, mat.second.specularColor);
 					}
 
 					const double exponent = mat.second.exponent/*/ 10.*/;
@@ -292,7 +290,7 @@ bool ObjLoader::Load(const std::string& name, bool center)
 					else
 					{
 						const std::string tname = dir + (addSlash ? "\\" : "") + mat.second.exponentTexture;
-						std::shared_ptr<Textures::Texture> expTexture = std::make_shared<Textures::ImageTexture>(tname);
+						std::shared_ptr<Textures::Texture> expTexture = texturesCache.Get(tname, Color());
 
 						materialsMap[mat.first] = std::make_shared<Materials::AnisotropicPhong>(exponent, exponent, tex, specTexture, expTexture);
 					}
