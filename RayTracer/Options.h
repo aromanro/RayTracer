@@ -2,6 +2,7 @@
 
 #include <string>
 #include <vector>
+#include <memory>
 
 #define wxNEEDS_DECL_BEFORE_TEMPLATE
 
@@ -12,10 +13,6 @@ class Options
 public:
 	Options();
 
-	~Options()
-	{
-		delete m_fileconfig;
-	}
 
 	// avoid double deletion of m_fileconfig at destruction if copied
 	Options(const Options& other)
@@ -58,8 +55,7 @@ public:
 		positionXOther(other.positionXOther),
 		positionYOther(other.positionYOther),
 		positionZOther(other.positionZOther),
-		objMaterialOther(other.objMaterialOther),
-		m_fileconfig(nullptr)
+		objMaterialOther(other.objMaterialOther)
 	{
 	}
 
@@ -104,8 +100,6 @@ public:
 		positionYOther = other.positionYOther;
 		positionZOther = other.positionZOther;
 		objMaterialOther = other.objMaterialOther;
-
-		m_fileconfig = nullptr;
 
 		return *this;
 	}
@@ -181,6 +175,6 @@ protected:
 	void Open();
 	void Close();
 
-	wxFileConfig *m_fileconfig;
+	std::unique_ptr<wxFileConfig> m_fileconfig;
 };
 

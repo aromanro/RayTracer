@@ -12,8 +12,7 @@ Options::Options()
 	depthOfFieldOther(false), localIlluminationOther(true), skyOther(0), floorOther(false),
 	scaleOther(1), rotateXOther(0), rotateYOther(0), rotateZOther(0),
 	positionXOther(4), positionYOther(1), positionZOther(0),
-	objMaterialOther(0),
-	m_fileconfig(nullptr)
+	objMaterialOther(0)
 {
 }
 
@@ -30,16 +29,15 @@ void Options::Open()
 
 	wxString iniFilePath = dir + "RayTracer.ini";
 
-	m_fileconfig = new wxFileConfig("RayTracer", wxEmptyString, iniFilePath);
+	m_fileconfig = std::make_unique<wxFileConfig>("RayTracer", wxEmptyString, iniFilePath);
 
-	wxConfigBase::Set(m_fileconfig);
+	wxConfigBase::Set(m_fileconfig.get());
 }
 
 
 void Options::Close()
 {
-	delete m_fileconfig;
-	m_fileconfig = NULL;
+	m_fileconfig.reset();
 	wxConfigBase::Set(NULL);
 }
 
