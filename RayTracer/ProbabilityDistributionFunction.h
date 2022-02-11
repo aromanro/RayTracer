@@ -34,7 +34,7 @@ namespace PDFs
 		{
 		}
 
-		virtual double Value(const Vector3D<double>& dir, Random& rnd) override
+		double Value(const Vector3D<double>& dir, Random& rnd) override
 		{
 			const double cosine = dir * onb.w();
 
@@ -43,7 +43,7 @@ namespace PDFs
 			return cosine * M_1_PI;
 		}		
 
-		virtual Vector3D<double> Generate(Random& rnd, Materials::ScatterInfo* info) override
+		Vector3D<double> Generate(Random& rnd, Materials::ScatterInfo* info) override
 		{
 			return onb.LocalToGlobal(rnd.getRandomCosineDirection());
 		}
@@ -60,12 +60,12 @@ namespace PDFs
 		{
 		}
 
-		virtual double Value(const Vector3D<double>& dir, Random& rnd) override
+		double Value(const Vector3D<double>& dir, Random& rnd) override
 		{
 			return 0.25 * M_1_PI;
 		}
 
-		virtual Vector3D<double> Generate(Random& rnd, Materials::ScatterInfo* info) override
+		Vector3D<double> Generate(Random& rnd, Materials::ScatterInfo* info) override
 		{
 			return rnd.getRandomInUnitSphere();
 		}
@@ -80,13 +80,13 @@ namespace PDFs
 		{
 		}
 
-		virtual double Value(const Vector3D<double>& dir, Random& rnd) override
+		double Value(const Vector3D<double>& dir, Random& rnd) override
 		{
 			return object->pdfValue(origin, dir, rnd);
 		}
 		
 
-		virtual Vector3D<double> Generate(Random& rnd, Materials::ScatterInfo* info) override
+		Vector3D<double> Generate(Random& rnd, Materials::ScatterInfo* info) override
 		{
 			return object->getRandom(origin, rnd); // generates a random ray pointing to the object, using a uniform distribution over the surface
 		}
@@ -105,12 +105,12 @@ namespace PDFs
 		{
 		}
 
-		virtual double Value(const Vector3D<double>& dir, Random& rnd) override
+		double Value(const Vector3D<double>& dir, Random& rnd) override
 		{
 			return 0.5 * m_pdf1->Value(dir, rnd) + 0.5 * m_pdf2->Value(dir, rnd);
 		}
 
-		virtual Vector3D<double> Generate(Random& rnd, Materials::ScatterInfo* info) override
+		Vector3D<double> Generate(Random& rnd, Materials::ScatterInfo* info) override
 		{
 			if (rnd.getZeroOne() < 0.5) return m_pdf1->Generate(rnd, info);
 

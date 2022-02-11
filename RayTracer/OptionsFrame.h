@@ -30,7 +30,7 @@ public:
 	
 protected:
 
-	virtual bool TransferDataFromWindow() override;
+	bool TransferDataFromWindow() override;
 
 	void OnClose(wxCloseEvent& event);
 	void OnSkyboxChoose(wxCommandEvent& event);

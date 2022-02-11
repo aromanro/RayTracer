@@ -29,7 +29,7 @@ namespace Textures
 		NormalsTexture(const std::string& name);
 		virtual ~NormalsTexture();
 
-		virtual bool Load(const std::string& name) override;
+		bool Load(const std::string& name) override;
 
 		double bumpParam;
 

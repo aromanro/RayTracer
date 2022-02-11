@@ -90,7 +90,7 @@ namespace Objects {
 
 		BVH::AxisAlignedBoundingBox boundingBox;
 	public:
-		virtual bool BoundingBox(BVH::AxisAlignedBoundingBox& box) override
+		bool BoundingBox(BVH::AxisAlignedBoundingBox& box) override
 		{
 			box = boundingBox;
 

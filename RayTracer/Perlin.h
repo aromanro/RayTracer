@@ -73,7 +73,7 @@ namespace Textures
 		}
 
 
-		virtual double Noise(const Vector3D<double>& p) const override
+		double Noise(const Vector3D<double>& p) const override
 		{
 			int i = floor(p.X);
 			int j = floor(p.Y);
@@ -130,7 +130,7 @@ namespace Textures
 		{
 		}
 
-		virtual Color Value(double u, double v, const Vector3D<double>& p) const override 
+		Color Value(double u, double v, const Vector3D<double>& p) const override 
 		{
 			return m_color * 0.5 * (1.0 + noise.Noise(m_scale * p));
 		}
@@ -149,7 +149,7 @@ namespace Textures
 		{
 		}
 
-		virtual Color Value(double u, double v, const Vector3D<double>& p) const override
+		Color Value(double u, double v, const Vector3D<double>& p) const override
 		{
 			return m_color * noise.Turbulence(m_scale * p);
 		}
@@ -163,7 +163,7 @@ namespace Textures
 		{
 		}
 
-		virtual Color Value(double u, double v, const Vector3D<double>& p) const override
+		Color Value(double u, double v, const Vector3D<double>& p) const override
 		{
 			return m_color * 0.5 * (1. + sin(m_scale * p.Z + 10. * noise.Turbulence(p)));
 		}

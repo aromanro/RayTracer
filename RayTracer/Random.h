@@ -15,8 +15,7 @@ public:
 	Random(int addseed = 0);
 
 	inline double getZeroOne()
-	{
-		
+	{		
 		return uniformZeroOne(rng);
 	}
 

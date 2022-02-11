@@ -130,14 +130,12 @@ OptionsFrame::OptionsFrame(const Options& opt, const wxString & title, wxWindow*
 bool OptionsFrame::TransferDataFromWindow()
 {
 	if (!wxDialog::TransferDataFromWindow()) return false;
-
 	
 	return true;
 }
 
 void OptionsFrame::OnClose(wxCloseEvent& event)
 {
-
 	event.Skip();
 }
 

@@ -60,10 +60,9 @@ namespace Materials {
 	public:
 		Lambertian(const std::shared_ptr<Textures::Texture>& texture = nullptr) : Material(texture) {}
 
-		virtual bool Scatter(const Ray& incidentRay, const PointInfo& info, ScatterInfo& scatterInfo, Random& random) override;
+		bool Scatter(const Ray& incidentRay, const PointInfo& info, ScatterInfo& scatterInfo, Random& random) override;
 
-
-		virtual double ScatteringPDF(const Ray& incidentRay, Ray& scatteredRay, const PointInfo& info) const override
+		double ScatteringPDF(const Ray& incidentRay, Ray& scatteredRay, const PointInfo& info) const override
 		{
 			const double cosine = info.normal * scatteredRay.getDirection();
 
@@ -98,7 +97,7 @@ namespace Materials {
 	public:
 		Metal(const std::shared_ptr<Textures::Texture>& texture = nullptr, double f = 0) : ReflectiveMaterial(texture, f) {}
 
-		virtual bool Scatter(const Ray& incidentRay, const PointInfo& info, ScatterInfo& scatterInfo, Random& random) override;
+		bool Scatter(const Ray& incidentRay, const PointInfo& info, ScatterInfo& scatterInfo, Random& random) override;
 	};
 
 
@@ -110,7 +109,7 @@ namespace Materials {
 			invRefrIndex = 1. / ri;
 		}
 
-		virtual bool Scatter(const Ray& incidentRay, const PointInfo& info, ScatterInfo& scatterInfo, Random& random) override;
+		bool Scatter(const Ray& incidentRay, const PointInfo& info, ScatterInfo& scatterInfo, Random& random) override;
 
 		double density;
 		Color volumeColor;
@@ -152,9 +151,9 @@ namespace Materials {
 	public:
 		Isotropic(const std::shared_ptr<Textures::Texture>& texture = nullptr) : Material(texture) {}
 
-		virtual bool Scatter(const Ray& incidentRay, const PointInfo& info, ScatterInfo& scatterInfo, Random& random) override;
+		bool Scatter(const Ray& incidentRay, const PointInfo& info, ScatterInfo& scatterInfo, Random& random) override;
 
-		virtual double ScatteringPDF(const Ray& incidentRay, Ray& scatteredRay, const PointInfo& info) const override
+		double ScatteringPDF(const Ray& incidentRay, Ray& scatteredRay, const PointInfo& info) const override
 		{
 			return 0.25 * M_1_PI;
 		}
@@ -167,9 +166,9 @@ namespace Materials {
 		AnisotropicPhong(double Nu, double Nv, const std::shared_ptr<Textures::Texture>& diffuseTexture = nullptr, const std::shared_ptr<Textures::Texture>& specularTexture = nullptr, const std::shared_ptr<Textures::Texture>& exponentTexture = nullptr) 
 			: Material(diffuseTexture), specular(specularTexture), exponent(exponentTexture), nu(Nu), nv(Nv) {}
 
-		virtual bool Scatter(const Ray& incidentRay, const PointInfo& info, ScatterInfo& scatterInfo, Random& random) override;
+		bool Scatter(const Ray& incidentRay, const PointInfo& info, ScatterInfo& scatterInfo, Random& random) override;
 
-		virtual double ScatteringPDF(const Ray& incidentRay, Ray& scatteredRay, const PointInfo& info) const override
+		double ScatteringPDF(const Ray& incidentRay, Ray& scatteredRay, const PointInfo& info) const override
 		{
 			const double cosine = info.normal * scatteredRay.getDirection();
 

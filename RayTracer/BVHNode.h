@@ -103,7 +103,7 @@ namespace BVH
 			return false;
 		}
 
-		virtual bool BoundingBox(AxisAlignedBoundingBox& box) override
+		bool BoundingBox(AxisAlignedBoundingBox& box) override
 		{
 			box = boundingBox;
 
@@ -111,7 +111,7 @@ namespace BVH
 		}
 
 
-		virtual void Translate(const Vector3D<double>& t) override
+		void Translate(const Vector3D<double>& t) override
 		{
 			boundingBox.Translate(t);
 
@@ -119,7 +119,7 @@ namespace BVH
 			if (child2) child2->Translate(t);
 		}
 
-		virtual void RotateAround(const Vector3D<double>& v, double angle)
+		void RotateAround(const Vector3D<double>& v, double angle)
 		{
 			child1->RotateAround(v, angle);
 			child1->BoundingBox(boundingBox);
@@ -135,7 +135,7 @@ namespace BVH
 		}
 
 
-		virtual void Scale(double s) override
+		void Scale(double s) override
 		{
 			boundingBox.Scale(s);
 			child1->Scale(s);

@@ -233,7 +233,6 @@ void FillRandomScene(Scene& scene, const Options& options)
 
 			if (choose_mat < 0.7)
 			{  // diffuse
-
 				std::shared_ptr<Materials::Material> mat;
 
 				if (random.getZeroOne() < 0.25)
@@ -295,7 +294,6 @@ void FillRandomScene(Scene& scene, const Options& options)
 			}
 		}
 	}
-
 }
 
 void FillCornellScene(Scene& scene, const Options& options)

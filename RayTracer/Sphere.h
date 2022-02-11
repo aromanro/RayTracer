@@ -21,10 +21,10 @@ namespace Objects
 		Sphere(const Vector3D<double>& position, double R, const std::shared_ptr<Materials::Material>& m);
 		virtual ~Sphere();
 
-		virtual bool Hit(const Ray& ray, PointInfo& info, double minr, double maxr, unsigned rcount, Random& random) const override;
+		bool Hit(const Ray& ray, PointInfo& info, double minr, double maxr, unsigned rcount, Random& random) const override;
 
 		
-		virtual void ConstructBoundingBox() override
+		void ConstructBoundingBox() override
 		{
 			const Vector3D<double> c = Vector3D<double>(radius, radius, radius);
 			boundingBox = BVH::AxisAlignedBoundingBox(center - c, center + c);
@@ -36,13 +36,13 @@ namespace Objects
 		void getUV(const Vector3D<double>& pos, double& u, double& v) const;
 
 
-		virtual void Translate(const Vector3D<double>& t) override
+		void Translate(const Vector3D<double>& t) override
 		{
 			center += t;
 			boundingBox.Translate(t);
 		}
 
-		virtual void RotateAround(const Vector3D<double>& v, double angle) override
+		void RotateAround(const Vector3D<double>& v, double angle) override
 		{
 			center = center.RotateAround(v, angle);
 
@@ -65,7 +65,7 @@ namespace Objects
 			ConstructBoundingBox();
 		}
 
-		virtual void Scale(double s) override
+		void Scale(double s) override
 		{
 			center *= s;
 			radius *= s;
@@ -73,7 +73,7 @@ namespace Objects
 			boundingBox.Scale(s);
 		}
 
-		virtual double pdfValue(const Vector3D<double>& o, const Vector3D<double>& v, Random& rnd) const override 
+		double pdfValue(const Vector3D<double>& o, const Vector3D<double>& v, Random& rnd) const override 
 		{ 
 			PointInfo info;
 
@@ -91,7 +91,7 @@ namespace Objects
 			return 0; 
 		}
 		
-		virtual Vector3D<double> getRandom(const Vector3D<double>& origin, Random& rnd) const override 
+		Vector3D<double> getRandom(const Vector3D<double>& origin, Random& rnd) const override 
 		{ 
 			const Vector3D<double> d = center - origin;
 			const double d2 = d * d;

@@ -18,7 +18,7 @@ namespace Textures
 
 		virtual bool Load(const std::string& name);
 
-		virtual Color Value(double u, double v, const Vector3D<double>& pos) const override;
+		Color Value(double u, double v, const Vector3D<double>& pos) const override;
 
 		void MultiplyWith(const Color& color);
 

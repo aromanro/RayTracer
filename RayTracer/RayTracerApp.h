@@ -27,6 +27,6 @@ public:
 
 	Options options;
 
-	virtual bool OnInit() override;
-	virtual int OnExit() override;
+	bool OnInit() override;
+	int OnExit() override;
 };

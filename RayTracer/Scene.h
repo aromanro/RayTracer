@@ -1,16 +1,11 @@
 #pragma once
 
 #include "Composite.h"
-
 #include "ProbabilityDistributionFunction.h"
-
 #include "Rectangle.h"
-
 
 class Scene : public Objects::VisibleObjectComposite
 {
-
-
 public:
 	Scene() : blackSky(false) {}
 
@@ -96,7 +91,7 @@ public:
 	// this gives the same weight (importance) for all objects, maybe the weight could be different depending on the some factors 
 	// area? some other things that can indicate a relative importance among them?
 	// as a workaround, one can add the same object twice (or more) to rise its importance relative to others (and to the whole scene)
-	virtual double pdfValue(const Vector3D<double>& o, const Vector3D<double>& v, Random& rnd) const override
+	double pdfValue(const Vector3D<double>& o, const Vector3D<double>& v, Random& rnd) const override
 	{		
 		double sum = 0;
 
@@ -106,7 +101,7 @@ public:
 		return sum * invPriSize;
 	}
 
-	virtual Vector3D<double> getRandom(const Vector3D<double>& origin, Random& rnd) const override
+	Vector3D<double> getRandom(const Vector3D<double>& origin, Random& rnd) const override
 	{
 		const unsigned int obj = static_cast<unsigned int>(rnd.getZeroOne() * static_cast<double>(PriorityObjects.size()));
 

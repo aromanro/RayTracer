@@ -15,7 +15,7 @@ namespace Objects {
 		Triangle(const Vector3D<double>& a, const Vector3D<double>& b, const Vector3D<double>& c, const std::shared_ptr<Materials::Material>& m = nullptr);
 		Triangle(const Vector3D<double>& a, const Vector3D<double>& b, const Vector3D<double>& c, const Vector3D<double>& n1, const Vector3D<double>& n2, const Vector3D<double>& n3, const std::shared_ptr<Materials::Material>& m = nullptr);
 
-		virtual void ConstructBoundingBox() override
+		void ConstructBoundingBox() override
 		{
 			Vector3D<double> minv(std::min(std::min(A.X, B.X), C.X), std::min(std::min(A.Y, B.Y), C.Y), std::min(std::min(A.Z, B.Z), C.Z));
 			Vector3D<double> maxv(std::max(std::max(A.X, B.X), C.X), std::max(std::max(A.Y, B.Y), C.Y), std::max(std::max(A.Z, B.Z), C.Z));
@@ -29,7 +29,7 @@ namespace Objects {
 			boundingBox = BVH::AxisAlignedBoundingBox(minv, maxv);
 		}
 
-		virtual void Translate(const Vector3D<double>& t) override
+		void Translate(const Vector3D<double>& t) override
 		{
 			A += t;
 			B += t;
@@ -38,7 +38,7 @@ namespace Objects {
 			boundingBox.Translate(t);
 		}
 
-		virtual void RotateAround(const Vector3D<double>& v, double angle) override
+		void RotateAround(const Vector3D<double>& v, double angle) override
 		{
 			A = A.RotateAround(v, angle);
 			B = B.RotateAround(v, angle);
@@ -60,7 +60,7 @@ namespace Objects {
 			ConstructBoundingBox();
 		}
 
-		virtual void Scale(double scale) override
+		void Scale(double scale) override
 		{
 			A *= scale;
 			B *= scale;
@@ -74,7 +74,7 @@ namespace Objects {
 		}
 
 
-		virtual bool Hit(const Ray& ray, PointInfo& info, double minr, double maxr, unsigned rcount, Random& random) const override;
+		bool Hit(const Ray& ray, PointInfo& info, double minr, double maxr, unsigned rcount, Random& random) const override;
 
 
 		inline static double Interpolate(const PointInfo& info, double val1, double val2, double val3)
@@ -99,7 +99,7 @@ namespace Objects {
 			return w * col1 + info.u * col2 + info.v * col3;
 		}
 
-		virtual double pdfValue(const Vector3D<double>& o, const Vector3D<double>& v, Random& rnd) const override 
+		double pdfValue(const Vector3D<double>& o, const Vector3D<double>& v, Random& rnd) const override 
 		{ 
 			PointInfo info;
 
@@ -118,7 +118,7 @@ namespace Objects {
 		// http://www.cs.princeton.edu/~funk/tog02.pdf
 		// another method is to simply generate the r1 and r2
 		// and use r1 * edge1 + r2 * edge2 (+A) then reject those that are outside the triangle (half of them), retrying until success
-		virtual Vector3D<double> getRandom(const Vector3D<double>& origin, Random& rnd) const override 
+		Vector3D<double> getRandom(const Vector3D<double>& origin, Random& rnd) const override 
 		{
 			const double r1 = rnd.getZeroOne();
 			const double r2 = rnd.getZeroOne();

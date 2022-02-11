@@ -11,9 +11,9 @@ namespace Transforms
 		FlipNormal() {};
 		FlipNormal(const std::shared_ptr<Objects::VisibleObject>& o) : obj(o) {}
 
-		virtual bool IsComposite() const override { return obj->IsComposite(); }
+		bool IsComposite() const override { return obj->IsComposite(); }
 
-		virtual bool Hit(const Ray& ray, PointInfo& info, double minr, double maxr, unsigned rcount, Random& random) const override
+		bool Hit(const Ray& ray, PointInfo& info, double minr, double maxr, unsigned rcount, Random& random) const override
 		{
 			if (obj->Hit(ray, info, minr, maxr, rcount, random))
 			{
@@ -24,7 +24,7 @@ namespace Transforms
 			return false;
 		}
 
-		virtual bool BoundingBox(BVH::AxisAlignedBoundingBox& box) override
+		bool BoundingBox(BVH::AxisAlignedBoundingBox& box) override
 		{
 			return obj->BoundingBox(box);
 
@@ -32,27 +32,27 @@ namespace Transforms
 		}
 
 
-		virtual void Translate(const Vector3D<double>& t) override
+		void Translate(const Vector3D<double>& t) override
 		{
 			obj->Translate(t);
 		}
 
-		virtual void RotateAround(const Vector3D<double>& v, double angle) override
+		void RotateAround(const Vector3D<double>& v, double angle) override
 		{
 			obj->RotateAround(v, angle);
 		}
 
-		virtual void Scale(double s) override
+		void Scale(double s) override
 		{
 			obj->Scale(s);
 		}
 
-		virtual double pdfValue(const Vector3D<double>& o, const Vector3D<double>& v, Random& rnd) const override
+		double pdfValue(const Vector3D<double>& o, const Vector3D<double>& v, Random& rnd) const override
 		{
 			return obj->pdfValue(o, v, rnd);
 		}
 
-		virtual Vector3D<double> getRandom(const Vector3D<double>& origin, Random& rnd) const override
+		Vector3D<double> getRandom(const Vector3D<double>& origin, Random& rnd) const override
 		{
 			return obj->getRandom(origin, rnd);
 		}
@@ -69,10 +69,10 @@ namespace Transforms
 			{
 			}
 
-			virtual bool IsComposite() const override { return obj->IsComposite(); }
+			bool IsComposite() const override { return obj->IsComposite(); }
 
 
-			virtual bool Hit(const Ray& ray, PointInfo& info, double minr, double maxr, unsigned rcount, Random& random) const override
+			bool Hit(const Ray& ray, PointInfo& info, double minr, double maxr, unsigned rcount, Random& random) const override
 			{
 				const Ray offRay(ray.getOrigin() - offset, ray.getDirection());
 
@@ -86,7 +86,7 @@ namespace Transforms
 				return false;
 			}
 
-			virtual bool BoundingBox(BVH::AxisAlignedBoundingBox& box) override
+			bool BoundingBox(BVH::AxisAlignedBoundingBox& box) override
 			{
 				if (obj->BoundingBox(box))
 				{
@@ -97,18 +97,18 @@ namespace Transforms
 				return false;
 			}
 
-			virtual void Translate(const Vector3D<double>& t) override
+			void Translate(const Vector3D<double>& t) override
 			{
 				obj->Translate(t);					
 			}
 
-			virtual void RotateAround(const Vector3D<double>& v, double angle) override
+			void RotateAround(const Vector3D<double>& v, double angle) override
 			{
 				obj->RotateAround(v, angle);
 				offset.RotateAround(v, angle);
 			}
 
-			virtual void Scale(double s) override
+			void Scale(double s) override
 			{
 				obj->Scale(s);
 
@@ -116,12 +116,12 @@ namespace Transforms
 				offlen *= s;
 			}
 
-			virtual double pdfValue(const Vector3D<double>& o, const Vector3D<double>& v, Random& rnd) const override
+			double pdfValue(const Vector3D<double>& o, const Vector3D<double>& v, Random& rnd) const override
 			{
 				return obj->pdfValue(o - offset, v, rnd);
 			}
 
-			virtual Vector3D<double> getRandom(const Vector3D<double>& origin, Random& rnd) const override
+			Vector3D<double> getRandom(const Vector3D<double>& origin, Random& rnd) const override
 			{
 				return obj->getRandom(origin - offset, rnd) + offset;
 			}
@@ -144,7 +144,7 @@ namespace Transforms
 			ConstructBoundingBox();
 		}
 
-		virtual void  ConstructBoundingBox() override
+		void  ConstructBoundingBox() override
 		{
 			static const Vector3D<double> YAxis(0, 1, 0);
 			hasBox = obj->BoundingBox(box);
@@ -170,10 +170,10 @@ namespace Transforms
 			box = BVH::AxisAlignedBoundingBox(Min, Max);
 		}
 
-		virtual bool IsComposite() const override { return obj->IsComposite(); }
+		bool IsComposite() const override { return obj->IsComposite(); }
 
 
-		virtual bool Hit(const Ray& ray, PointInfo& info, double minr, double maxr, unsigned rcount, Random& random) const override
+		bool Hit(const Ray& ray, PointInfo& info, double minr, double maxr, unsigned rcount, Random& random) const override
 		{
 			static const Vector3D<double> YAxis(0, 1, 0);
 			Ray rotatedRay(ray.getOrigin().RotateAround(YAxis, -angle), ray.getDirection().RotateAround(YAxis, -angle));
@@ -189,40 +189,40 @@ namespace Transforms
 			return false;
 		}
 
-		virtual bool BoundingBox(BVH::AxisAlignedBoundingBox& rbox) override
+		bool BoundingBox(BVH::AxisAlignedBoundingBox& rbox) override
 		{
 			rbox = box;
 
 			return hasBox;
 		}
 
-		virtual void Translate(const Vector3D<double>& t) override
+		void Translate(const Vector3D<double>& t) override
 		{
 			obj->Translate(t);
 			ConstructBoundingBox();
 		}
 
-		virtual void RotateAround(const Vector3D<double>& v, double angle) override
+		void RotateAround(const Vector3D<double>& v, double angle) override
 		{
 			obj->RotateAround(v, angle);
 			ConstructBoundingBox();
 		}
 
-		virtual void Scale(double s) override
+		void Scale(double s) override
 		{
 			obj->Scale(s);
 
 			box.Scale(s);
 		}
 
-		virtual double pdfValue(const Vector3D<double>& o, const Vector3D<double>& v, Random& rnd) const override
+		double pdfValue(const Vector3D<double>& o, const Vector3D<double>& v, Random& rnd) const override
 		{
 			static const Vector3D<double> YAxis(0, 1, 0);
 
 			return obj->pdfValue(o.RotateAround(YAxis, -angle), v.RotateAround(YAxis, -angle), rnd);
 		}
 
-		virtual Vector3D<double> getRandom(const Vector3D<double>& origin, Random& rnd) const override
+		Vector3D<double> getRandom(const Vector3D<double>& origin, Random& rnd) const override
 		{
 			static const Vector3D<double> YAxis(0, 1, 0);
 

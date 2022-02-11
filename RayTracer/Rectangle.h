@@ -55,12 +55,12 @@ namespace Objects
 			return true;
 		}
 
-		virtual void ConstructBoundingBox() override
+		void ConstructBoundingBox() override
 		{
 			boundingBox = BVH::AxisAlignedBoundingBox(Vector3D<double>(m_x0, m_y0, m_z - 0.000001), Vector3D<double>(m_x1, m_y1, m_z + 0.000001));
 		}
 
-		virtual void Translate(const Vector3D<double>& t) override
+		void Translate(const Vector3D<double>& t) override
 		{
 			m_z += t.Z;
 			m_x0 += t.X;
@@ -71,12 +71,12 @@ namespace Objects
 			boundingBox.Translate(t);
 		}
 
-		virtual void RotateAround(const Vector3D<double>& v, double angle) override
+		void RotateAround(const Vector3D<double>& v, double angle) override
 		{
 			// for now, don't rotate them, need a different implementation for rotation
 		}
 
-		virtual void Scale(double s) override
+		void Scale(double s) override
 		{
 			m_z *= s;
 			m_x0 *= s;
@@ -89,7 +89,7 @@ namespace Objects
 
 
 
-		virtual double pdfValue(const Vector3D<double>& o, const Vector3D<double>& v, Random& rnd) const override 
+		double pdfValue(const Vector3D<double>& o, const Vector3D<double>& v, Random& rnd) const override 
 		{ 
 			PointInfo info;
 
@@ -105,7 +105,7 @@ namespace Objects
 			return 0; 
 		}
 		
-		virtual Vector3D<double> getRandom(const Vector3D<double>& origin, Random& rnd) const override 
+		Vector3D<double> getRandom(const Vector3D<double>& origin, Random& rnd) const override 
 		{ 
 			const Vector3D<double> rndPoint(m_x0 + rnd.getZeroOne() * dim1, m_y0 + rnd.getZeroOne() * dim2, m_z + 0.000001);
 
@@ -144,7 +144,7 @@ namespace Objects
 			return normal;
 		}
 
-		virtual bool Hit(const Ray& ray, PointInfo& info, double minr, double maxr, unsigned rcount, Random& random) const override
+		bool Hit(const Ray& ray, PointInfo& info, double minr, double maxr, unsigned rcount, Random& random) const override
 		{
 			const double t = (m_y - ray.getOrigin().Y) * ray.getInvDir().Y;
 			if (t < minr || t > maxr) return false;
@@ -166,12 +166,12 @@ namespace Objects
 			return true;
 		}
 
-		virtual void ConstructBoundingBox() override
+		void ConstructBoundingBox() override
 		{
 			boundingBox = BVH::AxisAlignedBoundingBox(Vector3D<double>(m_x0, m_y - 0.000001, m_z0), Vector3D<double>(m_x1, m_y + 0.000001, m_z1));
 		}
 
-		virtual void Translate(const Vector3D<double>& t) override
+		void Translate(const Vector3D<double>& t) override
 		{
 			m_y += t.Y;
 			m_x0 += t.X;
@@ -182,13 +182,13 @@ namespace Objects
 			boundingBox.Translate(t);
 		}
 
-		virtual void RotateAround(const Vector3D<double>& v, double angle) override
+		void RotateAround(const Vector3D<double>& v, double angle) override
 		{
 			// for now, don't rotate them, need a different implementation for rotation
 		}
 
 
-		virtual void Scale(double s) override
+		void Scale(double s) override
 		{
 			m_y *= s;
 			m_x0 *= s;
@@ -199,7 +199,7 @@ namespace Objects
 			boundingBox.Scale(s);
 		}
 
-		virtual double pdfValue(const Vector3D<double>& o, const Vector3D<double>& v, Random& rnd) const override 
+		double pdfValue(const Vector3D<double>& o, const Vector3D<double>& v, Random& rnd) const override 
 		{ 
 			PointInfo info;
 
@@ -215,7 +215,7 @@ namespace Objects
 			return 0; 
 		}
 		
-		virtual Vector3D<double> getRandom(const Vector3D<double>& origin, Random& rnd) const override 
+		Vector3D<double> getRandom(const Vector3D<double>& origin, Random& rnd) const override 
 		{ 
 			const Vector3D<double> rndPoint(m_x0 + rnd.getZeroOne() * dim1, m_y + 0.000001, m_z0 + rnd.getZeroOne() * dim2);
 
@@ -255,7 +255,7 @@ namespace Objects
 			return normal;
 		}
 
-		virtual bool Hit(const Ray& ray, PointInfo& info, double minr, double maxr, unsigned rcount, Random& random) const override
+		bool Hit(const Ray& ray, PointInfo& info, double minr, double maxr, unsigned rcount, Random& random) const override
 		{
 			const double t = (m_x - ray.getOrigin().X) * ray.getInvDir().X;
 			if (t < minr || t > maxr) return false;
@@ -278,12 +278,12 @@ namespace Objects
 			return true;
 		}
 
-		virtual void ConstructBoundingBox() override
+		void ConstructBoundingBox() override
 		{
 			boundingBox = BVH::AxisAlignedBoundingBox(Vector3D<double>(m_x - 0.000001, m_y0, m_z0), Vector3D<double>(m_x + 0.000001, m_y1, m_z1));
 		}
 
-		virtual void Translate(const Vector3D<double>& t) override
+		void Translate(const Vector3D<double>& t) override
 		{
 			m_x += t.X;
 			m_y0 += t.Y;
@@ -294,12 +294,12 @@ namespace Objects
 			boundingBox.Translate(t);
 		}
 
-		virtual void RotateAround(const Vector3D<double>& v, double angle) override
+		void RotateAround(const Vector3D<double>& v, double angle) override
 		{
 			// for now, don't rotate them, need a different implementation for rotation
 		}
 
-		virtual void Scale(double s) override
+		void Scale(double s) override
 		{
 			m_x *= s;
 			m_y0 *= s;
@@ -312,7 +312,7 @@ namespace Objects
 
 
 
-		virtual double pdfValue(const Vector3D<double>& o, const Vector3D<double>& v, Random& rnd) const override 
+		double pdfValue(const Vector3D<double>& o, const Vector3D<double>& v, Random& rnd) const override 
 		{ 
 			PointInfo info;
 
@@ -329,7 +329,7 @@ namespace Objects
 			return 0; 
 		}
 		
-		virtual Vector3D<double> getRandom(const Vector3D<double>& origin, Random& rnd) const override 
+		Vector3D<double> getRandom(const Vector3D<double>& origin, Random& rnd) const override 
 		{ 
 			const Vector3D<double> rndPoint(m_x + 0.000001, m_y0 + rnd.getZeroOne() * dim1, m_z0 + rnd.getZeroOne() * dim2);
 
@@ -366,12 +366,12 @@ namespace Objects
 			ConstructBoundingBox();
 		};
 
-		virtual void ConstructBoundingBox() override
+		void ConstructBoundingBox() override
 		{
 			boundingBox = BVH::AxisAlignedBoundingBox(m_p1, m_p2);
 		}
 
-		virtual void Translate(const Vector3D<double>& t) override
+		void Translate(const Vector3D<double>& t) override
 		{
 			m_p1 += t;
 			m_p2 += t;
@@ -381,12 +381,12 @@ namespace Objects
 			ConstructBoundingBox();
 		}
 
-		virtual void RotateAround(const Vector3D<double>& v, double angle) override
+		void RotateAround(const Vector3D<double>& v, double angle) override
 		{
 			// for now, don't rotate them, need a different implementation for rotation
 		}
 
-		virtual void Scale(double s) override
+		void Scale(double s) override
 		{
 			m_p1 *= s;
 			m_p2 *= s;
@@ -451,12 +451,12 @@ namespace Objects
 			ConstructBoundingBox();
 		};
 
-		virtual void ConstructBoundingBox() override
+		void ConstructBoundingBox() override
 		{
 			boundingBox = BVH::AxisAlignedBoundingBox(m_p1, m_p2);
 		}
 
-		virtual void Translate(const Vector3D<double>& t) override
+		void Translate(const Vector3D<double>& t) override
 		{
 			m_p1 += t;
 			m_p2 += t;
@@ -466,12 +466,12 @@ namespace Objects
 			ConstructBoundingBox();
 		}
 
-		virtual void RotateAround(const Vector3D<double>& v, double angle) override
+		void RotateAround(const Vector3D<double>& v, double angle) override
 		{
 			// for now, don't rotate them, need a different implementation for rotation
 		}
 
-		virtual void Scale(double s) override
+		void Scale(double s) override
 		{
 			m_p1 *= s;
 			m_p2 *= s;
@@ -542,7 +542,6 @@ namespace Objects
 
 
 	protected:
-
 		void AddFaces(const std::shared_ptr<Materials::Material>& front_mat, const std::shared_ptr<Materials::Material>& back_mat, const std::shared_ptr<Materials::Material>& ceil_mat, const std::shared_ptr<Materials::Material>& floor_mat, const std::shared_ptr<Materials::Material>& left_mat, const std::shared_ptr<Materials::Material>& right_mat)
 		{
 			objects.emplace_back(std::make_shared<Transforms::FlipNormal>(std::make_shared<Objects::RectangleXY>(m_p1.X, m_p2.X, m_p1.Y, m_p2.Y, m_p2.Z, front_mat))); // front

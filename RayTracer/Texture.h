@@ -23,7 +23,7 @@ namespace Textures
 		Color m_color;
 	public:
 		ColorTexture(const Color& color) : m_color(color) {}
-		virtual Color Value(double u, double v, const Vector3D<double>& pos) const override { return m_color; }
+		Color Value(double u, double v, const Vector3D<double>& pos) const override { return m_color; }
 	};
 
 
@@ -37,7 +37,7 @@ namespace Textures
 	public:
 		CheckerTexture(const std::shared_ptr<Texture> texture1, const std::shared_ptr<Texture> texture2, double scale = 10.) : m_texture1(texture1), m_texture2(texture2), m_scale(scale) {}
 
-		virtual Color Value(double u, double v, const Vector3D<double>& pos) const override
+		Color Value(double u, double v, const Vector3D<double>& pos) const override
 		{
 			const double c = cos(m_scale * pos.X) * cos(m_scale * pos.Y) * cos(m_scale * pos.Z);
 

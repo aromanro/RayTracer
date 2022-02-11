@@ -20,10 +20,9 @@ namespace Objects {
 
 		VisibleObjectComposite() {}
 
-		virtual bool IsComposite() const override { return true; }
+		bool IsComposite() const override { return true; }
 
-
-		virtual bool Hit(const Ray& ray, PointInfo& info, double minr, double maxr, unsigned rcount, Random& random) const override
+		bool Hit(const Ray& ray, PointInfo& info, double minr, double maxr, unsigned rcount, Random& random) const override
 		{
 			if (root) return root->Hit(ray, info, minr, maxr, rcount, random);
 
@@ -45,7 +44,7 @@ namespace Objects {
 			return wasHit;
 		}
 
-		virtual bool BoundingBox(BVH::AxisAlignedBoundingBox& box) override
+		bool BoundingBox(BVH::AxisAlignedBoundingBox& box) override
 		{
 			if (objects.empty()) return false;
 
@@ -54,7 +53,7 @@ namespace Objects {
 			return true;
 		}
 
-		virtual void ConstructBoundingBox() override
+		void ConstructBoundingBox() override
 		{
 			if (objects.empty()) return;
 
@@ -72,7 +71,7 @@ namespace Objects {
 			}
 		}
 
-		virtual void ConstructBVH() override
+		void ConstructBVH() override
 		{
 			ConstructBoundingBox();
 
@@ -82,7 +81,7 @@ namespace Objects {
 			root = std::make_shared<BVH::BVHNode>(objects.begin(), objects.end());
 		}
 
-		virtual void Translate(const Vector3D<double>& t) override
+		void Translate(const Vector3D<double>& t) override
 		{
 			for (auto& obj : objects)
 				obj->Translate(t);
@@ -90,7 +89,7 @@ namespace Objects {
 			boundingBox.Translate(t);
 		}
 
-		virtual void RotateAround(const Vector3D<double>& v, double angle) override
+		void RotateAround(const Vector3D<double>& v, double angle) override
 		{
 			for (auto& obj : objects)
 				obj->RotateAround(v, angle);
@@ -99,7 +98,7 @@ namespace Objects {
 		}
 
 
-		virtual void Scale(double s) override
+		void Scale(double s) override
 		{
 			for (auto& obj : objects)
 				obj->Scale(s);
@@ -108,7 +107,7 @@ namespace Objects {
 		}
 
 
-		virtual double pdfValue(const Vector3D<double>& o, const Vector3D<double>& v, Random& rnd) const override
+		double pdfValue(const Vector3D<double>& o, const Vector3D<double>& v, Random& rnd) const override
 		{							
 			PointInfo info;
 
@@ -121,7 +120,7 @@ namespace Objects {
 			return 0;
 		}
 
-		virtual Vector3D<double> getRandom(const Vector3D<double>& origin, Random& rnd) const override
+		Vector3D<double> getRandom(const Vector3D<double>& origin, Random& rnd) const override
 		{
 			// this assumes equal weight for all objects contained, it could be improved (see also above)			
 			const unsigned int obj = static_cast<unsigned int>(rnd.getZeroOne() * static_cast<double>(objects.size()));
@@ -143,18 +142,18 @@ namespace Objects {
 			ConstructBVH();
 		}
 
-		virtual void ConstructBoundingBox() override
+		void ConstructBoundingBox() override
 		{
 			if (boundary) boundary->ConstructBoundingBox();
 		}
 
-		virtual void ConstructBVH() override
+		void ConstructBVH() override
 		{
 			if (boundary) boundary->ConstructBVH();
 		}
 
 
-		virtual bool BoundingBox(BVH::AxisAlignedBoundingBox& box) override
+		bool BoundingBox(BVH::AxisAlignedBoundingBox& box) override
 		{
 			if (!boundary) return false;
 
@@ -168,7 +167,7 @@ namespace Objects {
 			return normal;
 		}
 
-		virtual bool Hit(const Ray& ray, PointInfo& info, double minr, double maxr, unsigned rcount, Random& random) const override
+		bool Hit(const Ray& ray, PointInfo& info, double minr, double maxr, unsigned rcount, Random& random) const override
 		{
 			if (!boundary) return false;
 
@@ -206,19 +205,19 @@ namespace Objects {
 			return false;
 		}
 
-		virtual void Translate(const Vector3D<double>& t) override
+		void Translate(const Vector3D<double>& t) override
 		{
 			if (boundary)
 				boundary->Translate(t);
 		}
 
-		virtual void RotateAround(const Vector3D<double>& v, double angle) override
+		void RotateAround(const Vector3D<double>& v, double angle) override
 		{
 			if (boundary)
 				boundary->RotateAround(v, angle);
 		}
 
-		virtual void Scale(double s) override
+		void Scale(double s) override
 		{
 			if (boundary)
 				boundary->Scale(s);
