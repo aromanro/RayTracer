@@ -114,7 +114,6 @@ namespace Textures
 		}
 
 	protected:
-
 		std::vector<Vector3D<double>> ranVector;
 		std::vector<size_t> permX;
 		std::vector<size_t> permY;

@@ -29,7 +29,6 @@ public:
 	Options options;
 	
 protected:
-
 	bool TransferDataFromWindow() override;
 
 	void OnClose(wxCloseEvent& event);

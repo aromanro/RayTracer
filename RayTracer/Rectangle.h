@@ -33,7 +33,7 @@ namespace Objects
 			return normal;
 		}
 
-		virtual bool Hit(const Ray& ray, PointInfo& info, double minr, double maxr, unsigned rcount, Random& random) const override
+		bool Hit(const Ray& ray, PointInfo& info, double minr, double maxr, unsigned rcount, Random& random) const override
 		{
 			const double t = (m_z - ray.getOrigin().Z) * ray.getInvDir().Z;
 			if (t < minr || t > maxr) return false;

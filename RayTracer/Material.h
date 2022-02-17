@@ -70,8 +70,6 @@ namespace Materials {
 
 			return cosine * M_1_PI;
 		}
-
-
 	};
 
 

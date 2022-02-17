@@ -137,7 +137,7 @@ namespace PDFs
 		}
 
 
-		virtual double Value(const Vector3D<double>& dir, Random& rnd) override
+		double Value(const Vector3D<double>& dir, Random& rnd) override
 		{
 			const double cosine = dir * onb.w();
 			if (cosine < 0) return 0;
@@ -145,8 +145,7 @@ namespace PDFs
 			return cosine * M_1_PI;
 		}
 
-		virtual Vector3D<double> Generate(Random& rnd, Materials::ScatterInfo* info) override;
-
+		Vector3D<double> Generate(Random& rnd, Materials::ScatterInfo* info) override;
 
 	protected:
 		inline static double Schlick(const double val, double cosine)

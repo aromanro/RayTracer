@@ -86,7 +86,7 @@ namespace BVH
 			}
 		}
 
-		virtual bool Hit(const Ray& ray, PointInfo& info, double minr, double maxr, unsigned rcount, Random& random) const override
+		bool Hit(const Ray& ray, PointInfo& info, double minr, double maxr, unsigned rcount, Random& random) const override
 		{
 			if (boundingBox.Intersects(ray, minr, maxr))
 			{
