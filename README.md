@@ -1,6 +1,8 @@
 # RayTracer
 A ray tracing program
 
+[![CodeFactor](https://www.codefactor.io/repository/github/aromanro/raytracer/badge)](https://www.codefactor.io/repository/github/aromanro/raytracer)
+
 Mainly based on 'Ray Tracing' books from Peter Shirley: http://in1weekend.blogspot.com/2016/01/ray-tracing-in-one-weekend.html
 I skipped the boring (for me) texture generation part and also the motion bluring, I preffered to go further enhancing the materials and loading obj files.
 
