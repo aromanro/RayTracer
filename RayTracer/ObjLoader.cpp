@@ -333,23 +333,23 @@ bool ObjLoader::Load(const std::string& name, bool center)
 
 		const size_t indexvertex1 = std::get<0>(polygon[startPoint]);
 		const long long int indextex1 = std::get<1>(polygon[startPoint]);
-		const size_t indexnormal1 = std::get<2>(polygon[startPoint]);
+		const long long int indexnormal1 = std::get<2>(polygon[startPoint]);
 
 		const size_t indexvertex2 = std::get<0>(polygon[(startPoint + 1ULL) % polygon.size()]);
 		const long long int indextex2 = std::get<1>(polygon[(startPoint + 1ULL) % polygon.size()]);
-		const size_t indexnormal2 = std::get<2>(polygon[(startPoint + 1ULL) % polygon.size()]);
+		const long long int indexnormal2 = std::get<2>(polygon[(startPoint + 1ULL) % polygon.size()]);
 
 		const size_t indexvertex3 = std::get<0>(polygon[(startPoint + 2ULL) % polygon.size()]);
 		const long long int indextex3 = std::get<1>(polygon[(startPoint + 2ULL) % polygon.size()]);
-		const size_t indexnormal3 = std::get<2>(polygon[(startPoint + 2ULL) % polygon.size()]);
+		const long long int indexnormal3 = std::get<2>(polygon[(startPoint + 2ULL) % polygon.size()]);
 
 		if (indexvertex1 >= vertices.size()) break;
 		if (indexvertex2 >= vertices.size()) break;
 		if (indexvertex3 >= vertices.size()) break;
 
-		if (indexnormal1 >= normals.size()) break;
-		if (indexnormal2 >= normals.size()) break;
-		if (indexnormal3 >= normals.size()) break;
+		if (indexnormal1 >= static_cast<long long int>(normals.size()) || indexnormal1 < 0) break;
+		if (indexnormal2 >= static_cast<long long int>(normals.size()) || indexnormal2 < 0) break;
+		if (indexnormal3 >= static_cast<long long int>(normals.size()) || indexnormal3 < 0) break;
 
 		const Vector3D<double> firstPoint = vertices[indexvertex1];
 		const long long int firstIndexTex = indextex1;
@@ -407,8 +407,8 @@ bool ObjLoader::Load(const std::string& name, bool center)
 			if (nextIndexVertex >= vertices.size())
 				break;
 
-			const size_t nextIndexNormal = std::get<2>(polygon[ind]);
-			if (nextIndexNormal >= normals.size())
+			const long long int nextIndexNormal = std::get<2>(polygon[ind]);
+			if (nextIndexNormal >= static_cast<long long int>(normals.size()) || nextIndexNormal < 0)
 				break;
 
 			const long long int nextIndexTex = std::get<1>(polygon[ind]);
