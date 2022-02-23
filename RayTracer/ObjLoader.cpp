@@ -560,15 +560,15 @@ bool ObjLoader::IsConcave(const Polygon& polygon, const std::vector<Vector3D<dou
 bool ObjLoader::AddTriangle(int ind1, int ind2, int ind3, const Polygon& polygon, const std::vector<Vector3D<double>>& vertices, const std::vector<Vector3D<double>>& normals, const std::vector<std::pair<double, double>>& textureCoords, std::shared_ptr<Materials::Material> material, std::vector<std::shared_ptr<Objects::Triangle>>& triangles)
 {
 	const size_t indexvertex1 = std::get<0>(polygon[ind1]);
-	const size_t indextex1 = std::get<1>(polygon[ind1]);
+	const long long int indextex1 = std::get<1>(polygon[ind1]);
 	const size_t indexnormal1 = std::get<2>(polygon[ind1]);
 
 	const size_t indexvertex2 = std::get<0>(polygon[ind2]);
-	const size_t indextex2 = std::get<1>(polygon[ind2]);
+	const long long int indextex2 = std::get<1>(polygon[ind2]);
 	const size_t indexnormal2 = std::get<2>(polygon[ind2]);
 
 	const size_t indexvertex3 = std::get<0>(polygon[ind3]);
-	const size_t indextex3 = std::get<1>(polygon[ind3]);
+	const long long int indextex3 = std::get<1>(polygon[ind3]);
 	const size_t indexnormal3 = std::get<2>(polygon[ind3]);
 
 	if (indexvertex1 < 0 || indexvertex1 >= vertices.size()) return false;
@@ -580,11 +580,11 @@ bool ObjLoader::AddTriangle(int ind1, int ind2, int ind3, const Polygon& polygon
 	if (indexnormal3 < 0 || indexnormal3 >= normals.size()) return false;
 
 	const Vector3D<double> firstPoint = vertices[indexvertex1];
-	const size_t firstIndexTex = indextex1;
+	const long long int firstIndexTex = indextex1;
 	const Vector3D<double> firstNormal = normals[indexnormal1];
 
 	Vector3D<double> lastPoint(vertices[indexvertex3]);
-	size_t lastIndexTex = indextex3;
+	long long int lastIndexTex = indextex3;
 	Vector3D<double> lastNormal(normals[indexnormal3]);
 
 	std::shared_ptr<Objects::Triangle> triangle = std::make_shared<Objects::Triangle>(firstPoint, vertices[indexvertex2], lastPoint, firstNormal, normals[indexnormal2], lastNormal, material);
