@@ -570,7 +570,7 @@ bool ObjLoader::LoadMaterial(const std::string& name, const std::string& dir)
 
 	if (!infile) return false;
 
-	Material mat;
+	ObjMaterial mat;
 
 	std::string line;
 	while (std::getline(infile, line))
@@ -738,7 +738,7 @@ bool ObjLoader::LoadMaterial(const std::string& name, const std::string& dir)
 					int i;
 					std::istringstream sstream(line);
 					sstream >> i;
-					mat.illumination = Material::Illumination(i);
+					mat.illumination = ObjMaterial::Illumination(i);
 				}
 			}
 			break;
@@ -808,23 +808,7 @@ bool ObjLoader::LoadMaterial(const std::string& name, const std::string& dir)
 				{
 					if (!mat.IsEmpty())
 					{
-						// ambient texture and color are not used in this program, but set the empty values from the diffuse nevertheless
-						if (mat.ambientColor.TotalAbsorbant())
-						{
-							mat.ambientColor = mat.diffuseColor;
-							if (mat.ambientTexture.empty())
-								mat.ambientTexture = mat.diffuseTexture;
-						}
-
-						// the diffuse color and textures are used, in case they are empty set them from the ambient, maybe those are set to be used instead
-						if (mat.diffuseColor.TotalAbsorbant())
-						{
-							mat.diffuseColor = mat.ambientColor;
-
-							if (mat.diffuseTexture.empty())
-								mat.diffuseTexture = mat.ambientTexture;
-						}
-
+						mat.FixColors();
 						// save the old filled one
 						materials[mat.name] = mat;
 					}
@@ -849,25 +833,11 @@ bool ObjLoader::LoadMaterial(const std::string& name, const std::string& dir)
 		}
 	}
 
-	// ambient texture and color are not used in this program, but set the empty values from the diffuse nevertheless
-	if (mat.ambientColor.TotalAbsorbant())
-	{
-		mat.ambientColor = mat.diffuseColor;
-		if (mat.ambientTexture.empty())
-			mat.ambientTexture = mat.diffuseTexture;
-	}
-
-	// the diffuse color and textures are used, in case they are empty set them from the ambient, maybe those are set to be used instead
-	if (mat.diffuseColor.TotalAbsorbant())
-	{
-		mat.diffuseColor = mat.ambientColor;
-
-		if (mat.diffuseTexture.empty())
-			mat.diffuseTexture = mat.ambientTexture;
-	}
-
 	if (!mat.IsEmpty() && materials.find(mat.name) == materials.end())
-		materials[mat.name] = mat;
+	{
+		mat.FixColors();
+		materials[mat.name] = mat;	
+	}
 
 	return true;
 }

@@ -154,6 +154,7 @@
     <ClCompile Include="Material.cpp" />
     <ClCompile Include="NormalsTexture.cpp" />
     <ClCompile Include="ObjLoader.cpp" />
+    <ClCompile Include="ObjMaterial.cpp" />
     <ClCompile Include="Options.cpp" />
     <ClCompile Include="OptionsFrame.cpp" />
     <ClCompile Include="ProbabilityDistributionFunction.cpp" />
@@ -176,6 +177,7 @@
     <ClInclude Include="Material.h" />
     <ClInclude Include="NormalsTexture.h" />
     <ClInclude Include="ObjLoader.h" />
+    <ClInclude Include="ObjMaterial.h" />
     <ClInclude Include="Options.h" />
     <ClInclude Include="OptionsFrame.h" />
     <ClInclude Include="OrthoNormalBasis.h" />
