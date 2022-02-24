@@ -110,5 +110,8 @@ public:
 	bool IsEmpty() const { return name.empty(); }
 
 	void LoadLine(std::string& line);
+
+protected:
+	void LoadMap(std::string& line);
 };
 

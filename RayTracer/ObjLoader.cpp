@@ -573,7 +573,6 @@ bool ObjLoader::LoadMaterial(const std::string& name, const std::string& dir)
 
 		if (line.length() >= 2)
 		{
-
 			if (line.substr(0, 6) == "newmtl")
 			{
 				if (!mat.IsEmpty())
@@ -589,9 +588,7 @@ bool ObjLoader::LoadMaterial(const std::string& name, const std::string& dir)
 				mat.name = line;
 			}
 			else
-			{
 				mat.LoadLine(line);
-			}
 		}
 	}
 
