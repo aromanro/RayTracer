@@ -116,5 +116,10 @@ protected:
 	void LoadColor(std::string& line, Color& color);
 	void LoadMap(std::string& line);
 	void FixLine(std::string& line);
+	void LoadBumpLine(std::string& line);
+	void LoadIllumLine(std::string& line);
+	void LoadDissolveLine(std::string& line);
+	void LoadNsNiLine(std::string& line);
+	void LoadTfTrLine(std::string& line);
 };
 

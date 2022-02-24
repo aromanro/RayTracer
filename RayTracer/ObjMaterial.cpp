@@ -20,91 +20,111 @@ void ObjMaterial::LoadLine(std::string& line)
 		LoadColor(line);
 	break;
 	case 'T': //Tf or Tr
-	{
-		std::string what = line.substr(0, 2);
-		if (what == "Tf") // transmission filter
-		{
-			// TODO: again, for Tf is as above
-			line = line.substr(3);
-
-			// so check the prefix
-			if (line.substr(0, 3) != "xyz" && line.substr(0, 8) != "spectral")
-			{
-				std::istringstream sstream(line);
-
-				// TODO: implement it!
-			}
-			// else not implemented yet
-		}
-		else if (what == "Tr")
-		{
-			line = line.substr(3);
-
-			std::istringstream sstream(line);
-			sstream >> dissolve;
-			dissolve = 1. - dissolve;
-		}
-	}
+		LoadTfTrLine(line);
 	break;
 	case 'N': // Ns, Ni
-	{
-		std::string what = line.substr(0, 2);
-		if (what == "Ns") // specular exponent
-		{
-			line = line.substr(3);
-
-			std::istringstream sstream(line);
-			sstream >> exponent;
-		}
-		else if (what == "Ni") // optical density
-		{
-			line = line.substr(3);
-
-			std::istringstream sstream(line);
-			sstream >> refractionCoeff;
-		}
-	}
+		LoadNsNiLine(line);
 	break;
 	case 'd': //d = dissolve 
-	{
-		std::string what = line.substr(0, 1);
-		if (what == "d") // halo factor
-		{
-			line = line.substr(2);
-
-			std::istringstream sstream(line);
-			sstream >> dissolve;
-		}
-	}
+		LoadDissolveLine(line);
 	break;
 	case 'i': // illum
-	{
-		std::string what = line.substr(0, 5);
-		if (what == "illum")
-		{
-			line = line.substr(6);
-			int i;
-			std::istringstream sstream(line);
-			sstream >> i;
-			illumination = ObjMaterial::Illumination(i);
-		}
-	}
+		LoadIllumLine(line);
 	break;
 	case 'm': // map_Ka, map_Kd, map_Ks
 		LoadMap(line);
 	break;
 	case 'b':
-	{
-		std::string what = line.substr(0, 4);
-		if (what == "bump") // bump, see above map_bump, it's the same thing
-		{
-			line = line.substr(5);
-			bumpTexture = line;
-		}
-	}
+		LoadBumpLine(line);
 	break;
 	}
 }
+
+void ObjMaterial::LoadTfTrLine(std::string& line)
+{
+	std::string what = line.substr(0, 2);
+	if (what == "Tf") // transmission filter
+	{
+		// TODO: again, for Tf is as above
+		line = line.substr(3);
+
+		// so check the prefix
+		if (line.substr(0, 3) != "xyz" && line.substr(0, 8) != "spectral")
+		{
+			std::istringstream sstream(line);
+
+			// TODO: implement it!
+		}
+		// else not implemented yet
+	}
+	else if (what == "Tr")
+	{
+		line = line.substr(3);
+
+		std::istringstream sstream(line);
+		sstream >> dissolve;
+		dissolve = 1. - dissolve;
+	}
+}
+
+
+
+void ObjMaterial::LoadNsNiLine(std::string& line)
+{
+	std::string what = line.substr(0, 2);
+	if (what == "Ns") // specular exponent
+	{
+		line = line.substr(3);
+
+		std::istringstream sstream(line);
+		sstream >> exponent;
+	}
+	else if (what == "Ni") // optical density
+	{
+		line = line.substr(3);
+
+		std::istringstream sstream(line);
+		sstream >> refractionCoeff;
+	}
+}
+
+
+void ObjMaterial::LoadDissolveLine(std::string& line)
+{
+	std::string what = line.substr(0, 1);
+	if (what == "d") // halo factor
+	{
+		line = line.substr(2);
+
+		std::istringstream sstream(line);
+		sstream >> dissolve;
+	}
+}
+
+
+void ObjMaterial::LoadBumpLine(std::string& line)
+{
+	std::string what = line.substr(0, 4);
+	if (what == "bump") // bump, see above map_bump, it's the same thing
+	{
+		line = line.substr(5);
+		bumpTexture = line;
+	}
+}
+
+void ObjMaterial::LoadIllumLine(std::string& line)
+{
+	std::string what = line.substr(0, 5);
+	if (what == "illum")
+	{
+		line = line.substr(6);
+		int i;
+		std::istringstream sstream(line);
+		sstream >> i;
+		illumination = ObjMaterial::Illumination(i);
+	}
+}
+
 
 void ObjMaterial::LoadColor(std::string& line, Color& color)
 {
