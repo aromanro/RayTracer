@@ -113,5 +113,6 @@ public:
 
 protected:
 	void LoadMap(std::string& line);
+	void FixLine(std::string& line);
 };
 

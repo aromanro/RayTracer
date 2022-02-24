@@ -193,63 +193,58 @@ void ObjMaterial::LoadLine(std::string& line)
 	}
 }
 
+
+void ObjMaterial::FixLine(std::string& line)
+{
+	if (line.at(0) == '\\' || line.at(0) == '/')
+		line = line.substr(1);
+	std::replace(line.begin(), line.end(), '/', '\\');
+}
+
+
 void ObjMaterial::LoadMap(std::string& line)
 {
 	std::string what = line.substr(0, 6);
 	if (what == "map_Ka") // material ambient is multiplied by the texture value
 	{
 		line = line.substr(7);
-		if (line.at(0) == '\\' || line.at(0) == '/')
-			line = line.substr(1);
-		std::replace(line.begin(), line.end(), '/', '\\');
+		FixLine(line);
 		ambientTexture = line;
 	}
 	else if (what == "map_Kd") // material diffuse is multiplied by the texture value
 	{
 		line = line.substr(7);
-		if (line.at(0) == '\\' || line.at(0) == '/')
-			line = line.substr(1);
-		std::replace(line.begin(), line.end(), '/', '\\');
+		FixLine(line);
 		diffuseTexture = line;
 	}
 	else if (what == "map_Ks") // material specular is multiplied by the texture value
 	{
 		line = line.substr(7);
-		if (line.at(0) == '\\' || line.at(0) == '/')
-			line = line.substr(1);
-		std::replace(line.begin(), line.end(), '/', '\\');
+		FixLine(line);
 		specularTexture = line;
 	}
 	else if (what == "map_Ke") // material emission color is multiplied by the texture value
 	{
 		line = line.substr(7);
-		if (line.at(0) == '\\' || line.at(0) == '/')
-			line = line.substr(1);
-		std::replace(line.begin(), line.end(), '/', '\\');
+		FixLine(line);
 		glowTexture = line;
 	}
 	else if (what == "map_Ns") // material specular exponent is multiplied by the texture value
 	{
 		line = line.substr(7);
-		if (line.at(0) == '\\' || line.at(0) == '/')
-			line = line.substr(1);
-		std::replace(line.begin(), line.end(), '/', '\\');
+		FixLine(line);
 		exponentTexture = line;
 	}
 	else if (what == "map_d") // material dissolve is multiplied by the texture value
 	{
 		line = line.substr(6);
-		if (line.at(0) == '\\' || line.at(0) == '/')
-			line = line.substr(1);
-		std::replace(line.begin(), line.end(), '/', '\\');
+		FixLine(line);
 		dissolveTexture = line;
 	}
 	else if (what == "map_bump") // bump mapping, this probably should be implemented
 	{
 		line = line.substr(9);
-		if (line.at(0) == '\\' || line.at(0) == '/')
-			line = line.substr(1);
-		std::replace(line.begin(), line.end(), '/', '\\');
+		FixLine(line);
 		bumpTexture = line;
 	}
 }
