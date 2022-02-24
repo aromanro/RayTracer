@@ -112,6 +112,7 @@ public:
 	void LoadLine(std::string& line);
 
 protected:
+	void LoadColor(std::string& line);
 	void LoadMap(std::string& line);
 	void FixLine(std::string& line);
 };

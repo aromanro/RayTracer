@@ -17,94 +17,7 @@ void ObjMaterial::LoadLine(std::string& line)
 	switch (line.at(0))
 	{
 	case 'K': // Ka, Kd, Ks
-	{
-		std::string what = line.substr(0, 2);
-		if (what == "Ka") // ambient reflectivity
-		{
-			// TODO: can actually be not ony 'Ka r g b' but also 'Ka spectral file.rfl factor' or 'Ka xyz x y z'
-			line = line.substr(3);
-
-			// so check the prefix
-			if (line.substr(0, 3) != "xyz" && line.substr(0, 8) != "spectral")
-			{
-				std::istringstream sstream(line);
-
-				sstream >> ambientColor.r;
-				try
-				{
-					sstream >> ambientColor.g >> ambientColor.b;
-				}
-				catch (...)
-				{
-					ambientColor.g = ambientColor.b = ambientColor.r;
-				}
-			}
-			// else not implemented yet
-		}
-		else if (what == "Kd") // diffuse reflectivity
-		{
-			// TODO: for Kd is as above
-			line = line.substr(3);
-
-			// so check the prefix
-			if (line.substr(0, 3) != "xyz" && line.substr(0, 8) != "spectral")
-			{
-				std::istringstream sstream(line);
-				sstream >> diffuseColor.r;
-				try
-				{
-					sstream >> diffuseColor.g >> diffuseColor.b;
-				}
-				catch (...)
-				{
-					diffuseColor.g = diffuseColor.b = diffuseColor.r;
-				}
-			}
-			// else not implemented yet
-		}
-		else if (what == "Ks") // specular reflectivity
-		{
-			// TODO: for Ks is as above
-			line = line.substr(3);
-
-			// so check the prefix
-			if (line.substr(0, 3) != "xyz" && line.substr(0, 8) != "spectral")
-			{
-				std::istringstream sstream(line);
-				sstream >> specularColor.r;
-				try
-				{
-					sstream >> specularColor.g >> specularColor.b;
-				}
-				catch (...)
-				{
-					specularColor.g = specularColor.b = specularColor.r;
-				}
-			}
-			// else not implemented yet
-		}
-		else if (what == "Ke") // emission color
-		{
-			// TODO: for Ke is as above
-			line = line.substr(3);
-
-			// so check the prefix
-			if (line.substr(0, 3) != "xyz" && line.substr(0, 8) != "spectral")
-			{
-				std::istringstream sstream(line);
-				sstream >> emissionColor.r;
-				try
-				{
-					sstream >> emissionColor.g >> emissionColor.b;
-				}
-				catch (...)
-				{
-					emissionColor.g = emissionColor.b = emissionColor.r;
-				}
-			}
-			// else not implemented yet
-		}
-	}
+		LoadColor(line);
 	break;
 	case 'T': //Tf or Tr
 	{
@@ -193,6 +106,95 @@ void ObjMaterial::LoadLine(std::string& line)
 	}
 }
 
+void ObjMaterial::LoadColor(std::string& line)
+{
+	std::string what = line.substr(0, 2);
+	if (what == "Ka") // ambient reflectivity
+	{
+		// TODO: can actually be not ony 'Ka r g b' but also 'Ka spectral file.rfl factor' or 'Ka xyz x y z'
+		line = line.substr(3);
+
+		// so check the prefix
+		if (line.substr(0, 3) != "xyz" && line.substr(0, 8) != "spectral")
+		{
+			std::istringstream sstream(line);
+
+			sstream >> ambientColor.r;
+			try
+			{
+				sstream >> ambientColor.g >> ambientColor.b;
+			}
+			catch (...)
+			{
+				ambientColor.g = ambientColor.b = ambientColor.r;
+			}
+		}
+		// else not implemented yet
+	}
+	else if (what == "Kd") // diffuse reflectivity
+	{
+		// TODO: for Kd is as above
+		line = line.substr(3);
+
+		// so check the prefix
+		if (line.substr(0, 3) != "xyz" && line.substr(0, 8) != "spectral")
+		{
+			std::istringstream sstream(line);
+			sstream >> diffuseColor.r;
+			try
+			{
+				sstream >> diffuseColor.g >> diffuseColor.b;
+			}
+			catch (...)
+			{
+				diffuseColor.g = diffuseColor.b = diffuseColor.r;
+			}
+		}
+		// else not implemented yet
+	}
+	else if (what == "Ks") // specular reflectivity
+	{
+		// TODO: for Ks is as above
+		line = line.substr(3);
+
+		// so check the prefix
+		if (line.substr(0, 3) != "xyz" && line.substr(0, 8) != "spectral")
+		{
+			std::istringstream sstream(line);
+			sstream >> specularColor.r;
+			try
+			{
+				sstream >> specularColor.g >> specularColor.b;
+			}
+			catch (...)
+			{
+				specularColor.g = specularColor.b = specularColor.r;
+			}
+		}
+		// else not implemented yet
+	}
+	else if (what == "Ke") // emission color
+	{
+		// TODO: for Ke is as above
+		line = line.substr(3);
+
+		// so check the prefix
+		if (line.substr(0, 3) != "xyz" && line.substr(0, 8) != "spectral")
+		{
+			std::istringstream sstream(line);
+			sstream >> emissionColor.r;
+			try
+			{
+				sstream >> emissionColor.g >> emissionColor.b;
+			}
+			catch (...)
+			{
+				emissionColor.g = emissionColor.b = emissionColor.r;
+			}
+		}
+		// else not implemented yet
+	}
+}
 
 void ObjMaterial::FixLine(std::string& line)
 {
