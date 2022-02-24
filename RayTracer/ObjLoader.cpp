@@ -53,123 +53,14 @@ bool ObjLoader::Load(const std::string& name, bool center)
 			switch (line.at(0))
 			{
 			case 'v': // vertex info
-				if (line.at(1) == 't') // texture coordinates
-				{
-					line = line.substr(3);
-
-					std::istringstream sstream(line);
-
-					double u = 0;
-					double v = 0;
-
-					sstream >> u >> v;
-
-					// for tilling
-					u -= floor(u);
-					v -= floor(v);
-
-					textureCoords.emplace_back(std::make_pair(u, v));
-				}
-				else if (line.at(1) == 'n') // vertex normal
-				{
-					line = line.substr(3);
-
-					Vector3D<double> normal;
-
-					std::istringstream sstream(line);
-					sstream >> normal.X >> normal.Y >> normal.Z;
-
-					normals.emplace_back(normal);
-				}
-				else if (line.at(1) == ' ' || line.at(1) == '\t') // the actual vertex
-				{
-					line = line.substr(2);
-
-					Vector3D<double> vertex;
-
-					std::istringstream sstream(line);
-					sstream >> vertex.X >> vertex.Y >> vertex.Z;
-
-					vertices.emplace_back(vertex);
-
-					centerCoord += vertex;
-				}
-
+				LoadVertexInfo(line, vertices, normals, textureCoords, centerCoord);
 				break;
 
 			case 'f': // face - can be a triangle or in general, some polygon
 			{
 				line = line.substr(2);
 
-				std::istringstream sstream(line);
-				std::string token;
-
-				Polygon polygon;
-
-				while (std::getline(sstream, token, ' '))
-				{
-					// a 'token' contains info about the vertex
-					// index/index/index, where index starts from 1 and is
-					// first number: index for the vertex
-					// second: index for texture coordinate (can miss)
-					// third: index for the normal (can miss?)
-
-					std::istringstream tokenstream(token);
-
-
-					long long int indexvertex = 0;
-					long long int indextex = 0;
-					long long int indexnormal = 0;
-
-					std::string val;
-					int cnt = 0;
-					while (std::getline(tokenstream, val, '/'))
-					{
-						if (0 == cnt)
-						{
-							indexvertex = std::stoi(val);
-							// indices may be negative, in that case it indexes from last position backwards
-							if (indexvertex < 0)
-								indexvertex = vertices.size() + indexvertex + 1; // +1 because there will be decremented later
-						}
-						else if (1 == cnt)
-						{
-							if (!val.empty())
-							{
-								indextex = std::stoi(val);
-
-								// indices may be negative, in that case it indexes from last position backwards
-								if (indextex < 0)
-									indextex = textureCoords.size() + indextex + 1; // +1 because there will be decremented later
-							}
-						}
-						else
-						{
-							if (!val.empty())
-							{
-								indexnormal = std::stoi(val);
-								// indices may be negative, in that case it indexes from last position backwards
-								if (indexnormal < 0)
-									indexnormal = normals.size() + indexnormal + 1; // +1 because there will be decremented later
-							}
-
-							break;
-						}
-
-						++cnt;
-					}
-
-					--indexvertex;
-					--indextex;
-					--indexnormal;
-
-					if (indexvertex < 0 || indexnormal < 0)
-						break;
-
-					polygon.emplace_back(std::make_tuple(indexvertex, indextex, indexnormal));
-				}
-
-				if (polygon.size() > 2) polygons.emplace_back(std::make_pair(polygon, curMaterial));
+				LoadFace(line, curMaterial, polygons, vertices, normals, textureCoords);
 			}
 			break;
 
@@ -225,6 +116,127 @@ bool ObjLoader::Load(const std::string& name, bool center)
 
 	return true;
 }
+
+
+void ObjLoader::LoadFace(std::string& line, const std::string& curMaterial, std::vector<std::pair<Polygon, std::string>>& polygons, const std::vector<Vector3D<double>>& vertices, const std::vector<Vector3D<double>>& normals, const std::vector<std::pair<double, double>>& textureCoords)
+{
+	std::istringstream sstream(line);
+	std::string token;
+
+	Polygon polygon;
+
+	while (std::getline(sstream, token, ' '))
+	{
+		// a 'token' contains info about the vertex
+		// index/index/index, where index starts from 1 and is
+		// first number: index for the vertex
+		// second: index for texture coordinate (can miss)
+		// third: index for the normal (can miss?)
+
+		std::istringstream tokenstream(token);
+
+
+		long long int indexvertex = 0;
+		long long int indextex = 0;
+		long long int indexnormal = 0;
+
+		std::string val;
+		int cnt = 0;
+		while (std::getline(tokenstream, val, '/'))
+		{
+			if (0 == cnt)
+			{
+				indexvertex = std::stoi(val);
+				// indices may be negative, in that case it indexes from last position backwards
+				if (indexvertex < 0)
+					indexvertex = vertices.size() + indexvertex + 1; // +1 because there will be decremented later
+			}
+			else if (1 == cnt)
+			{
+				if (!val.empty())
+				{
+					indextex = std::stoi(val);
+
+					// indices may be negative, in that case it indexes from last position backwards
+					if (indextex < 0)
+						indextex = textureCoords.size() + indextex + 1; // +1 because there will be decremented later
+				}
+			}
+			else
+			{
+				if (!val.empty())
+				{
+					indexnormal = std::stoi(val);
+					// indices may be negative, in that case it indexes from last position backwards
+					if (indexnormal < 0)
+						indexnormal = normals.size() + indexnormal + 1; // +1 because there will be decremented later
+				}
+
+				break;
+			}
+
+			++cnt;
+		}
+
+		--indexvertex;
+		--indextex;
+		--indexnormal;
+
+		if (indexvertex < 0 || indexnormal < 0)
+			break;
+
+		polygon.emplace_back(std::make_tuple(indexvertex, indextex, indexnormal));
+	}
+
+	if (polygon.size() > 2) polygons.emplace_back(std::make_pair(polygon, curMaterial));
+}
+
+
+void ObjLoader::LoadVertexInfo(std::string& line, std::vector<Vector3D<double>>& vertices, std::vector<Vector3D<double>>& normals, std::vector<std::pair<double, double>>& textureCoords, Vector3D<double>& centerCoord)
+{
+	if (line.at(1) == 't') // texture coordinates
+	{
+		line = line.substr(3);
+
+		std::istringstream sstream(line);
+
+		double u = 0;
+		double v = 0;
+
+		sstream >> u >> v;
+
+		// for tilling
+		u -= floor(u);
+		v -= floor(v);
+
+		textureCoords.emplace_back(std::make_pair(u, v));
+	}
+	else if (line.at(1) == 'n') // vertex normal
+	{
+		line = line.substr(3);
+
+		Vector3D<double> normal;
+
+		std::istringstream sstream(line);
+		sstream >> normal.X >> normal.Y >> normal.Z;
+
+		normals.emplace_back(normal);
+	}
+	else if (line.at(1) == ' ' || line.at(1) == '\t') // the actual vertex
+	{
+		line = line.substr(2);
+
+		Vector3D<double> vertex;
+
+		std::istringstream sstream(line);
+		sstream >> vertex.X >> vertex.Y >> vertex.Z;
+
+		vertices.emplace_back(vertex);
+
+		centerCoord += vertex;
+	}
+}
+
 
 void ObjLoader::BuildMaterialsMap(std::map<std::string, std::shared_ptr<Materials::Material>>& materialsMap, const std::string& dirv)
 {
