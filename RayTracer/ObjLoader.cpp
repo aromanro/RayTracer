@@ -2,8 +2,6 @@
 #include "Material.h"
 #include "ImageTexture.h"
 
-#include "TexturesCache.h"
-
 #include <fstream>
 #include <sstream>
 #include <cctype>
@@ -228,86 +226,97 @@ bool ObjLoader::Load(const std::string& name, bool center)
 	return true;
 }
 
-void ObjLoader::BuildMaterialsMap(std::map<std::string, std::shared_ptr<Materials::Material>>& materialsMap, const std::string& dir)
+void ObjLoader::BuildMaterialsMap(std::map<std::string, std::shared_ptr<Materials::Material>>& materialsMap, const std::string& dirv)
 {
 	TexturesCache texturesCache;
 
-	bool addSlash = false;
+	std::string dir = dirv;
 	if (!dir.empty() && dir.at(dir.size() - 1) != '\\' && dir.at(dir.size() - 1) != '/')
-		addSlash = true;
+		dir += "\\";
 
 	for (const auto& mat : materials)
 	{
 		if (mat.second.diffuseTexture.empty())
 		{
-			auto tex = std::dynamic_pointer_cast<Textures::Texture>(std::make_shared<Textures::ColorTexture>((mat.second.IsTransparent() && mat.second.diffuseColor.VeryAbsorbing()) ? mat.second.specularColor : mat.second.diffuseColor));
-
-			if (mat.second.IsTransparent()) materialsMap[mat.first] = std::make_shared<Materials::Dielectric>(mat.second.refractionCoeff <= 1. ? 1.5 : mat.second.refractionCoeff, tex);
-			else
-			{
-				if (mat.second.IsSpecular())
-				{
-					std::shared_ptr<Textures::Texture> specTexture;
-
-					if (mat.second.specularTexture.empty())
-						specTexture = std::dynamic_pointer_cast<Textures::Texture>(std::make_shared<Textures::ColorTexture>(mat.second.specularColor));
-					else
-					{
-						const std::string tname = dir + (addSlash ? "\\" : "") + mat.second.specularTexture;
-						specTexture = texturesCache.Get(tname, mat.second.specularColor);
-					}
-
-					const double exponent = mat.second.exponent /*/ 10.*/;
-
-					if (mat.second.exponentTexture.empty())
-						materialsMap[mat.first] = std::make_shared<Materials::AnisotropicPhong>(exponent, exponent, tex, specTexture);
-					else
-					{
-						const std::string tname = dir + (addSlash ? "\\" : "") + mat.second.exponentTexture;
-						std::shared_ptr<Textures::Texture> expTexture = texturesCache.Get(tname, Color());
-
-						materialsMap[mat.first] = std::make_shared<Materials::AnisotropicPhong>(exponent, exponent, tex, specTexture, expTexture);
-					}
-				}
-				else materialsMap[mat.first] = std::make_shared<Materials::Lambertian>(tex);
-			}
+			AddMaterialNoDiffuseTexture(materialsMap, mat, dir, texturesCache);
 		}
 		else
 		{
-			const std::string tname = dir + (addSlash ? "\\" : "") + mat.second.diffuseTexture;
-			auto tex = texturesCache.Get(tname, mat.second.diffuseColor);
+			AddMaterialWithDiffuseTexture(materialsMap, mat, dir, texturesCache);
+		}
+	}
+}
 
-			if (mat.second.IsTransparent()) materialsMap[mat.first] = std::make_shared<Materials::Dielectric>(mat.second.refractionCoeff <= 1. ? 1.5 : mat.second.refractionCoeff, tex);
+void ObjLoader::AddMaterialWithDiffuseTexture(std::map<std::string, std::shared_ptr<Materials::Material>>& materialsMap, const std::pair<std::string, ObjMaterial>& mat, const std::string& dir, TexturesCache& texturesCache)
+{
+	const std::string tname = dir + mat.second.diffuseTexture;
+	auto tex = texturesCache.Get(tname, mat.second.diffuseColor);
+
+	if (mat.second.IsTransparent()) materialsMap[mat.first] = std::make_shared<Materials::Dielectric>(mat.second.refractionCoeff <= 1. ? 1.5 : mat.second.refractionCoeff, tex);
+	else
+	{
+		if (mat.second.IsSpecular())
+		{
+			std::shared_ptr<Textures::Texture> specTexture;
+
+
+			if (mat.second.specularTexture.empty())
+				specTexture = std::dynamic_pointer_cast<Textures::Texture>(std::make_shared<Textures::ColorTexture>(mat.second.specularColor));
 			else
 			{
-				if (mat.second.IsSpecular())
-				{
-					std::shared_ptr<Textures::Texture> specTexture;
+				const std::string tname = dir + mat.second.specularTexture;
+				specTexture = texturesCache.Get(tname, mat.second.specularColor);
+			}
 
+			const double exponent = mat.second.exponent/*/ 10.*/;
 
-					if (mat.second.specularTexture.empty())
-						specTexture = std::dynamic_pointer_cast<Textures::Texture>(std::make_shared<Textures::ColorTexture>(mat.second.specularColor));
-					else
-					{
-						const std::string tname = dir + (addSlash ? "\\" : "") + mat.second.specularTexture;
-						specTexture = texturesCache.Get(tname, mat.second.specularColor);
-					}
+			if (mat.second.exponentTexture.empty())
+				materialsMap[mat.first] = std::make_shared<Materials::AnisotropicPhong>(exponent, exponent, tex, specTexture);
+			else
+			{
+				const std::string tname = dir + mat.second.exponentTexture;
+				std::shared_ptr<Textures::Texture> expTexture = texturesCache.Get(tname, Color());
 
-					const double exponent = mat.second.exponent/*/ 10.*/;
-
-					if (mat.second.exponentTexture.empty())
-						materialsMap[mat.first] = std::make_shared<Materials::AnisotropicPhong>(exponent, exponent, tex, specTexture);
-					else
-					{
-						const std::string tname = dir + (addSlash ? "\\" : "") + mat.second.exponentTexture;
-						std::shared_ptr<Textures::Texture> expTexture = texturesCache.Get(tname, Color());
-
-						materialsMap[mat.first] = std::make_shared<Materials::AnisotropicPhong>(exponent, exponent, tex, specTexture, expTexture);
-					}
-				}
-				else materialsMap[mat.first] = std::make_shared<Materials::Lambertian>(tex);
+				materialsMap[mat.first] = std::make_shared<Materials::AnisotropicPhong>(exponent, exponent, tex, specTexture, expTexture);
 			}
 		}
+		else materialsMap[mat.first] = std::make_shared<Materials::Lambertian>(tex);
+	}
+}
+
+
+void ObjLoader::AddMaterialNoDiffuseTexture(std::map<std::string, std::shared_ptr<Materials::Material>>& materialsMap, const std::pair<std::string, ObjMaterial>& mat, const std::string& dir, TexturesCache& texturesCache)
+{
+	auto tex = std::dynamic_pointer_cast<Textures::Texture>(std::make_shared<Textures::ColorTexture>((mat.second.IsTransparent() && mat.second.diffuseColor.VeryAbsorbing()) ? mat.second.specularColor : mat.second.diffuseColor));
+
+	if (mat.second.IsTransparent()) materialsMap[mat.first] = std::make_shared<Materials::Dielectric>(mat.second.refractionCoeff <= 1. ? 1.5 : mat.second.refractionCoeff, tex);
+	else
+	{
+		if (mat.second.IsSpecular())
+		{
+			std::shared_ptr<Textures::Texture> specTexture;
+
+			if (mat.second.specularTexture.empty())
+				specTexture = std::dynamic_pointer_cast<Textures::Texture>(std::make_shared<Textures::ColorTexture>(mat.second.specularColor));
+			else
+			{
+				const std::string tname = dir + mat.second.specularTexture;
+				specTexture = texturesCache.Get(tname, mat.second.specularColor);
+			}
+
+			const double exponent = mat.second.exponent /*/ 10.*/;
+
+			if (mat.second.exponentTexture.empty())
+				materialsMap[mat.first] = std::make_shared<Materials::AnisotropicPhong>(exponent, exponent, tex, specTexture);
+			else
+			{
+				const std::string tname = dir + mat.second.exponentTexture;
+				std::shared_ptr<Textures::Texture> expTexture = texturesCache.Get(tname, Color());
+
+				materialsMap[mat.first] = std::make_shared<Materials::AnisotropicPhong>(exponent, exponent, tex, specTexture, expTexture);
+			}
+		}
+		else materialsMap[mat.first] = std::make_shared<Materials::Lambertian>(tex);
 	}
 }
 
