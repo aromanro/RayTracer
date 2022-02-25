@@ -81,7 +81,7 @@ public:
 
 		if (!specularTexture.empty() && specularColor.TotalAbsorbant())
 		{
-			specularColor.r = specularColor.g = specularColor.b = 1;
+			specularColor = diffuseColor;
 		}
 	}
 
