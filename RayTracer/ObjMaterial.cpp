@@ -229,6 +229,7 @@ void ObjMaterial::LoadMap(std::string& line)
 	}
 	else
 	{
+		what = line.substr(0, 8);
 		if (what == "map_bump" || what == "map_Bump") // bump mapping, this probably should be implemented
 		{
 			line = line.substr(9);
