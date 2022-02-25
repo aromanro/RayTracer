@@ -18,25 +18,26 @@ void ObjMaterial::LoadLine(std::string& line)
 	{
 	case 'K': // Ka, Kd, Ks
 		LoadColor(line);
-	break;
+		break;
 	case 'T': //Tf or Tr
 		LoadTfTrLine(line);
-	break;
+		break;
 	case 'N': // Ns, Ni
 		LoadNsNiLine(line);
-	break;
+		break;
 	case 'd': //d = dissolve 
 		LoadDissolveLine(line);
-	break;
+		break;
 	case 'i': // illum
 		LoadIllumLine(line);
-	break;
+		break;
 	case 'm': // map_Ka, map_Kd, map_Ks
 		LoadMap(line);
-	break;
+		break;
 	case 'b':
+	case 'B':
 		LoadBumpLine(line);
-	break;
+		break;
 	}
 }
 
@@ -105,7 +106,7 @@ void ObjMaterial::LoadDissolveLine(std::string& line)
 void ObjMaterial::LoadBumpLine(std::string& line)
 {
 	std::string what = line.substr(0, 4);
-	if (what == "bump") // bump, see above map_bump, it's the same thing
+	if (what == "bump" || what == "Bump") // bump, see above map_bump, it's the same thing
 	{
 		line = line.substr(5);
 		bumpTexture = line;
@@ -226,7 +227,7 @@ void ObjMaterial::LoadMap(std::string& line)
 		FixLine(line);
 		dissolveTexture = line;
 	}
-	else if (what == "map_bump") // bump mapping, this probably should be implemented
+	else if (what == "map_bump" || what == "map_Bump") // bump mapping, this probably should be implemented
 	{
 		line = line.substr(9);
 		FixLine(line);
