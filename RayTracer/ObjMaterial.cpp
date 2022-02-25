@@ -221,16 +221,19 @@ void ObjMaterial::LoadMap(std::string& line)
 		FixLine(line);
 		exponentTexture = line;
 	}
-	else if (what == "map_d") // material dissolve is multiplied by the texture value
+	else if (what == "map_d " || what == "map_d\t") // material dissolve is multiplied by the texture value
 	{
 		line = line.substr(6);
 		FixLine(line);
 		dissolveTexture = line;
 	}
-	else if (what == "map_bump" || what == "map_Bump") // bump mapping, this probably should be implemented
+	else
 	{
-		line = line.substr(9);
-		FixLine(line);
-		bumpTexture = line;
+		if (what == "map_bump" || what == "map_Bump") // bump mapping, this probably should be implemented
+		{
+			line = line.substr(9);
+			FixLine(line);
+			bumpTexture = line;
+		}
 	}
 }
