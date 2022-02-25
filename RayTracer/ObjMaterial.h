@@ -81,8 +81,7 @@ public:
 
 		if (!specularTexture.empty() && specularColor.TotalAbsorbant())
 		{
-			// TODO: Should I set it to diffuseColor instead?
-			specularColor.r = specularColor.g = specularColor.b = 1;
+			specularColor = diffuseColor;
 		}
 	}
 
