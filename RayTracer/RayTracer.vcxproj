@@ -162,6 +162,7 @@
     <ClCompile Include="Ray.cpp" />
     <ClCompile Include="RayTracerApp.cpp" />
     <ClCompile Include="RayTracerFrame.cpp" />
+    <ClCompile Include="RayTracerFrameScenes.cpp" />
     <ClCompile Include="Sphere.cpp" />
     <ClCompile Include="TexturesCache.cpp" />
     <ClCompile Include="Triangle.cpp" />

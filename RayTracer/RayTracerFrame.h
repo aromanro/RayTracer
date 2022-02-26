@@ -19,11 +19,37 @@
 	#include "wx/wx.h"
 #endif
 
+#ifndef M_PI_2
+#define M_PI_2     1.57079632679489661923
+#endif // !M_PI_2
+
+
+#ifndef M_1_PI
+#define M_1_PI     0.318309886183790671538  // 1/pi
+#endif 
 
 #include <atomic>
 #include <vector>
 
 #include "Color.h"
+
+#include "Random.h"
+
+#include "Ray.h"
+#include "Sphere.h"
+#include "Camera.h"
+#include "Material.h"
+#include "Scene.h"
+#include "ImageTexture.h"
+#include "Perlin.h"
+#include "Rectangle.h"
+#include "Actions.h"
+
+#include "Triangle.h"
+
+#include "ObjLoader.h"
+
+#include "Options.h"
 
 
 //#define RECORD_MOVIE
@@ -65,6 +91,10 @@ private:
 	void OnPaint(wxPaintEvent& evt);
 
 	void SaveToAsPPM(const wxString& fileName);
+
+	static void FillRandomScene(Scene& scene, const Options& options);
+	static void FillCornellScene(Scene& scene, const Options& options);
+	static void FillOtherScene(Scene& scene, const Options& options);
 
 	wxDECLARE_EVENT_TABLE();
 };
