@@ -16,8 +16,6 @@
 #include <fstream>
 
 #include <memory>
-#include <future>
-
 
 #include "Triangle.h"
 
@@ -235,83 +233,18 @@ void RayTracerFrame::Compute()
 
 				if (jitter)
 				{
-					for (int i = 0; i < nx; ++i)
-					{
-						const double originX = static_cast<double>(i);
-						for (int j = 0; j < ny; ++j)
-						{
-							Color radiance;
-							const double originY = static_cast<double>(j);
-
-							for (int k = 0; k < samples; ++k)
-							{
-								const double posX = static_cast<double>(k) / samples;
-								for (int l = 0; l < samples; ++l)
-								{
-									const double posY = static_cast<double>(l) / samples;
-
-									const double x = (originX + posX + random.getZeroOne() / samples) / nx;
-									const double y = (originY + posY + random.getZeroOne() / samples) / ny;
-
-									radiance += scene.RayCast(camera.getRay(x, y, random), random, 0, distMax);
-								}
-							}
-
-							
-							results[i][j] += radiance;
-						}
-					}
+					ComputeJitter(nx, ny, samples, distMax, random, camera, scene, results);
 				}
 				else
 				{
-					for (int i = 0; i < nx; ++i)
-					{
-						const double originX = static_cast<double>(i);
-						for (int j = 0; j < ny; ++j)
-						{
-							Color radiance;
-							const double originY = static_cast<double>(j);
-
-							for (int s = 0; s < samples; ++s)
-							{
-								const double x = (originX + random.getZeroOne()) / nx;
-								const double y = (originY + random.getZeroOne()) / ny;
-
-								radiance += scene.RayCast(camera.getRay(x, y, random), random, 0, distMax);
-							}
-
-							results[i][j] += radiance;
-						}
-					}
+					ComputeNoJitter(nx, ny, samples, distMax, random, camera, scene, results);
 				}
 
 				return std::move(results);
 			});
 		}
 
-		std::vector<std::vector<Color>> image(nx);
-		for (int i = 0; i < nx; ++i) image[i].resize(ny);
-
-		for (auto &task : tasks)
-		{
-			const auto results = task.get();
-
-			for (int j = 0; j < ny; ++j)
-				for (int i = 0; i < nx; ++i)
-					image[i][j] += results[i][j];
-		}
-
-
-		if (jitter) samples *= samples;
-
-		for (int i = 0; i < nx; ++i)
-			for (int j = 0; j < ny; ++j)
-			{
-				image[i][j] /= static_cast<double>(samples) * nrThreads;
-				image[i][j].Clamp();
-			}
-
-		result = image;
+		GetResults(tasks, nx, ny, nrThreads, jitter, samples);
 
 		std::chrono::high_resolution_clock::time_point t3 = std::chrono::high_resolution_clock::now();
 		dif = std::chrono::duration_cast<std::chrono::seconds>(t3 - t2).count();
@@ -323,6 +256,87 @@ void RayTracerFrame::Compute()
 		runningThreads = 0;
 	}).detach();
 }
+
+void RayTracerFrame::ComputeNoJitter(int nx, int ny, int samples, double distMax, Random& random, Camera& camera, Scene& scene, std::vector<std::vector<Color>>& results)
+{
+	for (int i = 0; i < nx; ++i)
+	{
+		const double originX = static_cast<double>(i);
+		for (int j = 0; j < ny; ++j)
+		{
+			Color radiance;
+			const double originY = static_cast<double>(j);
+
+			for (int s = 0; s < samples; ++s)
+			{
+				const double x = (originX + random.getZeroOne()) / nx;
+				const double y = (originY + random.getZeroOne()) / ny;
+
+				radiance += scene.RayCast(camera.getRay(x, y, random), random, 0, distMax);
+			}
+
+			results[i][j] += radiance;
+		}
+	}
+}
+
+void RayTracerFrame::ComputeJitter(int nx, int ny, int samples, double distMax, Random& random, Camera& camera, Scene& scene, std::vector<std::vector<Color>>& results)
+{
+	for (int i = 0; i < nx; ++i)
+	{
+		const double originX = static_cast<double>(i);
+		for (int j = 0; j < ny; ++j)
+		{
+			Color radiance;
+			const double originY = static_cast<double>(j);
+
+			for (int k = 0; k < samples; ++k)
+			{
+				const double posX = static_cast<double>(k) / samples;
+				for (int l = 0; l < samples; ++l)
+				{
+					const double posY = static_cast<double>(l) / samples;
+
+					const double x = (originX + posX + random.getZeroOne() / samples) / nx;
+					const double y = (originY + posY + random.getZeroOne() / samples) / ny;
+
+					radiance += scene.RayCast(camera.getRay(x, y, random), random, 0, distMax);
+				}
+			}
+
+
+			results[i][j] += radiance;
+		}
+	}
+}
+
+void RayTracerFrame::GetResults(std::vector<std::future<std::vector<std::vector<Color>>>>& tasks, int nx, int ny, int nrThreads, bool jitter, int samples)
+{
+	std::vector<std::vector<Color>> image(nx);
+	for (int i = 0; i < nx; ++i) image[i].resize(ny);
+
+	for (auto& task : tasks)
+	{
+		const auto results = task.get();
+
+		for (int j = 0; j < ny; ++j)
+			for (int i = 0; i < nx; ++i)
+				image[i][j] += results[i][j];
+	}
+
+
+	if (jitter) samples *= samples;
+
+	for (int i = 0; i < nx; ++i)
+		for (int j = 0; j < ny; ++j)
+		{
+			image[i][j] /= static_cast<double>(samples) * nrThreads;
+			image[i][j].Clamp();
+		}
+
+	result = image;
+}
+
 
 
 
