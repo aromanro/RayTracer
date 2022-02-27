@@ -76,7 +76,11 @@ private:
 
 	bool isFinished() const;
 	void StopThreads(bool cancel = false);
+
 	void Compute();
+	
+	static void InitScene(Scene& scene, const Options& options);
+	static void InitCamera(Camera& camera, const Options& options);
 	static void ComputeNoJitter(int nx, int ny, int samples, double distMax, Random& random, Camera& camera, Scene& scene, std::vector<std::vector<Color>>& results);
 	static void ComputeJitter(int nx, int ny, int samples, double distMax, Random& random, Camera& camera, Scene& scene, std::vector<std::vector<Color>>& results);
 

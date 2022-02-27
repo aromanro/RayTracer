@@ -162,7 +162,7 @@ void RayTracerFrame::Compute()
 	timer.Start(100);
 
 	RayTracerApp& app = wxGetApp();
-	Options options = app.options;
+	const Options options = app.options;
 
 	std::thread([this, options]()
 	{
@@ -185,40 +185,15 @@ void RayTracerFrame::Compute()
 			randomEngines.emplace_back(Random(static_cast<int>(initialSeed.getZeroOne() * 1E5)));
 
 		Scene scene;
-
-		scene.recursivityStop = options.recursivityStop;
-
-		if (0 == options.scene)
-		{
-			scene.blackSky = options.sky == 1;
-			FillRandomScene(scene, options);
-		}			
-		else if (1 == options.scene)
-		{
-			FillCornellScene(scene, options);
-		}
-		else
-		{
-			scene.blackSky = options.skyOther == 1;
-			FillOtherScene(scene, options);
-		}
-
-		scene.ConstructBVH();
+		InitScene(scene, options);
 
 		std::chrono::high_resolution_clock::time_point t2 = std::chrono::high_resolution_clock::now();
 		double dif = std::chrono::duration_cast<std::chrono::seconds>(t2 - t1).count();
 
 		Camera camera;
+		InitCamera(camera, options);
 
-		if (0 == options.scene) 
-			camera = Camera(Vector3D<double>(13., 2., 3.), Vector3D<double>(4., 1., 0.), Vector3D<double>(0., 1., 0.), 60, 1080. / 1920., options.depthOfField ? 0.1 : 0., (Vector3D<double>(13., 2., 3.) - Vector3D<double>(4, 1, 0)).Length());			
-		else if (1 == options.scene)
-		{
-			nx = 1080;
-			camera = Camera(Vector3D<double>(278., 278., -800.), Vector3D<double>(278., 278., 0.), Vector3D<double>(0., 1., 0.), 40, 1., 0., 10);
-		}
-		else
-			camera = Camera(Vector3D<double>(13., 2., 3.), Vector3D<double>(4., 1., 0.), Vector3D<double>(0., 1., 0.), 60, 1080. / 1920., options.depthOfFieldOther ? 0.1 : 0., (Vector3D<double>(13., 2., 3.) - Vector3D<double>(4, 1, 0)).Length());			
+		if (1 == options.scene) nx = 1080;
 		
 		const double distMax = 30000;
 
@@ -256,6 +231,39 @@ void RayTracerFrame::Compute()
 		runningThreads = 0;
 	}).detach();
 }
+
+void RayTracerFrame::InitCamera(Camera& camera, const Options& options)
+{
+	if (0 == options.scene)
+		camera = Camera(Vector3D<double>(13., 2., 3.), Vector3D<double>(4., 1., 0.), Vector3D<double>(0., 1., 0.), 60, 1080. / 1920., options.depthOfField ? 0.1 : 0., (Vector3D<double>(13., 2., 3.) - Vector3D<double>(4, 1, 0)).Length());
+	else if (1 == options.scene)
+		camera = Camera(Vector3D<double>(278., 278., -800.), Vector3D<double>(278., 278., 0.), Vector3D<double>(0., 1., 0.), 40, 1., 0., 10);
+	else
+		camera = Camera(Vector3D<double>(13., 2., 3.), Vector3D<double>(4., 1., 0.), Vector3D<double>(0., 1., 0.), 60, 1080. / 1920., options.depthOfFieldOther ? 0.1 : 0., (Vector3D<double>(13., 2., 3.) - Vector3D<double>(4, 1, 0)).Length());
+}
+
+void RayTracerFrame::InitScene(Scene& scene, const Options& options)
+{
+	scene.recursivityStop = options.recursivityStop;
+
+	if (0 == options.scene)
+	{
+		scene.blackSky = options.sky == 1;
+		FillRandomScene(scene, options);
+	}
+	else if (1 == options.scene)
+	{
+		FillCornellScene(scene, options);
+	}
+	else
+	{
+		scene.blackSky = options.skyOther == 1;
+		FillOtherScene(scene, options);
+	}
+
+	scene.ConstructBVH();
+}
+
 
 void RayTracerFrame::ComputeNoJitter(int nx, int ny, int samples, double distMax, Random& random, Camera& camera, Scene& scene, std::vector<std::vector<Color>>& results)
 {
