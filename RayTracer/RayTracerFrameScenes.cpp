@@ -55,79 +55,86 @@ void RayTracerFrame::FillRandomObjects(Scene& scene, const Options& options, Ran
 			double choose_mat = random.getZeroOne();
 			double choose_obj = random.getZeroOne();
 			double radius = 0.2 * random.getZeroOne() + 0.15;
-
-			bool newBox = choose_obj >= 0.5 ? true : false;
+			
 			if (choose_obj >= 0.5) radius /= sqrt(2); // make them smaller
 
 			Vector3D<double> center(a + 1.4 * random.getZeroOne(), radius, b + 1.4 * random.getZeroOne());
 
-			bool intersect;
-
-			do
-			{
-				intersect = false;
-
-				for (const auto& obj : scene.objects)
-				{
-					const auto sphere = std::dynamic_pointer_cast<Objects::Sphere>(obj);
-					const auto box = std::dynamic_pointer_cast<Objects::Box>(obj);
-					const auto to = std::dynamic_pointer_cast<Transforms::TranslateAction>(obj);
-					const auto ro = std::dynamic_pointer_cast<Transforms::RotateYAction>(obj);
-
-					if (!sphere && !box && !to && !ro) continue;
-
-					double dist = 0;
-					double boxRadius = 0;
-
-					if (sphere) dist = (sphere->getCenter() - center).Length();
-					else if (box)
-					{
-						dist = (box->getCenter() - center).Length();
-						boxRadius = box->getRadius();
-					}
-					else if (to)
-					{
-						BVH::AxisAlignedBoundingBox bbox;
-
-						to->BoundingBox(bbox);
-
-						auto tcenter = (bbox.max() + bbox.min()) * 0.5;
-
-						dist = (tcenter - center).Length();
-						boxRadius = (tcenter - bbox.min()).Length();
-					}
-					else if (ro)
-					{
-						BVH::AxisAlignedBoundingBox bbox;
-
-						ro->BoundingBox(bbox);
-
-						auto rcenter = (bbox.max() + bbox.min()) * 0.5;
-
-						dist = (rcenter - center).Length();
-						boxRadius = (rcenter - bbox.min()).Length();
-					}
-
-					if (dist < (sphere ? sphere->getRadius() + (newBox ? radius * sqrt(3) : radius) : boxRadius + (newBox ? radius * sqrt(3) : radius)) + 0.2)
-					{
-						intersect = true;
-						break;
-					}
-				}
-
-				if (intersect)
-				{
-					radius = 0.2 * random.getZeroOne() + 0.15;
-					if (choose_obj >= 0.5) radius /= sqrt(2); // make them smaller
-
-					center = Vector3D<double>(a + 1.4 * random.getZeroOne(), radius, b + 1.4 * random.getZeroOne());
-				}
-			} while (intersect);
+			AvoidIntersections(scene, center, radius, choose_obj, a, b, random);
 
 			AddObject(scene, options, center, radius, choose_mat, choose_obj, random);
 		}
 	}
 }
+
+void RayTracerFrame::AvoidIntersections(Scene& scene, Vector3D<double>& center, double& radius, double choose_obj, double a, double b, Random& random)
+{
+	bool intersect;
+
+	bool newBox = choose_obj >= 0.5 ? true : false;
+
+	do
+	{
+		intersect = false;
+
+		for (const auto& obj : scene.objects)
+		{
+			const auto sphere = std::dynamic_pointer_cast<Objects::Sphere>(obj);
+			const auto box = std::dynamic_pointer_cast<Objects::Box>(obj);
+			const auto to = std::dynamic_pointer_cast<Transforms::TranslateAction>(obj);
+			const auto ro = std::dynamic_pointer_cast<Transforms::RotateYAction>(obj);
+
+			if (!sphere && !box && !to && !ro) continue;
+
+			double dist = 0;
+			double boxRadius = 0;
+
+			if (sphere) dist = (sphere->getCenter() - center).Length();
+			else if (box)
+			{
+				dist = (box->getCenter() - center).Length();
+				boxRadius = box->getRadius();
+			}
+			else if (to)
+			{
+				BVH::AxisAlignedBoundingBox bbox;
+
+				to->BoundingBox(bbox);
+
+				auto tcenter = (bbox.max() + bbox.min()) * 0.5;
+
+				dist = (tcenter - center).Length();
+				boxRadius = (tcenter - bbox.min()).Length();
+			}
+			else if (ro)
+			{
+				BVH::AxisAlignedBoundingBox bbox;
+
+				ro->BoundingBox(bbox);
+
+				auto rcenter = (bbox.max() + bbox.min()) * 0.5;
+
+				dist = (rcenter - center).Length();
+				boxRadius = (rcenter - bbox.min()).Length();
+			}
+
+			if (dist < (sphere ? sphere->getRadius() + (newBox ? radius * sqrt(3) : radius) : boxRadius + (newBox ? radius * sqrt(3) : radius)) + 0.2)
+			{
+				intersect = true;
+				break;
+			}
+		}
+
+		if (intersect)
+		{
+			radius = 0.2 * random.getZeroOne() + 0.15;
+			if (choose_obj >= 0.5) radius /= sqrt(2); // make them smaller
+
+			center = Vector3D<double>(a + 1.4 * random.getZeroOne(), radius, b + 1.4 * random.getZeroOne());
+		}
+	} while (intersect);
+}
+
 
 void RayTracerFrame::AddObject(Scene& scene, const Options& options, Vector3D<double>& center, double radius, double choose_mat, double choose_obj, Random& random)
 {
