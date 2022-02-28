@@ -108,6 +108,9 @@ private:
 	static void AddObject(Scene& scene, const Options& options, Vector3D<double>& center, double radius, double choose_mat, double choose_obj, Random& random);
 
 	static void FillCornellScene(Scene& scene, const Options& options);
+	static void AddMirror(Scene& scene, const Options& options);
+	static void BuildWalls(Scene& scene, const Options& options, const std::shared_ptr<Materials::Lambertian>& WhiteMaterial, const std::shared_ptr<Materials::Lambertian>& LightMaterial);
+
 	static void FillOtherScene(Scene& scene, const Options& options);
 	static void SetSkyOther(Scene& scene, const Options& options);
 

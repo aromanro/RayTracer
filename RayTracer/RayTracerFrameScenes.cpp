@@ -270,41 +270,17 @@ void RayTracerFrame::FillCornellScene(Scene& scene, const Options& options)
 {
 	scene.blackSky = true;
 
-	const auto RedMaterial = std::make_shared<Materials::Lambertian>(std::dynamic_pointer_cast<Textures::Texture>(std::make_shared<Textures::ColorTexture>(Color(0.65, 0.05, 0.05))));
 	const auto WhiteMaterial = std::make_shared<Materials::Lambertian>(std::dynamic_pointer_cast<Textures::Texture>(std::make_shared<Textures::ColorTexture>(Color(0.73, 0.73, 0.73))));
-	const auto GreenMaterial = std::make_shared<Materials::Lambertian>(std::dynamic_pointer_cast<Textures::Texture>(std::make_shared<Textures::ColorTexture>(Color(0.12, 0.45, 0.15))));
 	const auto AluminiumMaterial = std::make_shared<Materials::Metal>(std::dynamic_pointer_cast<Textures::Texture>(std::make_shared<Textures::ColorTexture>(Color(0.8, 0.85, 0.88))));
 
 	const auto LightMaterial = std::make_shared<Materials::Lambertian>(std::dynamic_pointer_cast<Textures::Texture>(std::make_shared<Textures::ColorTexture>(Color(15, 15, 15))));
 
 
+	BuildWalls(scene, options, WhiteMaterial, LightMaterial);
 
-	scene.objects.emplace_back(std::make_shared<Transforms::FlipNormal>(std::make_shared<Objects::RectangleYZ>(0, 555, 0, 555, 555, GreenMaterial))); // left wall
-	scene.objects.emplace_back(std::make_shared<Objects::RectangleYZ>(0, 555, 0, 555, 0, RedMaterial)); // right wall
-
-	// The light
-
-	auto Light = std::make_shared<Transforms::FlipNormal>(std::make_shared<Objects::RectangleXZ>(213, 343, 227, 332, 554, LightMaterial));
-
-	scene.AddPriorityObject(Light);
-	scene.objects.emplace_back(Light);
-
-	auto ceiling = std::make_shared<Transforms::FlipNormal>(std::make_shared<Objects::RectangleXZ>(0, 555, 0, 555, 555, WhiteMaterial));
-	scene.objects.emplace_back(ceiling); // ceiling
-
-	auto floor = std::make_shared<Objects::RectangleXZ>(0, 555, 0, 555, 0, WhiteMaterial);
-	scene.objects.emplace_back(floor); // floor
-
-	scene.objects.emplace_back(std::make_shared<Transforms::FlipNormal>(std::make_shared<Objects::RectangleXY>(0, 555, 0, 555, 555, WhiteMaterial))); // back wall
 
 	// put a mirror on the right wall
-	if (options.mirrorOnWall)
-	{
-		const auto MirrorMaterial = std::make_shared<Materials::Metal>(std::dynamic_pointer_cast<Textures::Texture>(std::make_shared<Textures::ColorTexture>(Color(0.98, 0.98, 0.98))));
-		auto mirror = std::make_shared<Objects::RectangleYZ>(50, 443, 80, 332, 0, MirrorMaterial);
-		scene.objects.emplace_back(mirror);
-		if (options.addMirrorToImportanceSampling) scene.AddPriorityObject(mirror);
-	}
+	AddMirror(scene, options);
 
 
 	if (options.boxContent < 3)
@@ -402,6 +378,42 @@ void RayTracerFrame::FillCornellScene(Scene& scene, const Options& options)
 		//Translate(Vector3D<double>(100, 230, 300)); // indian
 
 		scene.objects.emplace_back(object);
+	}
+}
+
+void RayTracerFrame::BuildWalls(Scene& scene, const Options& options, const std::shared_ptr<Materials::Lambertian>& WhiteMaterial, const std::shared_ptr<Materials::Lambertian>& LightMaterial)
+{
+	const auto RedMaterial = std::make_shared<Materials::Lambertian>(std::dynamic_pointer_cast<Textures::Texture>(std::make_shared<Textures::ColorTexture>(Color(0.65, 0.05, 0.05))));
+	const auto GreenMaterial = std::make_shared<Materials::Lambertian>(std::dynamic_pointer_cast<Textures::Texture>(std::make_shared<Textures::ColorTexture>(Color(0.12, 0.45, 0.15))));
+
+	scene.objects.emplace_back(std::make_shared<Transforms::FlipNormal>(std::make_shared<Objects::RectangleYZ>(0, 555, 0, 555, 555, GreenMaterial))); // left wall
+	scene.objects.emplace_back(std::make_shared<Objects::RectangleYZ>(0, 555, 0, 555, 0, RedMaterial)); // right wall
+
+	// The light
+
+	auto Light = std::make_shared<Transforms::FlipNormal>(std::make_shared<Objects::RectangleXZ>(213, 343, 227, 332, 554, LightMaterial));
+
+	scene.AddPriorityObject(Light);
+	scene.objects.emplace_back(Light);
+
+	auto ceiling = std::make_shared<Transforms::FlipNormal>(std::make_shared<Objects::RectangleXZ>(0, 555, 0, 555, 555, WhiteMaterial));
+	scene.objects.emplace_back(ceiling); // ceiling
+
+	auto floor = std::make_shared<Objects::RectangleXZ>(0, 555, 0, 555, 0, WhiteMaterial);
+	scene.objects.emplace_back(floor); // floor
+
+	scene.objects.emplace_back(std::make_shared<Transforms::FlipNormal>(std::make_shared<Objects::RectangleXY>(0, 555, 0, 555, 555, WhiteMaterial))); // back wall
+}
+
+
+void RayTracerFrame::AddMirror(Scene& scene, const Options& options)
+{
+	if (options.mirrorOnWall)
+	{
+		const auto MirrorMaterial = std::make_shared<Materials::Metal>(std::dynamic_pointer_cast<Textures::Texture>(std::make_shared<Textures::ColorTexture>(Color(0.98, 0.98, 0.98))));
+		auto mirror = std::make_shared<Objects::RectangleYZ>(50, 443, 80, 332, 0, MirrorMaterial);
+		scene.objects.emplace_back(mirror);
+		if (options.addMirrorToImportanceSampling) scene.AddPriorityObject(mirror);
 	}
 }
 
