@@ -110,6 +110,7 @@ private:
 	static void FillCornellScene(Scene& scene, const Options& options);
 	static void AddMirror(Scene& scene, const Options& options);
 	static void BuildWalls(Scene& scene, const Options& options, const std::shared_ptr<Materials::Lambertian>& WhiteMaterial, const std::shared_ptr<Materials::Lambertian>& LightMaterial);
+	static void SetObj(Scene& scene, const Options& options, const std::shared_ptr<Materials::Metal>& AluminiumMaterial);
 
 	static void FillOtherScene(Scene& scene, const Options& options);
 	static void SetSkyOther(Scene& scene, const Options& options);

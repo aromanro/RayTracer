@@ -326,59 +326,65 @@ void RayTracerFrame::FillCornellScene(Scene& scene, const Options& options)
 	}
 	else if (!options.objFileName.empty() && wxFileName::Exists(options.objFileName))
 	{
-		ObjLoader loader;
-		loader.Load(std::string(options.objFileName.c_str()));
-
-		auto object = std::make_shared<Objects::VisibleObjectComposite>();
-
-		for (const auto& triangle : loader.triangles)
-			object->objects.emplace_back(triangle);
-
-		object->Scale(options.scale);
-
-		const Vector3D<double> Ox(1, 0, 0);
-		const Vector3D<double> Oy(0, 1, 0);
-		const Vector3D<double> Oz(0, 1, 0);
-
-		object->RotateAround(Ox, options.rotateX * M_PI / 180.);
-		object->RotateAround(Oy, options.rotateY * M_PI / 180.);
-		object->RotateAround(Oz, options.rotateZ * M_PI / 180.);
-
-		object->Translate(Vector3D<double>(options.positionX, options.positionY, options.positionZ));
-
-		if (1 == options.objMaterial)
-		{
-			for (auto& obj : object->objects)
-				std::dynamic_pointer_cast<Objects::VisibleObjectMaterial>(obj)->SetMaterial(AluminiumMaterial);
-		}
-		else if (2 == options.objMaterial)
-		{
-			auto glassmat = std::make_shared<Materials::Dielectric>(1.5);
-			glassmat->density = 0.03;
-			glassmat->volumeColor = Color(1, 1, 0);
-			for (auto& obj : object->objects)
-				std::dynamic_pointer_cast<Objects::VisibleObjectMaterial>(obj)->SetMaterial(glassmat);
-		}
-
-
-		// save some values for some test objects
-		//Scale(150); // monkey
-		//Scale(80); // car
-		//Scale(2.5); // indian
-
-		//monkey->RotateAround(Oy, /*120.*/180 * M_PI / 180.);
-		//monkey->RotateAround(Ox, 15 * M_PI / 180.);
-
-		// indian
-		//RotateAround(Ox, -90 * M_PI / 180.);
-		//RotateAround(Oy, 180 * M_PI / 180.);
-
-		//Translate(Vector3D<double>(275, 250, 300)); // monkey	
-		//Translate(Vector3D<double>(275, 100, 350)); // car	
-		//Translate(Vector3D<double>(100, 230, 300)); // indian
-
-		scene.objects.emplace_back(object);
+		SetObj(scene, options, AluminiumMaterial);
 	}
+}
+
+
+void RayTracerFrame::SetObj(Scene& scene, const Options& options, const std::shared_ptr<Materials::Metal>& AluminiumMaterial)
+{
+	ObjLoader loader;
+	loader.Load(std::string(options.objFileName.c_str()));
+
+	auto object = std::make_shared<Objects::VisibleObjectComposite>();
+
+	for (const auto& triangle : loader.triangles)
+		object->objects.emplace_back(triangle);
+
+	object->Scale(options.scale);
+
+	const Vector3D<double> Ox(1, 0, 0);
+	const Vector3D<double> Oy(0, 1, 0);
+	const Vector3D<double> Oz(0, 1, 0);
+
+	object->RotateAround(Ox, options.rotateX * M_PI / 180.);
+	object->RotateAround(Oy, options.rotateY * M_PI / 180.);
+	object->RotateAround(Oz, options.rotateZ * M_PI / 180.);
+
+	object->Translate(Vector3D<double>(options.positionX, options.positionY, options.positionZ));
+
+	if (1 == options.objMaterial)
+	{
+		for (auto& obj : object->objects)
+			std::dynamic_pointer_cast<Objects::VisibleObjectMaterial>(obj)->SetMaterial(AluminiumMaterial);
+	}
+	else if (2 == options.objMaterial)
+	{
+		auto glassmat = std::make_shared<Materials::Dielectric>(1.5);
+		glassmat->density = 0.03;
+		glassmat->volumeColor = Color(1, 1, 0);
+		for (auto& obj : object->objects)
+			std::dynamic_pointer_cast<Objects::VisibleObjectMaterial>(obj)->SetMaterial(glassmat);
+	}
+
+
+	// save some values for some test objects
+	//Scale(150); // monkey
+	//Scale(80); // car
+	//Scale(2.5); // indian
+
+	//monkey->RotateAround(Oy, /*120.*/180 * M_PI / 180.);
+	//monkey->RotateAround(Ox, 15 * M_PI / 180.);
+
+	// indian
+	//RotateAround(Ox, -90 * M_PI / 180.);
+	//RotateAround(Oy, 180 * M_PI / 180.);
+
+	//Translate(Vector3D<double>(275, 250, 300)); // monkey	
+	//Translate(Vector3D<double>(275, 100, 350)); // car	
+	//Translate(Vector3D<double>(100, 230, 300)); // indian
+
+	scene.objects.emplace_back(object);
 }
 
 void RayTracerFrame::BuildWalls(Scene& scene, const Options& options, const std::shared_ptr<Materials::Lambertian>& WhiteMaterial, const std::shared_ptr<Materials::Lambertian>& LightMaterial)
