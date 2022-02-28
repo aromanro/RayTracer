@@ -102,8 +102,11 @@ private:
 	void SaveToAsPPM(const wxString& fileName);
 
 	static void FillRandomScene(Scene& scene, const Options& options);
+	static void SetSky(Scene& scene, const Options& options);
+
 	static void FillCornellScene(Scene& scene, const Options& options);
 	static void FillOtherScene(Scene& scene, const Options& options);
+	static void SetSkyOther(Scene& scene, const Options& options);
 
 	wxDECLARE_EVENT_TABLE();
 };

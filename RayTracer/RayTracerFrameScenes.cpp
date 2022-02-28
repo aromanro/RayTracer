@@ -40,66 +40,8 @@ void RayTracerFrame::FillRandomScene(Scene& scene, const Options& options)
 
 	scene.objects.emplace_back(std::make_shared<Objects::Sphere>(Vector3D<double>(-4, 1, 0), 1, std::make_shared<Materials::Metal>(std::dynamic_pointer_cast<Textures::Texture>(std::make_shared<Textures::ColorTexture>(Color(0.7, 0.6, 0.5))))));
 
+	SetSky(scene, options);
 
-	if (2 == options.sky && !options.skyBoxDirName.empty())
-	{
-		scene.blackSky = true;
-
-		std::string frontFile;
-		std::string backFile;
-		std::string topFile;
-		std::string bottomFile;
-		std::string leftFile;
-		std::string rightFile;
-
-		bool exists = false;
-
-		if (wxFileName::Exists(options.skyBoxDirName + "front.jpg"))
-		{
-			// jpg file names
-
-			frontFile = options.skyBoxDirName + "front.jpg";
-			backFile = options.skyBoxDirName + "back.jpg";
-			topFile = options.skyBoxDirName + "top.jpg";
-			bottomFile = options.skyBoxDirName + "bottom.jpg";
-			leftFile = options.skyBoxDirName + "left.jpg";
-			rightFile = options.skyBoxDirName + "right.jpg";
-
-			exists = true;
-		}
-		else if (wxFileName::Exists(options.skyBoxDirName + "front.png"))// try png
-		{
-			frontFile = options.skyBoxDirName + "front.png";
-			backFile = options.skyBoxDirName + "back.png";
-			topFile = options.skyBoxDirName + "top.png";
-			bottomFile = options.skyBoxDirName + "bottom.png";
-			leftFile = options.skyBoxDirName + "left.png";
-			rightFile = options.skyBoxDirName + "right.png";
-
-			exists = true;
-		}
-
-		if (exists)
-		{
-			auto skybox = std::make_shared<Objects::SkyBox>(Vector3D<double>(13. - 10000, 2. - 10000, 3. - 10000), Vector3D<double>(13. + 10000, 2. + 10000, 3. + 10000));
-			skybox->Load(frontFile, backFile, topFile, bottomFile, leftFile, rightFile);
-			scene.sky = skybox;
-		}
-	}
-	else if (3 == options.sky && !options.skySphereFileName.empty() && wxFileName::Exists(options.skySphereFileName))
-	{
-		scene.blackSky = true;
-
-		auto skysphere = std::make_shared<Objects::SkySphere>(Vector3D<double>(0, 0, 0), 10000);
-		if (skysphere->Load(std::string(options.skySphereFileName.c_str())))
-		{
-			scene.sky = skysphere;
-		}
-	}
-	else if (1 == options.sky)
-		scene.blackSky = true;
-	else
-		scene.blackSky = false;
 
 
 	for (double a = -10; a < 10; a += 1.25)
@@ -242,6 +184,71 @@ void RayTracerFrame::FillRandomScene(Scene& scene, const Options& options)
 		}
 	}
 }
+
+
+void RayTracerFrame::SetSky(Scene& scene, const Options& options)
+{
+	if (2 == options.sky && !options.skyBoxDirName.empty())
+	{
+		scene.blackSky = true;
+
+		std::string frontFile;
+		std::string backFile;
+		std::string topFile;
+		std::string bottomFile;
+		std::string leftFile;
+		std::string rightFile;
+
+		bool exists = false;
+
+		if (wxFileName::Exists(options.skyBoxDirName + "front.jpg"))
+		{
+			// jpg file names
+
+			frontFile = options.skyBoxDirName + "front.jpg";
+			backFile = options.skyBoxDirName + "back.jpg";
+			topFile = options.skyBoxDirName + "top.jpg";
+			bottomFile = options.skyBoxDirName + "bottom.jpg";
+			leftFile = options.skyBoxDirName + "left.jpg";
+			rightFile = options.skyBoxDirName + "right.jpg";
+
+			exists = true;
+		}
+		else if (wxFileName::Exists(options.skyBoxDirName + "front.png"))// try png
+		{
+			frontFile = options.skyBoxDirName + "front.png";
+			backFile = options.skyBoxDirName + "back.png";
+			topFile = options.skyBoxDirName + "top.png";
+			bottomFile = options.skyBoxDirName + "bottom.png";
+			leftFile = options.skyBoxDirName + "left.png";
+			rightFile = options.skyBoxDirName + "right.png";
+
+			exists = true;
+		}
+
+		if (exists)
+		{
+			auto skybox = std::make_shared<Objects::SkyBox>(Vector3D<double>(13. - 10000, 2. - 10000, 3. - 10000), Vector3D<double>(13. + 10000, 2. + 10000, 3. + 10000));
+			skybox->Load(frontFile, backFile, topFile, bottomFile, leftFile, rightFile);
+			scene.sky = skybox;
+		}
+	}
+	else if (3 == options.sky && !options.skySphereFileName.empty() && wxFileName::Exists(options.skySphereFileName))
+	{
+		scene.blackSky = true;
+
+		auto skysphere = std::make_shared<Objects::SkySphere>(Vector3D<double>(0, 0, 0), 10000);
+		if (skysphere->Load(std::string(options.skySphereFileName.c_str())))
+		{
+			scene.sky = skysphere;
+		}
+	}
+	else if (1 == options.sky)
+		scene.blackSky = true;
+	else
+		scene.blackSky = false;
+}
+
 
 void RayTracerFrame::FillCornellScene(Scene& scene, const Options& options)
 {
@@ -408,66 +415,7 @@ void RayTracerFrame::FillOtherScene(Scene& scene, const Options& options)
 		scene.AddPriorityObject(light);
 	}
 
-	if (2 == options.skyOther && !options.skyBoxDirNameOther.empty())
-	{
-		scene.blackSky = true;
-
-		std::string frontFile;
-		std::string backFile;
-		std::string topFile;
-		std::string bottomFile;
-		std::string leftFile;
-		std::string rightFile;
-
-		bool exists = false;
-
-		if (wxFileName::Exists(options.skyBoxDirNameOther + "front.jpg"))
-		{
-			// jpg file names
-
-			frontFile = options.skyBoxDirNameOther + "front.jpg";
-			backFile = options.skyBoxDirNameOther + "back.jpg";
-			topFile = options.skyBoxDirNameOther + "top.jpg";
-			bottomFile = options.skyBoxDirNameOther + "bottom.jpg";
-			leftFile = options.skyBoxDirNameOther + "left.jpg";
-			rightFile = options.skyBoxDirNameOther + "right.jpg";
-
-			exists = true;
-		}
-		else if (wxFileName::Exists(options.skyBoxDirNameOther + "front.png"))// try png
-		{
-			frontFile = options.skyBoxDirNameOther + "front.png";
-			backFile = options.skyBoxDirNameOther + "back.png";
-			topFile = options.skyBoxDirNameOther + "top.png";
-			bottomFile = options.skyBoxDirNameOther + "bottom.png";
-			leftFile = options.skyBoxDirNameOther + "left.png";
-			rightFile = options.skyBoxDirNameOther + "right.png";
-
-			exists = true;
-		}
-
-		if (exists)
-		{
-			auto skybox = std::make_shared<Objects::SkyBox>(Vector3D<double>(13. - 10000, 2. - 10000, 3. - 10000), Vector3D<double>(13. + 10000, 2. + 10000, 3. + 10000));
-			skybox->Load(frontFile, backFile, topFile, bottomFile, leftFile, rightFile);
-			scene.sky = skybox;
-		}
-	}
-	else if (3 == options.skyOther && !options.skySphereFileNameOther.empty() && wxFileName::Exists(options.skySphereFileNameOther))
-	{
-		scene.blackSky = true;
-		auto skysphere = std::make_shared<Objects::SkySphere>(Vector3D<double>(0, 0, 0), 10000);
-		if (skysphere->Load(std::string(options.skySphereFileNameOther.c_str())))
-		{
-			scene.sky = skysphere;
-		}
-	}
-	else if (1 == options.skyOther)
-		scene.blackSky = true;
-	else
-		scene.blackSky = false;
-
-
+	SetSkyOther(scene, options);
 
 	if (!options.objFileNameOther.empty() && wxFileName::Exists(options.objFileNameOther))
 	{
@@ -550,4 +498,66 @@ void RayTracerFrame::FillOtherScene(Scene& scene, const Options& options)
 
 	scene.objects.emplace_back(metallicAngel);
 #endif
+}
+
+void RayTracerFrame::SetSkyOther(Scene& scene, const Options& options)
+{
+	if (2 == options.skyOther && !options.skyBoxDirNameOther.empty())
+	{
+		scene.blackSky = true;
+
+		std::string frontFile;
+		std::string backFile;
+		std::string topFile;
+		std::string bottomFile;
+		std::string leftFile;
+		std::string rightFile;
+
+		bool exists = false;
+
+		if (wxFileName::Exists(options.skyBoxDirNameOther + "front.jpg"))
+		{
+			// jpg file names
+
+			frontFile = options.skyBoxDirNameOther + "front.jpg";
+			backFile = options.skyBoxDirNameOther + "back.jpg";
+			topFile = options.skyBoxDirNameOther + "top.jpg";
+			bottomFile = options.skyBoxDirNameOther + "bottom.jpg";
+			leftFile = options.skyBoxDirNameOther + "left.jpg";
+			rightFile = options.skyBoxDirNameOther + "right.jpg";
+
+			exists = true;
+		}
+		else if (wxFileName::Exists(options.skyBoxDirNameOther + "front.png"))// try png
+		{
+			frontFile = options.skyBoxDirNameOther + "front.png";
+			backFile = options.skyBoxDirNameOther + "back.png";
+			topFile = options.skyBoxDirNameOther + "top.png";
+			bottomFile = options.skyBoxDirNameOther + "bottom.png";
+			leftFile = options.skyBoxDirNameOther + "left.png";
+			rightFile = options.skyBoxDirNameOther + "right.png";
+
+			exists = true;
+		}
+
+		if (exists)
+		{
+			auto skybox = std::make_shared<Objects::SkyBox>(Vector3D<double>(13. - 10000, 2. - 10000, 3. - 10000), Vector3D<double>(13. + 10000, 2. + 10000, 3. + 10000));
+			skybox->Load(frontFile, backFile, topFile, bottomFile, leftFile, rightFile);
+			scene.sky = skybox;
+		}
+	}
+	else if (3 == options.skyOther && !options.skySphereFileNameOther.empty() && wxFileName::Exists(options.skySphereFileNameOther))
+	{
+		scene.blackSky = true;
+		auto skysphere = std::make_shared<Objects::SkySphere>(Vector3D<double>(0, 0, 0), 10000);
+		if (skysphere->Load(std::string(options.skySphereFileNameOther.c_str())))
+		{
+			scene.sky = skysphere;
+		}
+	}
+	else if (1 == options.skyOther)
+		scene.blackSky = true;
+	else
+		scene.blackSky = false;
 }
