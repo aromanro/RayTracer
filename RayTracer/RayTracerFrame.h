@@ -103,6 +103,7 @@ private:
 
 	static void FillRandomScene(Scene& scene, const Options& options);
 	static void SetSky(Scene& scene, const Options& options);
+	static void FillRandomObjects(Scene& scene, const Options& options, Random& random);
 
 	static void FillCornellScene(Scene& scene, const Options& options);
 	static void FillOtherScene(Scene& scene, const Options& options);

@@ -42,8 +42,12 @@ void RayTracerFrame::FillRandomScene(Scene& scene, const Options& options)
 
 	SetSky(scene, options);
 
+	FillRandomObjects(scene, options, random);
+}
 
 
+void RayTracerFrame::FillRandomObjects(Scene& scene, const Options& options, Random& random)
+{
 	for (double a = -10; a < 10; a += 1.25)
 	{
 		for (double b = -10; b < 10; b += 1.25)
