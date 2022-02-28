@@ -124,67 +124,72 @@ void RayTracerFrame::FillRandomObjects(Scene& scene, const Options& options, Ran
 				}
 			} while (intersect);
 
-			if (choose_mat < 0.7)
-			{  // diffuse
-				std::shared_ptr<Materials::Material> mat;
+			AddObject(scene, options, center, radius, choose_mat, choose_obj, random);
+		}
+	}
+}
 
-				if (random.getZeroOne() < 0.25)
-					mat = std::make_shared<Materials::Lambertian>(std::dynamic_pointer_cast<Textures::Texture>(std::make_shared<Textures::ColorTexture>(Color(random.getZeroOne() * random.getZeroOne(), random.getZeroOne() * random.getZeroOne(), random.getZeroOne() * random.getZeroOne()))));
-				else
-				{
-					const double exponent = 200. * random.getZeroOne();
-					mat = std::make_shared<Materials::AnisotropicPhong>(exponent, exponent, std::dynamic_pointer_cast<Textures::Texture>(std::make_shared<Textures::ColorTexture>(Color(random.getZeroOne() * random.getZeroOne(), random.getZeroOne() * random.getZeroOne(), random.getZeroOne() * random.getZeroOne()))),
-						std::dynamic_pointer_cast<Textures::Texture>(std::make_shared<Textures::ColorTexture>(Color(0.7, 0.7, 0.7))));
-				}
+void RayTracerFrame::AddObject(Scene& scene, const Options& options, Vector3D<double>& center, double radius, double choose_mat, double choose_obj, Random& random)
+{
+	if (choose_mat < 0.7)
+	{  // diffuse
+		std::shared_ptr<Materials::Material> mat;
 
-				if (choose_obj < 0.5)
-					scene.objects.emplace_back(std::make_shared<Objects::Sphere>(center, radius, mat));
-				else
-				{
-					auto b = std::make_shared<Objects::Box>(Vector3D<double>(-radius, -radius, -radius), Vector3D<double>(radius, radius, radius), mat);
-					const double choose_rot = random.getZeroOne() * 0.5 * M_PI;
-					auto r = std::make_shared<Transforms::RotateYAction>(b, choose_rot);
-					auto t = std::make_shared<Transforms::TranslateAction>(r, center);
+		if (random.getZeroOne() < 0.25)
+			mat = std::make_shared<Materials::Lambertian>(std::dynamic_pointer_cast<Textures::Texture>(std::make_shared<Textures::ColorTexture>(Color(random.getZeroOne() * random.getZeroOne(), random.getZeroOne() * random.getZeroOne(), random.getZeroOne() * random.getZeroOne()))));
+		else
+		{
+			const double exponent = 200. * random.getZeroOne();
+			mat = std::make_shared<Materials::AnisotropicPhong>(exponent, exponent, std::dynamic_pointer_cast<Textures::Texture>(std::make_shared<Textures::ColorTexture>(Color(random.getZeroOne() * random.getZeroOne(), random.getZeroOne() * random.getZeroOne(), random.getZeroOne() * random.getZeroOne()))),
+				std::dynamic_pointer_cast<Textures::Texture>(std::make_shared<Textures::ColorTexture>(Color(0.7, 0.7, 0.7))));
+		}
 
-					scene.objects.emplace_back(t);
-				}
-			}
-			else if (choose_mat < 0.9)
-			{ // metal
-				auto mat = std::make_shared<Materials::Metal>(std::dynamic_pointer_cast<Textures::Texture>(std::make_shared<Textures::ColorTexture>(0.5 * Color(1. + random.getZeroOne(), 1. + random.getZeroOne(), 1. + random.getZeroOne()))));
-				if (choose_obj < 0.5)
-					scene.objects.emplace_back(std::make_shared<Objects::Sphere>(center, radius, mat));
-				else
-				{
-					auto b = std::make_shared<Objects::Box>(Vector3D<double>(-radius, -radius, -radius), Vector3D<double>(radius, radius, radius), mat);
-					const double choose_rot = random.getZeroOne() * 0.5 * M_PI;
-					auto r = std::make_shared<Transforms::RotateYAction>(b, choose_rot);
-					auto t = std::make_shared<Transforms::TranslateAction>(r, center);
+		if (choose_obj < 0.5)
+			scene.objects.emplace_back(std::make_shared<Objects::Sphere>(center, radius, mat));
+		else
+		{
+			auto b = std::make_shared<Objects::Box>(Vector3D<double>(-radius, -radius, -radius), Vector3D<double>(radius, radius, radius), mat);
+			const double choose_rot = random.getZeroOne() * 0.5 * M_PI;
+			auto r = std::make_shared<Transforms::RotateYAction>(b, choose_rot);
+			auto t = std::make_shared<Transforms::TranslateAction>(r, center);
+
+			scene.objects.emplace_back(t);
+		}
+	}
+	else if (choose_mat < 0.9)
+	{ // metal
+		auto mat = std::make_shared<Materials::Metal>(std::dynamic_pointer_cast<Textures::Texture>(std::make_shared<Textures::ColorTexture>(0.5 * Color(1. + random.getZeroOne(), 1. + random.getZeroOne(), 1. + random.getZeroOne()))));
+		if (choose_obj < 0.5)
+			scene.objects.emplace_back(std::make_shared<Objects::Sphere>(center, radius, mat));
+		else
+		{
+			auto b = std::make_shared<Objects::Box>(Vector3D<double>(-radius, -radius, -radius), Vector3D<double>(radius, radius, radius), mat);
+			const double choose_rot = random.getZeroOne() * 0.5 * M_PI;
+			auto r = std::make_shared<Transforms::RotateYAction>(b, choose_rot);
+			auto t = std::make_shared<Transforms::TranslateAction>(r, center);
 
 
-					scene.objects.emplace_back(t);
-				}
-			}
-			else
-			{  // glass
-				auto mat = std::make_shared<Materials::Dielectric>(1.5);
+			scene.objects.emplace_back(t);
+		}
+	}
+	else
+	{  // glass
+		auto mat = std::make_shared<Materials::Dielectric>(1.5);
 
-				// make some colored glass
-				mat->density = random.getZeroOne() * 10;
-				mat->volumeColor = Color(random.getZeroOne(), random.getZeroOne(), random.getZeroOne());
+		// make some colored glass
+		mat->density = random.getZeroOne() * 10;
+		mat->volumeColor = Color(random.getZeroOne(), random.getZeroOne(), random.getZeroOne());
 
-				if (choose_obj < 0.5)
-					scene.objects.emplace_back(std::make_shared<Objects::Sphere>(center, radius, mat));
-				else
-				{
-					auto b = std::make_shared<Objects::Box>(Vector3D<double>(-radius, -radius, -radius), Vector3D<double>(radius, radius, radius), mat);
-					const double choose_rot = random.getZeroOne() * 0.5 * M_PI;
-					auto r = std::make_shared<Transforms::RotateYAction>(b, choose_rot);
-					auto t = std::make_shared<Transforms::TranslateAction>(r, center);
+		if (choose_obj < 0.5)
+			scene.objects.emplace_back(std::make_shared<Objects::Sphere>(center, radius, mat));
+		else
+		{
+			auto b = std::make_shared<Objects::Box>(Vector3D<double>(-radius, -radius, -radius), Vector3D<double>(radius, radius, radius), mat);
+			const double choose_rot = random.getZeroOne() * 0.5 * M_PI;
+			auto r = std::make_shared<Transforms::RotateYAction>(b, choose_rot);
+			auto t = std::make_shared<Transforms::TranslateAction>(r, center);
 
-					scene.objects.emplace_back(t);
-				}
-			}
+			scene.objects.emplace_back(t);
 		}
 	}
 }

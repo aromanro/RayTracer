@@ -104,6 +104,7 @@ private:
 	static void FillRandomScene(Scene& scene, const Options& options);
 	static void SetSky(Scene& scene, const Options& options);
 	static void FillRandomObjects(Scene& scene, const Options& options, Random& random);
+	static void AddObject(Scene& scene, const Options& options, Vector3D<double>& center, double radius, double choose_mat, double choose_obj, Random& random);
 
 	static void FillCornellScene(Scene& scene, const Options& options);
 	static void FillOtherScene(Scene& scene, const Options& options);
