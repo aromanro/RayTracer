@@ -154,6 +154,7 @@
     <ClCompile Include="Material.cpp" />
     <ClCompile Include="NormalsTexture.cpp" />
     <ClCompile Include="ObjLoader.cpp" />
+    <ClCompile Include="ObjLoaderTriangles.cpp" />
     <ClCompile Include="ObjMaterial.cpp" />
     <ClCompile Include="Options.cpp" />
     <ClCompile Include="OptionsFrame.cpp" />
