@@ -589,15 +589,15 @@ wxPanel* OptionsFrame::CreateCornellBoxSettingsPage(wxBookCtrlBase* parent)
 
 
 	wxIntegerValidator<int> val1(&options.rotateX, wxNUM_VAL_DEFAULT);
-	val1.SetRange(0, 360);
+	val1.SetRange(-360, 360);
 	rotxCtrl->SetValidator(val1);
 
 	wxIntegerValidator<int> val2(&options.rotateY, wxNUM_VAL_DEFAULT);
-	val2.SetRange(0, 360);
+	val2.SetRange(-360, 360);
 	rotyCtrl->SetValidator(val2);
 
 	wxIntegerValidator<int> val3(&options.rotateZ, wxNUM_VAL_DEFAULT);
-	val3.SetRange(0, 360);
+	val3.SetRange(-360, 360);
 	rotzCtrl->SetValidator(val3);
 
 	wxIntegerValidator<int> v1(&options.positionX, wxNUM_VAL_DEFAULT);
@@ -871,15 +871,15 @@ wxPanel* OptionsFrame::CreateOtherSettingsPage(wxBookCtrlBase* parent)
 
 
 	wxIntegerValidator<int> val1(&options.rotateXOther, wxNUM_VAL_DEFAULT);
-	val1.SetRange(0, 360);	
+	val1.SetRange(-360, 360);
 	rotxCtrl->SetValidator(val1);
 
 	wxIntegerValidator<int> val2(&options.rotateYOther, wxNUM_VAL_DEFAULT);
-	val2.SetRange(0, 360);
+	val2.SetRange(-360, 360);
 	rotyCtrl->SetValidator(val2);
 
 	wxIntegerValidator<int> val3(&options.rotateZOther, wxNUM_VAL_DEFAULT);
-	val3.SetRange(0, 360);
+	val3.SetRange(-360, 360);
 	rotzCtrl->SetValidator(val3);
 
 	wxFloatingPointValidator<double> v1(&options.positionXOther, wxNUM_VAL_DEFAULT);
