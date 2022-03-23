@@ -25,7 +25,56 @@ namespace Objects {
 		area = normal.Length() * 0.5;
 		normal = normal.Normalize();
 
+		if (!threeNormals)
+			normal1 = normal2 = normal3 = normal;
+
 		ConstructBoundingBox();
+	}
+
+
+	void Triangle::InitTangents()
+	{
+		Vector3D<double> tangent;
+
+		if (U1 >= 0 && V1 >= 0 && U2 >= 0 && V2 >= 0 && U3 >= 0 && V3 >= 0)
+		{
+			const double dU1 = U2 - U1;
+			const double dV1 = V2 - V1;
+			const double dU2 = U3 - U1;
+			const double dV2 = V3 - V1;
+
+			const double f = 1. / (dU1 * dV2 - dU2 * dV1);
+
+			tangent = Vector3D<double>(f * (dV2 * edge1.X - dV1 * edge2.X), f * (dV2 * edge1.Y - dV1 * edge2.Y), f * (dV2 * edge1.Z - dV1 * edge2.Z));
+		}
+		else
+		{
+			tangent = edge1 + edge2; // whatever
+		}
+
+		// this is tangent to the triangle, but not necessarily orthogonal to the vertex normal (because it might not be orthogonal to the triangle plane), so orthogonalize it:
+		tangent = tangent.Normalize();
+		// just subtract out the component along the normal, for each vertex, then normalize it again
+
+		if (threeNormals)
+		{
+			Vector3D<double> vtangent = tangent - (tangent * normal1) * normal1;
+			tangent1 = vtangent.Normalize();
+			bitangent1 = (tangent1 % normal1).Normalize(); // normalization is not really necessary
+
+			vtangent = tangent - (tangent * normal2) * normal2;
+			tangent2 = vtangent.Normalize();
+			bitangent2 = (tangent2 % normal2).Normalize(); // normalization is not really necessary
+
+			vtangent = tangent - (tangent * normal3) * normal3;
+			tangent3 = vtangent.Normalize();
+			bitangent3 = (tangent3 % normal3).Normalize(); // normalization is not really necessary
+		}
+		else
+		{
+			tangent1 = tangent2 = tangent3 = tangent - (tangent * normal) * normal;
+			bitangent1 = bitangent2 = bitangent3 = (tangent1 % normal).Normalize(); // normalization is not really necessary
+		}
 	}
 
 

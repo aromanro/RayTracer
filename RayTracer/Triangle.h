@@ -15,6 +15,8 @@ namespace Objects {
 		Triangle(const Vector3D<double>& a, const Vector3D<double>& b, const Vector3D<double>& c, const std::shared_ptr<Materials::Material>& m = nullptr);
 		Triangle(const Vector3D<double>& a, const Vector3D<double>& b, const Vector3D<double>& c, const Vector3D<double>& n1, const Vector3D<double>& n2, const Vector3D<double>& n3, const std::shared_ptr<Materials::Material>& m = nullptr);
 
+		void InitTangents();
+
 		void ConstructBoundingBox() override
 		{
 			Vector3D<double> minv(std::min(std::min(A.X, B.X), C.X), std::min(std::min(A.Y, B.Y), C.Y), std::min(std::min(A.Z, B.Z), C.Z));
@@ -55,7 +57,22 @@ namespace Objects {
 				normal1 = normal1.RotateAround(v, angle);
 				normal2 = normal2.RotateAround(v, angle);
 				normal3 = normal3.RotateAround(v, angle);
+
+				tangent1 = tangent1.RotateAround(v, angle);
+				tangent2 = tangent1.RotateAround(v, angle);
+				tangent3 = tangent1.RotateAround(v, angle);
+
+				bitangent1 = (tangent1 % normal1).Normalize(); // normalization is not really necessary
+				bitangent2 = (tangent2 % normal2).Normalize(); // normalization is not really necessary
+				bitangent3 = (tangent3 % normal3).Normalize(); // normalization is not really necessary
 			}
+			else
+			{
+				normal1 = normal2 = normal3 = normal;
+				tangent1 = tangent2 = tangent3 = tangent1.RotateAround(v, angle);
+				bitangent1 = bitangent2 = bitangent3 = (tangent1 % normal).Normalize(); // normalization is not really necessary
+			}
+
 
 			ConstructBoundingBox();
 		}
@@ -149,6 +166,30 @@ namespace Objects {
 			return normal;
 		}
 
+		inline const Vector3D<double> getTangent(const PointInfo& info) const
+		{
+			if (threeNormals)
+			{
+				const double w = 1. - info.u - info.v;
+
+				return (w * tangent1 + info.u * tangent2 + info.v * tangent3).Normalize();
+			}
+
+			return tangent1;
+		}
+
+		inline const Vector3D<double> getBitangent(const PointInfo& info) const
+		{
+			if (threeNormals)
+			{
+				const double w = 1. - info.u - info.v;
+
+				return (w * bitangent1 + info.u * bitangent2 + info.v * bitangent3).Normalize();
+			}
+
+			return bitangent1;
+		}
+
 		Vector3D<double> A, B, C;
 
 		double U1, V1, U2, V2, U3, V3;
@@ -167,6 +208,14 @@ namespace Objects {
 		Vector3D<double> normal1;
 		Vector3D<double> normal2;
 		Vector3D<double> normal3;
+
+		Vector3D<double> tangent1;
+		Vector3D<double> tangent2;
+		Vector3D<double> tangent3;
+
+		Vector3D<double> bitangent1;
+		Vector3D<double> bitangent2;
+		Vector3D<double> bitangent3;
 
 		Vector3D<double> edge1;
 		Vector3D<double> edge2;

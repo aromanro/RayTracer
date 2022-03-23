@@ -202,6 +202,8 @@ void ObjLoader::AddTriangle(const Vector3D<double>& firstPoint, const Vector3D<d
 		triangle->V3 = -1;
 	}
 
+	triangle->InitTangents();
+
 	triangle->SetUseInterpolation();
 	triangles.emplace_back(triangle);
 }
@@ -244,6 +246,8 @@ void ObjLoader::AddTriangleNoNormals(const Vector3D<double>& firstPoint, const V
 		triangle->U3 = -1;
 		triangle->V3 = -1;
 	}
+
+	triangle->InitTangents();
 
 	triangle->SetUseInterpolation();
 	triangles.emplace_back(triangle);
