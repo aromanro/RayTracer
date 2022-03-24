@@ -2,7 +2,7 @@
 #include "Material.h"
 #include "ImageTexture.h"
 
-void ObjLoader::SetTriangles(const std::vector<std::pair<double, double>>& textureCoords, const std::vector<Vector3D<double>>& normals, const std::vector<Vector3D<double>>& vertices, const std::vector<std::pair<Polygon, std::string>>& polygons, std::map<std::string, std::shared_ptr<Materials::Material>>& materialsMap)
+void ObjLoader::SetTriangles(const std::vector<std::pair<double, double>>& textureCoords, const std::vector<Vector3D<double>>& normals, const std::vector<Vector3D<double>>& vertices, const std::vector<std::pair<Polygon, std::string>>& polygons, std::map<std::string, std::shared_ptr<Materials::Material>>& materialsMap, std::map<std::string, std::shared_ptr<Textures::Texture>>& normalsMap)
 {
 	const auto WhiteMaterial = std::make_shared<Materials::Lambertian>(std::dynamic_pointer_cast<Textures::Texture>(std::make_shared<Textures::ColorTexture>(Color(0.73, 0.73, 0.73))));
 
@@ -22,11 +22,15 @@ void ObjLoader::SetTriangles(const std::vector<std::pair<double, double>>& textu
 		else
 			material = WhiteMaterial;
 
-		if (!SplitPolygon(polygon, vertices, normals, textureCoords, material)) break;
+		std::shared_ptr<Textures::Texture> normalTexture;
+		if (normalsMap.find(matName) != normalsMap.end())
+			normalTexture = normalsMap[matName];
+		
+		if (!SplitPolygon(polygon, vertices, normals, textureCoords, material, normalTexture)) break;
 	}
 }
 
-bool ObjLoader::SplitPolygon(Polygon& polygon, const std::vector<Vector3D<double>>& vertices, const std::vector<Vector3D<double>>& normals, const std::vector<std::pair<double, double>>& textureCoords, std::shared_ptr<Materials::Material>& material)
+bool ObjLoader::SplitPolygon(Polygon& polygon, const std::vector<Vector3D<double>>& vertices, const std::vector<Vector3D<double>>& normals, const std::vector<std::pair<double, double>>& textureCoords, std::shared_ptr<Materials::Material>& material, const std::shared_ptr<Textures::Texture>& normalTexture)
 {
 	int startPoint = 0;
 
@@ -59,7 +63,7 @@ bool ObjLoader::SplitPolygon(Polygon& polygon, const std::vector<Vector3D<double
 	if (indexvertex3 >= vertices.size()) return false;
 
 	if (indexnormal1 < 0 || indexnormal2 < 0 || indexnormal3 < 0)
-		return SplitPolygonNoNormals(polygon, vertices, textureCoords, material);
+		return SplitPolygonNoNormals(polygon, vertices, textureCoords, material, normalTexture);
 
 	if (indexnormal1 >= static_cast<long long int>(normals.size())) return false;
 	if (indexnormal2 >= static_cast<long long int>(normals.size())) return false;
@@ -73,7 +77,7 @@ bool ObjLoader::SplitPolygon(Polygon& polygon, const std::vector<Vector3D<double
 	long long int lastIndexTex = indextex3;
 	Vector3D<double> lastNormal(normals[indexnormal3]);
 
-	AddTriangle(firstPoint, vertices[indexvertex2], lastPoint, firstNormal, normals[indexnormal2], lastNormal, material, textureCoords, firstIndexTex, indextex2, lastIndexTex);
+	AddTriangle(firstPoint, vertices[indexvertex2], lastPoint, firstNormal, normals[indexnormal2], lastNormal, material, textureCoords, firstIndexTex, indextex2, lastIndexTex, normalTexture);
 
 	for (int i = 3; i < polygon.size(); ++i)
 	{
@@ -92,7 +96,7 @@ bool ObjLoader::SplitPolygon(Polygon& polygon, const std::vector<Vector3D<double
 		const Vector3D<double>& nextPoint = vertices[nextIndexVertex];
 		const Vector3D<double>& nextNormal = normals[nextIndexNormal];
 
-		AddTriangle(firstPoint, lastPoint, nextPoint, firstNormal, lastNormal, nextNormal, material, textureCoords, firstIndexTex, lastIndexTex, nextIndexTex);
+		AddTriangle(firstPoint, lastPoint, nextPoint, firstNormal, lastNormal, nextNormal, material, textureCoords, firstIndexTex, lastIndexTex, nextIndexTex, normalTexture);
 
 		lastPoint = nextPoint;
 		lastIndexTex = nextIndexTex;
@@ -104,7 +108,7 @@ bool ObjLoader::SplitPolygon(Polygon& polygon, const std::vector<Vector3D<double
 
 
 
-bool ObjLoader::SplitPolygonNoNormals(Polygon& polygon, const std::vector<Vector3D<double>>& vertices, const std::vector<std::pair<double, double>>& textureCoords, std::shared_ptr<Materials::Material>& material)
+bool ObjLoader::SplitPolygonNoNormals(Polygon& polygon, const std::vector<Vector3D<double>>& vertices, const std::vector<std::pair<double, double>>& textureCoords, std::shared_ptr<Materials::Material>& material, const std::shared_ptr<Textures::Texture>& normalTexture)
 {
 	int startPoint = 0;
 
@@ -139,7 +143,7 @@ bool ObjLoader::SplitPolygonNoNormals(Polygon& polygon, const std::vector<Vector
 	Vector3D<double> lastPoint(vertices[indexvertex3]);
 	long long int lastIndexTex = indextex3;
 
-	AddTriangleNoNormals(firstPoint, vertices[indexvertex2], lastPoint, material, textureCoords, firstIndexTex, indextex2, lastIndexTex);
+	AddTriangleNoNormals(firstPoint, vertices[indexvertex2], lastPoint, material, textureCoords, firstIndexTex, indextex2, lastIndexTex, normalTexture);
 
 	for (int i = 3; i < polygon.size(); ++i)
 	{
@@ -153,7 +157,7 @@ bool ObjLoader::SplitPolygonNoNormals(Polygon& polygon, const std::vector<Vector
 
 		const Vector3D<double>& nextPoint = vertices[nextIndexVertex];
 
-		AddTriangleNoNormals(firstPoint, lastPoint, nextPoint, material, textureCoords, firstIndexTex, lastIndexTex, nextIndexTex);
+		AddTriangleNoNormals(firstPoint, lastPoint, nextPoint, material, textureCoords, firstIndexTex, lastIndexTex, nextIndexTex, normalTexture);
 
 		lastPoint = nextPoint;
 		lastIndexTex = nextIndexTex;
@@ -164,9 +168,9 @@ bool ObjLoader::SplitPolygonNoNormals(Polygon& polygon, const std::vector<Vector
 
 
 
-void ObjLoader::AddTriangle(const Vector3D<double>& firstPoint, const Vector3D<double>& secondPoint, const Vector3D<double>& lastPoint, const Vector3D<double>& firstNormal, const Vector3D<double>& secondNormal, const Vector3D<double>& lastNormal, std::shared_ptr<Materials::Material>& material, const std::vector<std::pair<double, double>>& textureCoords, long long int firstIndexTex, long long int indextex2, long long int lastIndexTex)
+void ObjLoader::AddTriangle(const Vector3D<double>& firstPoint, const Vector3D<double>& secondPoint, const Vector3D<double>& lastPoint, const Vector3D<double>& firstNormal, const Vector3D<double>& secondNormal, const Vector3D<double>& lastNormal, std::shared_ptr<Materials::Material>& material, const std::vector<std::pair<double, double>>& textureCoords, long long int firstIndexTex, long long int indextex2, long long int lastIndexTex, const std::shared_ptr<Textures::Texture>& normalTexture)
 {
-	std::shared_ptr<Objects::Triangle> triangle = std::make_shared<Objects::Triangle>(firstPoint, secondPoint, lastPoint, firstNormal, secondNormal, lastNormal, material);
+	std::shared_ptr<Objects::Triangle> triangle = std::make_shared<Objects::Triangle>(firstPoint, secondPoint, lastPoint, firstNormal, secondNormal, lastNormal, material, normalTexture);
 
 	if (firstIndexTex >= 0)
 	{
@@ -209,9 +213,9 @@ void ObjLoader::AddTriangle(const Vector3D<double>& firstPoint, const Vector3D<d
 }
 
 
-void ObjLoader::AddTriangleNoNormals(const Vector3D<double>& firstPoint, const Vector3D<double>& secondPoint, const Vector3D<double>& lastPoint, std::shared_ptr<Materials::Material>& material, const std::vector<std::pair<double, double>>& textureCoords, long long int firstIndexTex, long long int indextex2, long long int lastIndexTex)
+void ObjLoader::AddTriangleNoNormals(const Vector3D<double>& firstPoint, const Vector3D<double>& secondPoint, const Vector3D<double>& lastPoint, std::shared_ptr<Materials::Material>& material, const std::vector<std::pair<double, double>>& textureCoords, long long int firstIndexTex, long long int indextex2, long long int lastIndexTex, const std::shared_ptr<Textures::Texture>& normalTexture)
 {
-	std::shared_ptr<Objects::Triangle> triangle = std::make_shared<Objects::Triangle>(firstPoint, secondPoint, lastPoint, material);
+	std::shared_ptr<Objects::Triangle> triangle = std::make_shared<Objects::Triangle>(firstPoint, secondPoint, lastPoint, material, normalTexture);
 
 	if (firstIndexTex >= 0)
 	{

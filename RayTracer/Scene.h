@@ -54,7 +54,7 @@ public:
 						if (scatterInfo.isSpecular) return scatterInfo.atten * RayCast(scatterInfo.specularRay, random, rcount, maxr);
 							
 						Ray scatteredRay;
-						double PDF;
+						double PDF = 1.; // avoid complaint about not being initialized
 
 						if (PriorityObjects.size())
 						{

@@ -12,6 +12,9 @@ public:
 	// the normal and the incident ray vector
 	OrthoNormalBasis(const Vector3D<double>& n, const Vector3D<double>& i) { BuildFrom(n, i); };
 
+	// normal, tangent, bitangent - in case it's also used for the TBN matrix
+	OrthoNormalBasis(const Vector3D<double>& n, const Vector3D<double>& t, const Vector3D<double>& b) { BuildFrom(n, t, b); };
+
 	~OrthoNormalBasis() {};
 
 
@@ -26,6 +29,15 @@ public:
 
 	inline Vector3D<double> LocalToGlobal(double X, double Y, double Z) const { return X * basis[0] + Y * basis[1] + Z * basis[2]; }
 	inline Vector3D<double> LocalToGlobal(const Vector3D<double>& vect) const { return vect.X * basis[0] + vect.Y * basis[1] + vect.Z * basis[2]; }
+
+	inline Vector3D<double> GlobalToLocal(const Vector3D<double>& vect) const
+	{
+		return Vector3D<double>(
+				basis[0].X * vect.X + basis[1].X * vect.Y + basis[2].X * vect.Z,
+				basis[0].Y * vect.X + basis[1].Y * vect.Y + basis[2].Y * vect.Z,
+				basis[0].Z * vect.X + basis[1].Z * vect.Y + basis[2].Z * vect.Z
+			);
+	}
 
 	inline void BuildFrom(const Vector3D<double>& v) 
 	{
@@ -51,6 +63,13 @@ public:
 			basis[0] = (i % n).Normalize(); // x
 			basis[1] = basis[2] % basis[0]; // x = z % x
 		}
+	}
+
+	inline void BuildFrom(const Vector3D<double>& n, const Vector3D<double>& t, const Vector3D<double>& b)
+	{
+		basis[2] = n; // z
+		basis[0] = t;
+		basis[1] = b;
 	}
 
 protected:

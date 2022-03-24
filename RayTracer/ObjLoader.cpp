@@ -105,14 +105,15 @@ bool ObjLoader::Load(const std::string& name, bool center)
 	// first, create the materials
 
 	std::map<std::string, std::shared_ptr<Materials::Material>> materialsMap;
+	std::map<std::string, std::shared_ptr<Textures::Texture>> normalsMap;
 
-	BuildMaterialsMap(materialsMap, dir);
+	BuildMaterialsAndNormalsMaps(materialsMap, normalsMap, dir);
 	// now build the object out of polygons, by splitting them to triangles
 	// splits it 'triangle-fan' style
 
 	// it won't work for all polygons, works for convex ones and some concave ones
 
-	SetTriangles(textureCoords, normals, vertices, polygons, materialsMap);
+	SetTriangles(textureCoords, normals, vertices, polygons, materialsMap, normalsMap);
 
 	return true;
 }
@@ -238,9 +239,10 @@ void ObjLoader::LoadVertexInfo(std::string& line, std::vector<Vector3D<double>>&
 }
 
 
-void ObjLoader::BuildMaterialsMap(std::map<std::string, std::shared_ptr<Materials::Material>>& materialsMap, const std::string& dirv)
+void ObjLoader::BuildMaterialsAndNormalsMaps(std::map<std::string, std::shared_ptr<Materials::Material>>& materialsMap, std::map<std::string, std::shared_ptr<Textures::Texture>>& normalsMap, const std::string& dirv)
 {
 	TexturesCache texturesCache;
+	Color bcolor;
 
 	std::string dir = dirv;
 	if (!dir.empty() && dir.at(dir.size() - 1) != '\\' && dir.at(dir.size() - 1) != '/')
@@ -255,6 +257,13 @@ void ObjLoader::BuildMaterialsMap(std::map<std::string, std::shared_ptr<Material
 		else
 		{
 			AddMaterialWithDiffuseTexture(materialsMap, mat, dir, texturesCache);
+		}
+
+		if (!mat.second.bumpTexture.empty())
+		{
+			auto tex = texturesCache.Get(dir + mat.second.bumpTexture, bcolor);
+
+			normalsMap[mat.first] = tex;
 		}
 	}
 }

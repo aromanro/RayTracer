@@ -69,6 +69,7 @@ namespace Objects {
 	{
 	public:
 		void SetMaterial(const std::shared_ptr<Materials::Material>& m) { material = m; }
+		void SetNormals(const std::shared_ptr<Textures::Texture>& n) { normals = n; }
 	protected:
 		VisibleObjectMaterial() {};
 		VisibleObjectMaterial(const std::shared_ptr<Materials::Material>& m) : material(m) {};
