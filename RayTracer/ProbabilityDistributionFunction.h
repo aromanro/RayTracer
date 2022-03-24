@@ -132,14 +132,16 @@ namespace PDFs
 		AnisotropicPhongPDF(const Vector3D<double>& inc, const Vector3D<double>& norm, double Nu, double Nv)
 			: incident(inc), onb(norm, inc), nu(Nu), nv(Nv)
 		{
-			prefactor1 = sqrt((nu + 1.) / (nv + 1.));
-			prefactor2 = sqrt((nu + 1.) * (nv + 1.)) / (2. * M_PI);
+			const double nu1 = nu + 1.;
+			const double nv1 = nv + 1.;
+			prefactor1 = sqrt(nu1 / nv1);
+			prefactor2 = sqrt(nu1 * nv1) / (2. * M_PI);
 		}
 
 
 		double Value(const Vector3D<double>& dir, Random& rnd) override
 		{
-			const double cosine = dir * onb.w();
+			const double cosine = dir * onb.Normal();
 			if (cosine < 0) return 0;
 
 			return cosine * M_1_PI;
@@ -165,7 +167,7 @@ namespace PDFs
 
 		inline double GetHPDH(const Vector3D<double>& h, double cos2, double sin2) const
 		{
-			const double nh = h * onb.w();
+			const double nh = h * onb.Normal();
 
 			return prefactor2 * pow(nh, nu * cos2 + nv * sin2);
 		}

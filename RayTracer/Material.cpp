@@ -118,9 +118,9 @@ namespace Materials
 
 		if (exponent)
 		{
-			// TODO: I still have to find such material
 			const Color c = exponent->Value(info.u, info.v, info.position);
 			const double e = (c.r + c.g + c.b) / 3.;
+
 			if (e > 0)
 				scatterInfo.pdf = new PDFs::AnisotropicPhongPDF(incidentRay.getDirection(), info.normal, e * nu, e * nv);
 			else
@@ -129,20 +129,15 @@ namespace Materials
 		else
 			scatterInfo.pdf = new PDFs::AnisotropicPhongPDF(incidentRay.getDirection(), info.normal, nu, nv);		
 
-		if (scatterInfo.isSpecular) 
+		Vector3D<double> dir  = scatterInfo.pdf->Generate(random, &scatterInfo);			
+		while (dir*info.normal < 0)
 		{
-			Vector3D<double> dir  = scatterInfo.pdf->Generate(random, &scatterInfo);			
-			while (dir*info.normal < 0)
-			{
-				dir = scatterInfo.pdf->Generate(random, &scatterInfo);
-			}
-			scatterInfo.specularRay = Ray(info.position + epsilon * info.normal, dir);
+			dir = scatterInfo.pdf->Generate(random, &scatterInfo);
 		}
+		scatterInfo.specularRay = Ray(info.position + epsilon * info.normal, dir);
 
 		return true;
 	}
-
-
 
 }
 

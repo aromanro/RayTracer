@@ -11,7 +11,6 @@ namespace PDFs
 		double phase = 0;
 		bool flip = false;
 
-
 		if (xi < 0.25)
 		{
 			xi *= 4;
@@ -88,12 +87,19 @@ namespace PDFs
 
 		const Vector3D<double> h = onb.LocalToGlobal(Vector3D<double>(st * c, st * s, ct));
 
-		const double kh = -incident * h;
-		const double specularProbability = GetSpecularPDH(h, kh, cos2, sin2);
-		const double weight = 1. + specularProbability;
+		double diffuseProbability;
+		double kh = 0.; // avoid complains about not being initialized
 
-		const double diffuseProbability = 1. / weight;
+		if (h * onb.Normal() < 0)
+			diffuseProbability = 1.;
+		else
+		{
+			kh = -incident * h;
+			const double specularProbability = GetSpecularPDH(h, kh, cos2, sin2);
+			const double weight = 1. + specularProbability;
 
+			diffuseProbability = 1. / weight;
+		}
 
 		if (rnd.getZeroOne() < diffuseProbability)
 		{
@@ -101,7 +107,7 @@ namespace PDFs
 			return onb.LocalToGlobal(rnd.getRandomCosineDirection());
 		}
 
-		info->atten = info->specularColor;		
+		info->atten = info->specularColor;	
 		return GetSpecularReflected(incident, h, kh);
 	}
 

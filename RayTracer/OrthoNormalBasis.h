@@ -22,6 +22,8 @@ public:
 	inline Vector3D<double> v() const { return basis[1]; }
 	inline Vector3D<double> w() const { return basis[2]; } // the normal to the surface, really
 
+	inline Vector3D<double> Normal() const { return w(); }
+
 	inline Vector3D<double> LocalToGlobal(double X, double Y, double Z) const { return X * basis[0] + Y * basis[1] + Z * basis[2]; }
 	inline Vector3D<double> LocalToGlobal(const Vector3D<double>& vect) const { return vect.X * basis[0] + vect.Y * basis[1] + vect.Z * basis[2]; }
 
