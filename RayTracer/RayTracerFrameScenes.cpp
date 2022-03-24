@@ -441,7 +441,7 @@ void RayTracerFrame::FillOtherScene(Scene& scene, const Options& options)
 		auto lightTex = std::dynamic_pointer_cast<Textures::Texture>(std::make_shared<Textures::ColorTexture>(Color(30, 30, 30)));
 		auto light = std::make_shared<Objects::Sphere>(Vector3D<double>(6, 3.9, 2), 0.4, std::make_shared<Materials::Lambertian>(lightTex));
 #else
-		auto lightTex = std::dynamic_pointer_cast<Textures::Texture>(std::make_shared<Textures::ColorTexture>(Color(25, 25, 25)));
+		auto lightTex = std::dynamic_pointer_cast<Textures::Texture>(std::make_shared<Textures::ColorTexture>(Color(30, 30, 30)));
 		auto light = std::make_shared<Objects::Sphere>(Vector3D<double>(6, 2, 2), 0.4, std::make_shared<Materials::Lambertian>(lightTex));
 #endif		
 

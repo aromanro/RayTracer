@@ -32,6 +32,10 @@ An animation generated with the program:
 
 Some images obtained while implementing it:
 
+First, with more recent code, an obj that has specular mapping and a normal/bump map:
+
+![Screenshot](img/bump.png)
+
 After the first book, 'Ray Tracing in one weekend':
 
 ![Screenshot](img/RayTracing4000spp.png)
