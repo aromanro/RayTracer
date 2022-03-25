@@ -172,6 +172,8 @@ namespace PDFs
 			return prefactor2 * pow(nh, nu * cos2 + nv * sin2);
 		}
 
+		static void DealWithQuadrants(double& xi, double& phase, bool& flip);
+
 		Vector3D<double> incident;
 		OrthoNormalBasis onb;
 		

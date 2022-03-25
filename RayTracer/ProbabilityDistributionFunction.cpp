@@ -4,49 +4,8 @@
 namespace PDFs
 {
 
-	Vector3D<double> AnisotropicPhongPDF::Generate(Random& rnd, Materials::ScatterInfo* info)
+	void AnisotropicPhongPDF::DealWithQuadrants(double& xi, double& phase, bool& flip)
 	{
-		double xi = rnd.getZeroOne();
-		
-		double phase = 0;
-		bool flip = false;
-
-		if (xi < 0.25)
-		{
-			xi *= 4;
-		}
-		else if (xi < 0.5)
-		{
-			xi = 1. - 4. * (0.5 - xi);
-			phase = M_PI;
-			flip = true;
-		}
-		else if (xi < 0.75)
-		{
-			xi = 1. - 4. * (0.75 - xi);
-			phase = M_PI;
-		}
-		else
-		{
-			xi = 1. - 4. * (1. - xi);
-			phase = 2. * M_PI;
-			flip = true;
-		}
-
-
-		double phi = atan(prefactor1 * tan(M_PI_2 * xi));
-		if (flip)
-			phi = phase - phi;
-		else
-			phi += phase;
-
-		const double c = cos(phi);
-		const double s = sin(phi);
-		const double c2 = c * c;
-		const double s2 = 1. - c2;
-		
-		xi = rnd.getZeroOne();
-
 		phase = 0;
 		flip = false;
 
@@ -71,7 +30,30 @@ namespace PDFs
 			phase = 2. * M_PI;
 			flip = true;
 		}
+	}
+
+
+	Vector3D<double> AnisotropicPhongPDF::Generate(Random& rnd, Materials::ScatterInfo* info)
+	{
+		double phase;
+		bool flip;
+
+		double xi = rnd.getZeroOne();		
+		DealWithQuadrants(xi, phase, flip);
+
+		double phi = atan(prefactor1 * tan(M_PI_2 * xi));
+		if (flip)
+			phi = phase - phi;
+		else
+			phi += phase;
+
+		const double c = cos(phi);
+		const double s = sin(phi);
+		const double c2 = c * c;
+		const double s2 = 1. - c2;
 		
+		xi = rnd.getZeroOne();
+		DealWithQuadrants(xi, phase, flip);
 			
 		double theta = acos(pow(1. - xi, 1. / (nu * c2 + nv * s2 + 1.)));				
 		if (flip)
