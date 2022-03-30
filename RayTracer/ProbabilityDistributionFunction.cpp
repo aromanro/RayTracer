@@ -89,7 +89,7 @@ namespace PDFs
 			return onb.LocalToGlobal(rnd.getRandomCosineDirection());
 		}
 
-		info->atten = info->specularColor;	
+		info->atten = 0.8 * info->specularColor + 0.2 * info->diffuseColor; // I don't like the white specular color that's typical in obj files, mix it with the diffuse color
 		return GetSpecularReflected(incident, h, kh);
 	}
 
