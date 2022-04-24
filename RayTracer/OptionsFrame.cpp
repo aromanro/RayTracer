@@ -154,7 +154,7 @@ wxPanel* OptionsFrame::CreateGeneralSettingsPage(wxBookCtrlBase* parent)
 	wxBoxSizer* itemSizer = new wxBoxSizer(wxHORIZONTAL);
 
 	wxStaticText* label = new wxStaticText(panel, wxID_STATIC, "Threads:", wxDefaultPosition, wxSize(100, -1), wxALIGN_RIGHT);
-	itemSizer->Add(label, 0, wxALIGN_RIGHT|wxALIGN_CENTER_VERTICAL|wxALL, 5);
+	itemSizer->Add(label, 0, wxALIGN_CENTER_VERTICAL|wxALL, 5);
 
 	wxString str = wxString::Format(wxT("%i"), options.nrThreads);
 
@@ -168,7 +168,7 @@ wxPanel* OptionsFrame::CreateGeneralSettingsPage(wxBookCtrlBase* parent)
 	itemSizer = new wxBoxSizer(wxHORIZONTAL);
 
 	label = new wxStaticText(panel, wxID_STATIC, "Rays/pixel/thread:", wxDefaultPosition, wxSize(100, -1), wxALIGN_RIGHT);
-	itemSizer->Add(label, 0, wxALIGN_RIGHT|wxALIGN_CENTER_VERTICAL|wxALL, 5);
+	itemSizer->Add(label, 0, wxALIGN_CENTER_VERTICAL|wxALL, 5);
 
 	str = wxString::Format(wxT("%i"), options.nrSamples);
 	wxTextCtrl* nrSamplesCtrl = new wxTextCtrl(panel, ID_NRSAMPLES, str, wxDefaultPosition, wxSize(60, -1), 0);
@@ -181,7 +181,7 @@ wxPanel* OptionsFrame::CreateGeneralSettingsPage(wxBookCtrlBase* parent)
 	itemSizer = new wxBoxSizer(wxHORIZONTAL);
 
 	label = new wxStaticText(panel, wxID_STATIC, "Recursivity stop:", wxDefaultPosition, wxSize(100, -1), wxALIGN_RIGHT);
-	itemSizer->Add(label, 0, wxALIGN_RIGHT|wxALIGN_CENTER_VERTICAL|wxALL, 5);
+	itemSizer->Add(label, 0, wxALIGN_CENTER_VERTICAL|wxALL, 5);
 
 	str = wxString::Format(wxT("%i"), options.recursivityStop);
 	wxTextCtrl* nrRecursiveCtrl = new wxTextCtrl(panel, ID_RECURSIVE, str, wxDefaultPosition, wxSize(60, -1), 0);
@@ -192,20 +192,20 @@ wxPanel* OptionsFrame::CreateGeneralSettingsPage(wxBookCtrlBase* parent)
 	itemSizer = new wxBoxSizer(wxHORIZONTAL);
 
 	label = new wxStaticText(panel, wxID_STATIC, "Scene:", wxDefaultPosition, wxSize(100, -1), wxALIGN_RIGHT);
-	itemSizer->Add(label, 0, wxALIGN_RIGHT|wxALIGN_CENTER_VERTICAL|wxALL, 5);
+	itemSizer->Add(label, 0, wxALIGN_CENTER_VERTICAL|wxALL, 5);
 
 	const wxString strings[3] = { "In a Weekend", "Cornell Box", "Other" };
 
 	wxChoice* sceneChoice = new wxChoice(panel, ID_SCENE, wxDefaultPosition, wxSize(100, -1), 3, strings, 0);
 	sceneChoice->SetSelection(options.scene);
-	itemSizer->Add(sceneChoice, 1, wxALIGN_RIGHT|wxALIGN_CENTER_VERTICAL|wxALL | wxGROW, 5);
+	itemSizer->Add(sceneChoice, 1, wxALIGN_CENTER_VERTICAL|wxALL | wxGROW, 5);
 
 	item0->Add(itemSizer, 0, wxALL | wxGROW, 0);
 
 	itemSizer = new wxBoxSizer(wxHORIZONTAL);
 
 	wxCheckBox *checkBox = new wxCheckBox(panel, ID_JITTER, "Jitter (will round up rays/pixel/thread to a square number)");
-	itemSizer->Add(checkBox, 0, wxALIGN_RIGHT|wxALIGN_CENTER_VERTICAL|wxALL);
+	itemSizer->Add(checkBox, 0, wxALIGN_CENTER_VERTICAL|wxALL);
 
 	item0->Add(itemSizer, 0, wxALL | wxGROW, 0);
 
@@ -250,27 +250,27 @@ wxPanel* OptionsFrame::CreateInOneWeekendSettingsPage(wxBookCtrlBase* parent)
 	wxBoxSizer* itemSizer = new wxBoxSizer(wxHORIZONTAL);
 
 	wxCheckBox *checkBoxDepth = new wxCheckBox(panel, ID_DEPTHFIELD, "Depth of field (non zero aperture)");
-	itemSizer->Add(checkBoxDepth, 0, wxALIGN_RIGHT|wxALIGN_CENTER_VERTICAL|wxALL);
+	itemSizer->Add(checkBoxDepth, 0, wxALIGN_CENTER_VERTICAL|wxALL);
 
 	item0->Add(itemSizer, 0, wxALL | wxGROW, 0);
 
 	itemSizer = new wxBoxSizer(wxHORIZONTAL);
 
 	wxCheckBox *checkBoxLocal = new wxCheckBox(panel, ID_LOCALILLUM, "Local Illumination");
-	itemSizer->Add(checkBoxLocal, 0, wxALIGN_RIGHT|wxALIGN_CENTER_VERTICAL|wxALL);
+	itemSizer->Add(checkBoxLocal, 0, wxALIGN_CENTER_VERTICAL|wxALL);
 
 	item0->Add(itemSizer, 0, wxALL | wxGROW, 0);
 
 	itemSizer = new wxBoxSizer(wxHORIZONTAL);
 
 	wxStaticText* label = new wxStaticText(panel, wxID_STATIC, "Sky:", wxDefaultPosition, wxSize(50, -1), wxALIGN_RIGHT);
-	itemSizer->Add(label, 0, wxALIGN_RIGHT|wxALIGN_CENTER_VERTICAL|wxALL, 5);
+	itemSizer->Add(label, 0, wxALIGN_CENTER_VERTICAL|wxALL, 5);
 
 	const wxString strings[] = { "Blue", "Black", "Sky Box", "Sky Sphere" };
 
 	wxChoice* skyChoice = new wxChoice(panel, ID_SKY, wxDefaultPosition, wxSize(60, -1), sizeof(strings) / sizeof(wxString), strings, 0);
 	skyChoice->SetSelection(options.sky);
-	itemSizer->Add(skyChoice, 1, wxALIGN_RIGHT|wxALIGN_CENTER_VERTICAL|wxALL | wxGROW, 5);
+	itemSizer->Add(skyChoice, 1, wxALIGN_CENTER_VERTICAL|wxALL | wxGROW, 5);
 
 	item0->Add(itemSizer, 0, wxALL | wxGROW, 0);
 
@@ -278,18 +278,18 @@ wxPanel* OptionsFrame::CreateInOneWeekendSettingsPage(wxBookCtrlBase* parent)
 	itemSizer = new wxBoxSizer(wxHORIZONTAL);
 
 	label = new wxStaticText(panel, wxID_STATIC, "Sky Box:", wxDefaultPosition, wxSize(50, -1), wxALIGN_RIGHT);
-	itemSizer->Add(label, 0, wxALIGN_RIGHT|wxALIGN_CENTER_VERTICAL|wxALL, 5);
+	itemSizer->Add(label, 0, wxALIGN_CENTER_VERTICAL|wxALL, 5);
 
 	wxButton* button = new wxButton(panel, ID_SKYBOXDIR_CHOOSE, "Choose", wxDefaultPosition, wxSize(70, -1));
-	itemSizer->Add(button, 0, wxALIGN_RIGHT|wxALIGN_CENTER_VERTICAL|wxALL, 5);
+	itemSizer->Add(button, 0, wxALIGN_CENTER_VERTICAL|wxALL, 5);
 
 	button = new wxButton(panel, ID_SKYBOXDIR_CLEAR, "Clear", wxDefaultPosition, wxSize(70, -1));
-	itemSizer->Add(button, 0, wxALIGN_RIGHT|wxALIGN_CENTER_VERTICAL|wxALL, 5);
+	itemSizer->Add(button, 0, wxALIGN_CENTER_VERTICAL|wxALL, 5);
 
 
 	wxTextCtrl* editSkyBox = new wxTextCtrl(panel, ID_SKYBOXDIR, options.skyBoxDirName, wxDefaultPosition, wxSize(100, -1), wxTE_READONLY | wxALIGN_LEFT);
 	
-	itemSizer->Add(editSkyBox, 1, wxALIGN_RIGHT|wxALIGN_CENTER_VERTICAL|wxALL | wxGROW, 5);
+	itemSizer->Add(editSkyBox, 1, wxALIGN_CENTER_VERTICAL|wxALL | wxGROW, 5);
 
 	item0->Add(itemSizer, 1, wxALL | wxGROW, 0);
 
@@ -317,24 +317,24 @@ wxPanel* OptionsFrame::CreateInOneWeekendSettingsPage(wxBookCtrlBase* parent)
 	itemSizer = new wxBoxSizer(wxHORIZONTAL);
 
 	label = new wxStaticText(panel, wxID_STATIC, "Texture:", wxDefaultPosition, wxSize(50, -1), wxALIGN_RIGHT);
-	itemSizer->Add(label, 0, wxALIGN_RIGHT|wxALIGN_CENTER_VERTICAL|wxALL, 5);
+	itemSizer->Add(label, 0, wxALIGN_CENTER_VERTICAL|wxALL, 5);
 
 	button = new wxButton(panel, ID_SPHERETEX_CHOOSE, "Choose", wxDefaultPosition, wxSize(70, -1));
-	itemSizer->Add(button, 0, wxALIGN_RIGHT|wxALIGN_CENTER_VERTICAL|wxALL, 5);
+	itemSizer->Add(button, 0, wxALIGN_CENTER_VERTICAL|wxALL, 5);
 
 	button = new wxButton(panel, ID_SPHERETEX_CLEAR, "Clear", wxDefaultPosition, wxSize(70, -1));
-	itemSizer->Add(button, 0, wxALIGN_RIGHT|wxALIGN_CENTER_VERTICAL|wxALL, 5);
+	itemSizer->Add(button, 0, wxALIGN_CENTER_VERTICAL|wxALL, 5);
 
 
 	wxTextCtrl* editTexture = new wxTextCtrl(panel, ID_SPHERETEX, options.textureFileName, wxDefaultPosition, wxSize(100, -1), wxTE_READONLY | wxALIGN_LEFT);
 	
-	itemSizer->Add(editTexture, 1, wxALIGN_RIGHT|wxALIGN_CENTER_VERTICAL|wxALL | wxGROW, 5);
+	itemSizer->Add(editTexture, 1, wxALIGN_CENTER_VERTICAL|wxALL | wxGROW, 5);
 
 	item0->Add(itemSizer, 1, wxALL | wxGROW, 0);
 
 	itemSizer = new wxBoxSizer(wxHORIZONTAL);
 	label = new wxStaticText(panel, wxID_STATIC, "The texture is for the big Lambertian sphere", wxDefaultPosition, wxSize(250, -1), wxALIGN_LEFT);
-	itemSizer->Add(label, 0, wxALIGN_RIGHT|wxALIGN_CENTER_VERTICAL|wxALL, 5);
+	itemSizer->Add(label, 0, wxALIGN_CENTER_VERTICAL|wxALL, 5);
 	item0->Add(itemSizer, 1, wxALL | wxGROW, 0);
 
 	// validators
@@ -443,17 +443,17 @@ wxPanel* OptionsFrame::CreateCornellBoxSettingsPage(wxBookCtrlBase* parent)
 	wxBoxSizer* itemSizer = new wxBoxSizer(wxHORIZONTAL);
 
 	wxCheckBox *checkBoxMirror = new wxCheckBox(panel, ID_MIRROR, "Mirror on the wall");
-	itemSizer->Add(checkBoxMirror, 0, wxALIGN_RIGHT|wxALIGN_CENTER_VERTICAL|wxALL);
+	itemSizer->Add(checkBoxMirror, 0, wxALIGN_CENTER_VERTICAL|wxALL);
 	item0->Add(itemSizer, 0, wxALL | wxGROW, 0);
 
 	itemSizer = new wxBoxSizer(wxHORIZONTAL);
 	wxCheckBox *checkBoxMirrorSampling = new wxCheckBox(panel, ID_MIRROR_SAMPLING, "Importance Sampling for Mirror");
-	itemSizer->Add(checkBoxMirrorSampling, 0, wxALIGN_RIGHT|wxALIGN_CENTER_VERTICAL|wxALL);
+	itemSizer->Add(checkBoxMirrorSampling, 0, wxALIGN_CENTER_VERTICAL|wxALL);
 	item0->Add(itemSizer, 0, wxALL | wxGROW, 0);
 
 	itemSizer = new wxBoxSizer(wxHORIZONTAL);
 	wxCheckBox *checkBoxObjSampling = new wxCheckBox(panel, ID_SMALLOBJ_SAMPLING, "Importance Sampling for small object (non composite only, that is, the sphere)");
-	itemSizer->Add(checkBoxObjSampling, 0, wxALIGN_RIGHT|wxALIGN_CENTER_VERTICAL|wxALL);
+	itemSizer->Add(checkBoxObjSampling, 0, wxALIGN_CENTER_VERTICAL|wxALL);
 	item0->Add(itemSizer, 0, wxALL | wxGROW, 0);
 
 	checkBoxObjSampling->Enable(3 == options.boxContent);
@@ -462,7 +462,7 @@ wxPanel* OptionsFrame::CreateCornellBoxSettingsPage(wxBookCtrlBase* parent)
 	itemSizer = new wxBoxSizer(wxHORIZONTAL);
 
 	wxStaticText* label = new wxStaticText(panel, wxID_STATIC, "Content:", wxDefaultPosition, wxSize(50, -1), wxALIGN_RIGHT);
-	itemSizer->Add(label, 0, wxALIGN_RIGHT|wxALIGN_CENTER_VERTICAL|wxALL, 5);
+	itemSizer->Add(label, 0, wxALIGN_CENTER_VERTICAL|wxALL, 5);
 
 	const wxString strings[5] = { "Two 'white' boxes", "One metal box, one 'white'", "Two 'mist' boxes", "One 'white' box, one transparent sphere", "Object loaded from file" };
 
@@ -471,7 +471,7 @@ wxPanel* OptionsFrame::CreateCornellBoxSettingsPage(wxBookCtrlBase* parent)
 
 	if (3 != options.boxContent) options.addSmallObjectToImportanceSampling = false;
 
-	itemSizer->Add(contentChoice, 1, wxALIGN_RIGHT|wxALIGN_CENTER_VERTICAL|wxALL | wxGROW, 5);
+	itemSizer->Add(contentChoice, 1, wxALIGN_CENTER_VERTICAL|wxALL | wxGROW, 5);
 
 	item0->Add(itemSizer, 0, wxALL | wxGROW, 0);
 
@@ -479,18 +479,18 @@ wxPanel* OptionsFrame::CreateCornellBoxSettingsPage(wxBookCtrlBase* parent)
 	itemSizer = new wxBoxSizer(wxHORIZONTAL);
 
 	label = new wxStaticText(panel, wxID_STATIC, "Object:", wxDefaultPosition, wxSize(50, -1), wxALIGN_RIGHT);
-	itemSizer->Add(label, 0, wxALIGN_RIGHT|wxALIGN_CENTER_VERTICAL|wxALL, 5);
+	itemSizer->Add(label, 0, wxALIGN_CENTER_VERTICAL|wxALL, 5);
 
 	wxButton* button = new wxButton(panel, ID_OBJECT_CHOOSE, "Choose", wxDefaultPosition, wxSize(70, -1));
-	itemSizer->Add(button, 0, wxALIGN_RIGHT|wxALIGN_CENTER_VERTICAL|wxALL, 5);
+	itemSizer->Add(button, 0, wxALIGN_CENTER_VERTICAL|wxALL, 5);
 
 	button = new wxButton(panel, ID_OBJECT_CLEAR, "Clear", wxDefaultPosition, wxSize(70, -1));
-	itemSizer->Add(button, 0, wxALIGN_RIGHT|wxALIGN_CENTER_VERTICAL|wxALL, 5);
+	itemSizer->Add(button, 0, wxALIGN_CENTER_VERTICAL|wxALL, 5);
 
 
 	wxTextCtrl* editObj = new wxTextCtrl(panel, ID_OBJECT, options.objFileName, wxDefaultPosition, wxSize(100, -1), wxTE_READONLY | wxALIGN_LEFT);
 	
-	itemSizer->Add(editObj, 1, wxALIGN_RIGHT|wxALIGN_CENTER_VERTICAL|wxALL | wxGROW, 5);
+	itemSizer->Add(editObj, 1, wxALIGN_CENTER_VERTICAL|wxALL | wxGROW, 5);
 
 	item0->Add(itemSizer, 0, wxALL | wxGROW, 0);
 
@@ -500,7 +500,7 @@ wxPanel* OptionsFrame::CreateCornellBoxSettingsPage(wxBookCtrlBase* parent)
 	
 	wxString str = wxString::Format(wxT("%g"), options.scale);
 	wxTextCtrl* scaleCtrl = new wxTextCtrl(panel, ID_SCALE, str, wxDefaultPosition, wxSize(100, -1), 0 );
-	itemSizer->Add(scaleCtrl, 0, wxALIGN_RIGHT|wxALIGN_CENTER_VERTICAL|wxALL | wxGROW, 5);
+	itemSizer->Add(scaleCtrl, 0, wxALIGN_CENTER_VERTICAL|wxALL | wxGROW, 5);
 	
 	item0->Add(itemSizer, 0, wxALL | wxGROW, 0);
 
@@ -511,14 +511,14 @@ wxPanel* OptionsFrame::CreateCornellBoxSettingsPage(wxBookCtrlBase* parent)
 	
 	str = wxString::Format(wxT("%d"), options.rotateX);
 	wxTextCtrl* rotxCtrl = new wxTextCtrl(panel, ID_ROTATE_X, str, wxDefaultPosition, wxSize(60, -1), 0 );
-	itemSizer->Add(rotxCtrl, 0, wxALIGN_RIGHT|wxALIGN_CENTER_VERTICAL|wxALL | wxGROW, 5);
+	itemSizer->Add(rotxCtrl, 0, wxALIGN_CENTER_VERTICAL|wxALL | wxGROW, 5);
 	
 	label = new wxStaticText(panel, wxID_STATIC, "X Position:", wxDefaultPosition, wxSize(100, -1), wxALIGN_RIGHT);
 	itemSizer->Add(label, 0, wxALIGN_LEFT|wxALIGN_CENTER_VERTICAL|wxALL, 5);
 
 	str = wxString::Format(wxT("%d"), options.positionX);
 	wxTextCtrl* posxCtrl = new wxTextCtrl(panel, ID_POSITION_X, str, wxDefaultPosition, wxSize(60, -1), 0 );
-	itemSizer->Add(posxCtrl, 0, wxALIGN_RIGHT|wxALIGN_CENTER_VERTICAL|wxALL | wxGROW, 5);
+	itemSizer->Add(posxCtrl, 0, wxALIGN_CENTER_VERTICAL|wxALL | wxGROW, 5);
 
 	item0->Add(itemSizer, 0, wxALL | wxGROW, 0);
 
@@ -530,14 +530,14 @@ wxPanel* OptionsFrame::CreateCornellBoxSettingsPage(wxBookCtrlBase* parent)
 	
 	str = wxString::Format(wxT("%d"), options.rotateY);
 	wxTextCtrl* rotyCtrl = new wxTextCtrl(panel, ID_ROTATE_Y, str, wxDefaultPosition, wxSize(60, -1), 0 );
-	itemSizer->Add(rotyCtrl, 0, wxALIGN_RIGHT|wxALIGN_CENTER_VERTICAL|wxALL | wxGROW, 5);
+	itemSizer->Add(rotyCtrl, 0, wxALIGN_CENTER_VERTICAL|wxALL | wxGROW, 5);
 
 	label = new wxStaticText(panel, wxID_STATIC, "Y Position:", wxDefaultPosition, wxSize(100, -1), wxALIGN_RIGHT);
 	itemSizer->Add(label, 0, wxALIGN_LEFT|wxALIGN_CENTER_VERTICAL|wxALL, 5);
 
 	str = wxString::Format(wxT("%d"), options.positionY);
 	wxTextCtrl* posyCtrl = new wxTextCtrl(panel, ID_POSITION_Y, str, wxDefaultPosition, wxSize(60, -1), 0 );
-	itemSizer->Add(posyCtrl, 0, wxALIGN_RIGHT|wxALIGN_CENTER_VERTICAL|wxALL | wxGROW, 5);
+	itemSizer->Add(posyCtrl, 0, wxALIGN_CENTER_VERTICAL|wxALL | wxGROW, 5);
 
 
 	item0->Add(itemSizer, 0, wxALL | wxGROW, 0);
@@ -549,14 +549,14 @@ wxPanel* OptionsFrame::CreateCornellBoxSettingsPage(wxBookCtrlBase* parent)
 	
 	str = wxString::Format(wxT("%d"), options.rotateZ);
 	wxTextCtrl* rotzCtrl = new wxTextCtrl(panel, ID_ROTATE_Z, str, wxDefaultPosition, wxSize(60, -1), 0 );
-	itemSizer->Add(rotzCtrl, 0, wxALIGN_RIGHT|wxALIGN_CENTER_VERTICAL|wxALL | wxGROW, 5);
+	itemSizer->Add(rotzCtrl, 0, wxALIGN_CENTER_VERTICAL|wxALL | wxGROW, 5);
 	
 	label = new wxStaticText(panel, wxID_STATIC, "Z Position:", wxDefaultPosition, wxSize(100, -1), wxALIGN_RIGHT);
 	itemSizer->Add(label, 0, wxALIGN_LEFT|wxALIGN_CENTER_VERTICAL|wxALL, 5);
 
 	str = wxString::Format(wxT("%d"), options.positionZ);
 	wxTextCtrl* poszCtrl = new wxTextCtrl(panel, ID_POSITION_Z, str, wxDefaultPosition, wxSize(60, -1), 0 );
-	itemSizer->Add(poszCtrl, 0, wxALIGN_RIGHT|wxALIGN_CENTER_VERTICAL|wxALL | wxGROW, 5);
+	itemSizer->Add(poszCtrl, 0, wxALIGN_CENTER_VERTICAL|wxALL | wxGROW, 5);
 
 	item0->Add(itemSizer, 0, wxALL | wxGROW, 0);
 
@@ -564,13 +564,13 @@ wxPanel* OptionsFrame::CreateCornellBoxSettingsPage(wxBookCtrlBase* parent)
 	itemSizer = new wxBoxSizer(wxHORIZONTAL);
 
 	label = new wxStaticText(panel, wxID_STATIC, "Material:", wxDefaultPosition, wxSize(50, -1), wxALIGN_RIGHT);
-	itemSizer->Add(label, 0, wxALIGN_RIGHT|wxALIGN_CENTER_VERTICAL|wxALL, 5);
+	itemSizer->Add(label, 0, wxALIGN_CENTER_VERTICAL|wxALL, 5);
 
 	const wxString matstrings[3] = { "Keep original", "Make metallic", "Make transparent" };
 
 	wxChoice* matChoice = new wxChoice(panel, ID_OBJ_MATERIAL, wxDefaultPosition, wxSize(60, -1), 3, matstrings, 0);
 	matChoice->SetSelection(options.objMaterial);
-	itemSizer->Add(matChoice, 1, wxALIGN_RIGHT|wxALIGN_CENTER_VERTICAL|wxALL | wxGROW, 5);
+	itemSizer->Add(matChoice, 1, wxALIGN_CENTER_VERTICAL|wxALL | wxGROW, 5);
 
 	item0->Add(itemSizer, 0, wxALL | wxGROW, 0);
 
@@ -678,34 +678,34 @@ wxPanel* OptionsFrame::CreateOtherSettingsPage(wxBookCtrlBase* parent)
 	wxBoxSizer* itemSizer = new wxBoxSizer(wxHORIZONTAL);
 
 	wxCheckBox *checkBoxDepth = new wxCheckBox(panel, ID_DEPTHFIELD_OTHER, "Depth of field (non zero aperture)");
-	itemSizer->Add(checkBoxDepth, 0, wxALIGN_RIGHT|wxALIGN_CENTER_VERTICAL|wxALL);
+	itemSizer->Add(checkBoxDepth, 0, wxALIGN_CENTER_VERTICAL|wxALL);
 
 	item0->Add(itemSizer, 0, wxALL | wxGROW, 0);
 
 	itemSizer = new wxBoxSizer(wxHORIZONTAL);
 
 	wxCheckBox *checkBoxLocal = new wxCheckBox(panel, ID_LOCALILLUM_OTHER, "Local Illumination");
-	itemSizer->Add(checkBoxLocal, 0, wxALIGN_RIGHT|wxALIGN_CENTER_VERTICAL|wxALL);
+	itemSizer->Add(checkBoxLocal, 0, wxALIGN_CENTER_VERTICAL|wxALL);
 
 	item0->Add(itemSizer, 0, wxALL | wxGROW, 0);
 
 	itemSizer = new wxBoxSizer(wxHORIZONTAL);
 
 	wxCheckBox *checkBoxFloor = new wxCheckBox(panel, ID_FLOOR_OTHER, "Floor");
-	itemSizer->Add(checkBoxFloor, 0, wxALIGN_RIGHT|wxALIGN_CENTER_VERTICAL|wxALL);
+	itemSizer->Add(checkBoxFloor, 0, wxALIGN_CENTER_VERTICAL|wxALL);
 
 	item0->Add(itemSizer, 0, wxALL | wxGROW, 0);
 
 	itemSizer = new wxBoxSizer(wxHORIZONTAL);
 
 	wxStaticText* label = new wxStaticText(panel, wxID_STATIC, "Sky:", wxDefaultPosition, wxSize(50, -1), wxALIGN_RIGHT);
-	itemSizer->Add(label, 0, wxALIGN_RIGHT|wxALIGN_CENTER_VERTICAL|wxALL, 5);
+	itemSizer->Add(label, 0, wxALIGN_CENTER_VERTICAL|wxALL, 5);
 
 	const wxString strings[] = { "Blue", "Black", "Sky Box", "Sky Sphere" };
 
 	wxChoice* skyChoice = new wxChoice(panel, ID_SKY, wxDefaultPosition, wxSize(60, -1), sizeof(strings) / sizeof(wxString), strings, 0);
 	skyChoice->SetSelection(options.skyOther);
-	itemSizer->Add(skyChoice, 1, wxALIGN_RIGHT|wxALIGN_CENTER_VERTICAL|wxALL | wxGROW, 5);
+	itemSizer->Add(skyChoice, 1, wxALIGN_CENTER_VERTICAL|wxALL | wxGROW, 5);
 
 	item0->Add(itemSizer, 0, wxALL | wxGROW, 0);
 
@@ -713,18 +713,18 @@ wxPanel* OptionsFrame::CreateOtherSettingsPage(wxBookCtrlBase* parent)
 	itemSizer = new wxBoxSizer(wxHORIZONTAL);
 
 	label = new wxStaticText(panel, wxID_STATIC, "Sky Box:", wxDefaultPosition, wxSize(50, -1), wxALIGN_RIGHT);
-	itemSizer->Add(label, 0, wxALIGN_RIGHT|wxALIGN_CENTER_VERTICAL|wxALL, 5);
+	itemSizer->Add(label, 0, wxALIGN_CENTER_VERTICAL|wxALL, 5);
 
 	wxButton* button = new wxButton(panel, ID_SKYBOXDIR_CHOOSE_OTHER, "Choose", wxDefaultPosition, wxSize(70, -1));
-	itemSizer->Add(button, 0, wxALIGN_RIGHT|wxALIGN_CENTER_VERTICAL|wxALL, 5);
+	itemSizer->Add(button, 0, wxALIGN_CENTER_VERTICAL|wxALL, 5);
 
 	button = new wxButton(panel, ID_SKYBOXDIR_CLEAR_OTHER, "Clear", wxDefaultPosition, wxSize(70, -1));
-	itemSizer->Add(button, 0, wxALIGN_RIGHT|wxALIGN_CENTER_VERTICAL|wxALL, 5);
+	itemSizer->Add(button, 0, wxALIGN_CENTER_VERTICAL|wxALL, 5);
 
 
 	wxTextCtrl* editSkyBox = new wxTextCtrl(panel, ID_SKYBOXDIR_OTHER, options.skyBoxDirNameOther, wxDefaultPosition, wxSize(100, -1), wxTE_READONLY | wxALIGN_LEFT);
 	
-	itemSizer->Add(editSkyBox, 1, wxALIGN_RIGHT|wxALIGN_CENTER_VERTICAL|wxALL | wxGROW, 5);
+	itemSizer->Add(editSkyBox, 1, wxALIGN_CENTER_VERTICAL|wxALL | wxGROW, 5);
 
 	item0->Add(itemSizer, 1, wxALL | wxGROW, 0);
 
@@ -753,18 +753,18 @@ wxPanel* OptionsFrame::CreateOtherSettingsPage(wxBookCtrlBase* parent)
 	itemSizer = new wxBoxSizer(wxHORIZONTAL);
 
 	label = new wxStaticText(panel, wxID_STATIC, "Object:", wxDefaultPosition, wxSize(50, -1), wxALIGN_RIGHT);
-	itemSizer->Add(label, 0, wxALIGN_RIGHT|wxALIGN_CENTER_VERTICAL|wxALL, 5);
+	itemSizer->Add(label, 0, wxALIGN_CENTER_VERTICAL|wxALL, 5);
 
 	button = new wxButton(panel, ID_OBJECT_CHOOSE_OTHER, "Choose", wxDefaultPosition, wxSize(70, -1));
-	itemSizer->Add(button, 0, wxALIGN_RIGHT|wxALIGN_CENTER_VERTICAL|wxALL, 5);
+	itemSizer->Add(button, 0, wxALIGN_CENTER_VERTICAL|wxALL, 5);
 
 	button = new wxButton(panel, ID_OBJECT_CLEAR_OTHER, "Clear", wxDefaultPosition, wxSize(70, -1));
-	itemSizer->Add(button, 0, wxALIGN_RIGHT|wxALIGN_CENTER_VERTICAL|wxALL, 5);
+	itemSizer->Add(button, 0, wxALIGN_CENTER_VERTICAL|wxALL, 5);
 
 
 	wxTextCtrl* editObj = new wxTextCtrl(panel, ID_OBJECT_OTHER, options.objFileNameOther, wxDefaultPosition, wxSize(100, -1), wxTE_READONLY | wxALIGN_LEFT);
 	
-	itemSizer->Add(editObj, 1, wxALIGN_RIGHT|wxALIGN_CENTER_VERTICAL|wxALL | wxGROW, 5);
+	itemSizer->Add(editObj, 1, wxALIGN_CENTER_VERTICAL|wxALL | wxGROW, 5);
 
 	item0->Add(itemSizer, 0, wxALL | wxGROW, 0);
 
@@ -774,7 +774,7 @@ wxPanel* OptionsFrame::CreateOtherSettingsPage(wxBookCtrlBase* parent)
 	
 	wxString str = wxString::Format(wxT("%g"), options.scaleOther);
 	wxTextCtrl* scaleCtrl = new wxTextCtrl(panel, ID_SCALE_OTHER, str, wxDefaultPosition, wxSize(100, -1), 0 );
-	itemSizer->Add(scaleCtrl, 0, wxALIGN_RIGHT|wxALIGN_CENTER_VERTICAL|wxALL | wxGROW, 5);
+	itemSizer->Add(scaleCtrl, 0, wxALIGN_CENTER_VERTICAL|wxALL | wxGROW, 5);
 	
 	item0->Add(itemSizer, 0, wxALL | wxGROW, 0);
 
@@ -785,14 +785,14 @@ wxPanel* OptionsFrame::CreateOtherSettingsPage(wxBookCtrlBase* parent)
 	
 	str = wxString::Format(wxT("%d"), options.rotateXOther);
 	wxTextCtrl* rotxCtrl = new wxTextCtrl(panel, ID_ROTATE_X_OTHER, str, wxDefaultPosition, wxSize(60, -1), 0 );
-	itemSizer->Add(rotxCtrl, 0, wxALIGN_RIGHT|wxALIGN_CENTER_VERTICAL|wxALL | wxGROW, 5);
+	itemSizer->Add(rotxCtrl, 0, wxALIGN_CENTER_VERTICAL|wxALL | wxGROW, 5);
 	
 	label = new wxStaticText(panel, wxID_STATIC, "X Position:", wxDefaultPosition, wxSize(100, -1), wxALIGN_RIGHT);
 	itemSizer->Add(label, 0, wxALIGN_LEFT|wxALIGN_CENTER_VERTICAL|wxALL, 5);
 
 	str = wxString::Format(wxT("%g"), options.positionXOther);
 	wxTextCtrl* posxCtrl = new wxTextCtrl(panel, ID_POSITION_X_OTHER, str, wxDefaultPosition, wxSize(60, -1), 0 );
-	itemSizer->Add(posxCtrl, 0, wxALIGN_RIGHT|wxALIGN_CENTER_VERTICAL|wxALL | wxGROW, 5);
+	itemSizer->Add(posxCtrl, 0, wxALIGN_CENTER_VERTICAL|wxALL | wxGROW, 5);
 
 	item0->Add(itemSizer, 0, wxALL | wxGROW, 0);
 
@@ -804,14 +804,14 @@ wxPanel* OptionsFrame::CreateOtherSettingsPage(wxBookCtrlBase* parent)
 	
 	str = wxString::Format(wxT("%d"), options.rotateYOther);
 	wxTextCtrl* rotyCtrl = new wxTextCtrl(panel, ID_ROTATE_Y_OTHER, str, wxDefaultPosition, wxSize(60, -1), 0 );
-	itemSizer->Add(rotyCtrl, 0, wxALIGN_RIGHT|wxALIGN_CENTER_VERTICAL|wxALL | wxGROW, 5);
+	itemSizer->Add(rotyCtrl, 0, wxALIGN_CENTER_VERTICAL|wxALL | wxGROW, 5);
 
 	label = new wxStaticText(panel, wxID_STATIC, "Y Position:", wxDefaultPosition, wxSize(100, -1), wxALIGN_RIGHT);
 	itemSizer->Add(label, 0, wxALIGN_LEFT|wxALIGN_CENTER_VERTICAL|wxALL, 5);
 
 	str = wxString::Format(wxT("%g"), options.positionYOther);
 	wxTextCtrl* posyCtrl = new wxTextCtrl(panel, ID_POSITION_Y_OTHER, str, wxDefaultPosition, wxSize(60, -1), 0 );
-	itemSizer->Add(posyCtrl, 0, wxALIGN_RIGHT|wxALIGN_CENTER_VERTICAL|wxALL | wxGROW, 5);
+	itemSizer->Add(posyCtrl, 0, wxALIGN_CENTER_VERTICAL|wxALL | wxGROW, 5);
 
 
 	item0->Add(itemSizer, 0, wxALL | wxGROW, 0);
@@ -823,14 +823,14 @@ wxPanel* OptionsFrame::CreateOtherSettingsPage(wxBookCtrlBase* parent)
 	
 	str = wxString::Format(wxT("%d"), options.rotateZOther);
 	wxTextCtrl* rotzCtrl = new wxTextCtrl(panel, ID_ROTATE_Z_OTHER, str, wxDefaultPosition, wxSize(60, -1), 0 );
-	itemSizer->Add(rotzCtrl, 0, wxALIGN_RIGHT|wxALIGN_CENTER_VERTICAL|wxALL | wxGROW, 5);
+	itemSizer->Add(rotzCtrl, 0, wxALIGN_CENTER_VERTICAL|wxALL | wxGROW, 5);
 	
 	label = new wxStaticText(panel, wxID_STATIC, "Z Position:", wxDefaultPosition, wxSize(100, -1), wxALIGN_RIGHT);
 	itemSizer->Add(label, 0, wxALIGN_LEFT|wxALIGN_CENTER_VERTICAL|wxALL, 5);
 
 	str = wxString::Format(wxT("%g"), options.positionZOther);
 	wxTextCtrl* poszCtrl = new wxTextCtrl(panel, ID_POSITION_Z_OTHER, str, wxDefaultPosition, wxSize(60, -1), 0 );
-	itemSizer->Add(poszCtrl, 0, wxALIGN_RIGHT|wxALIGN_CENTER_VERTICAL|wxALL | wxGROW, 5);
+	itemSizer->Add(poszCtrl, 0, wxALIGN_CENTER_VERTICAL|wxALL | wxGROW, 5);
 
 	item0->Add(itemSizer, 0, wxALL | wxGROW, 0);
 
@@ -838,13 +838,13 @@ wxPanel* OptionsFrame::CreateOtherSettingsPage(wxBookCtrlBase* parent)
 	itemSizer = new wxBoxSizer(wxHORIZONTAL);
 
 	label = new wxStaticText(panel, wxID_STATIC, "Material:", wxDefaultPosition, wxSize(50, -1), wxALIGN_RIGHT);
-	itemSizer->Add(label, 0, wxALIGN_RIGHT|wxALIGN_CENTER_VERTICAL|wxALL, 5);
+	itemSizer->Add(label, 0, wxALIGN_CENTER_VERTICAL|wxALL, 5);
 
 	const wxString matstrings[3] = { "Keep original", "Make metallic", "Make transparent" };
 
 	wxChoice* matChoice = new wxChoice(panel, ID_OBJ_MATERIAL_OTHER, wxDefaultPosition, wxSize(60, -1), 3, matstrings, 0);
 	matChoice->SetSelection(options.objMaterialOther);
-	itemSizer->Add(matChoice, 1, wxALIGN_RIGHT|wxALIGN_CENTER_VERTICAL|wxALL | wxGROW, 5);
+	itemSizer->Add(matChoice, 1, wxALIGN_CENTER_VERTICAL|wxALL | wxGROW, 5);
 
 	item0->Add(itemSizer, 0, wxALL | wxGROW, 0);
 
