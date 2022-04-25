@@ -496,7 +496,7 @@ wxPanel* OptionsFrame::CreateCornellBoxSettingsPage(wxBookCtrlBase* parent)
 
 	itemSizer = new wxBoxSizer(wxHORIZONTAL);
 	label = new wxStaticText(panel, wxID_STATIC, "Scale:", wxDefaultPosition, wxSize(100, -1), wxALIGN_RIGHT);
-	itemSizer->Add(label, 0, wxALIGN_LEFT|wxALIGN_CENTER_VERTICAL|wxALL, 5);
+	itemSizer->Add(label, 0, wxALIGN_CENTER_VERTICAL|wxALL, 5);
 	
 	wxString str = wxString::Format(wxT("%g"), options.scale);
 	wxTextCtrl* scaleCtrl = new wxTextCtrl(panel, ID_SCALE, str, wxDefaultPosition, wxSize(100, -1), 0 );
@@ -507,14 +507,14 @@ wxPanel* OptionsFrame::CreateCornellBoxSettingsPage(wxBookCtrlBase* parent)
 
 	itemSizer = new wxBoxSizer(wxHORIZONTAL);
 	label = new wxStaticText(panel, wxID_STATIC, "Rotate around Ox:", wxDefaultPosition, wxSize(100, -1), wxALIGN_RIGHT);
-	itemSizer->Add(label, 0, wxALIGN_LEFT|wxALIGN_CENTER_VERTICAL|wxALL, 5);
+	itemSizer->Add(label, 0, wxALIGN_CENTER_VERTICAL|wxALL, 5);
 	
 	str = wxString::Format(wxT("%d"), options.rotateX);
 	wxTextCtrl* rotxCtrl = new wxTextCtrl(panel, ID_ROTATE_X, str, wxDefaultPosition, wxSize(60, -1), 0 );
 	itemSizer->Add(rotxCtrl, 0, wxALIGN_CENTER_VERTICAL|wxALL | wxGROW, 5);
 	
 	label = new wxStaticText(panel, wxID_STATIC, "X Position:", wxDefaultPosition, wxSize(100, -1), wxALIGN_RIGHT);
-	itemSizer->Add(label, 0, wxALIGN_LEFT|wxALIGN_CENTER_VERTICAL|wxALL, 5);
+	itemSizer->Add(label, 0, wxALIGN_CENTER_VERTICAL|wxALL, 5);
 
 	str = wxString::Format(wxT("%d"), options.positionX);
 	wxTextCtrl* posxCtrl = new wxTextCtrl(panel, ID_POSITION_X, str, wxDefaultPosition, wxSize(60, -1), 0 );
@@ -526,14 +526,14 @@ wxPanel* OptionsFrame::CreateCornellBoxSettingsPage(wxBookCtrlBase* parent)
 
 	itemSizer = new wxBoxSizer(wxHORIZONTAL);
 	label = new wxStaticText(panel, wxID_STATIC, "Rotate around Oy:", wxDefaultPosition, wxSize(100, -1), wxALIGN_RIGHT);
-	itemSizer->Add(label, 0, wxALIGN_LEFT|wxALIGN_CENTER_VERTICAL|wxALL, 5);
+	itemSizer->Add(label, 0, wxALIGN_CENTER_VERTICAL|wxALL, 5);
 	
 	str = wxString::Format(wxT("%d"), options.rotateY);
 	wxTextCtrl* rotyCtrl = new wxTextCtrl(panel, ID_ROTATE_Y, str, wxDefaultPosition, wxSize(60, -1), 0 );
 	itemSizer->Add(rotyCtrl, 0, wxALIGN_CENTER_VERTICAL|wxALL | wxGROW, 5);
 
 	label = new wxStaticText(panel, wxID_STATIC, "Y Position:", wxDefaultPosition, wxSize(100, -1), wxALIGN_RIGHT);
-	itemSizer->Add(label, 0, wxALIGN_LEFT|wxALIGN_CENTER_VERTICAL|wxALL, 5);
+	itemSizer->Add(label, 0, wxALIGN_CENTER_VERTICAL|wxALL, 5);
 
 	str = wxString::Format(wxT("%d"), options.positionY);
 	wxTextCtrl* posyCtrl = new wxTextCtrl(panel, ID_POSITION_Y, str, wxDefaultPosition, wxSize(60, -1), 0 );
@@ -545,14 +545,14 @@ wxPanel* OptionsFrame::CreateCornellBoxSettingsPage(wxBookCtrlBase* parent)
 
 	itemSizer = new wxBoxSizer(wxHORIZONTAL);
 	label = new wxStaticText(panel, wxID_STATIC, "Rotate around Oz:", wxDefaultPosition, wxSize(100, -1), wxALIGN_RIGHT);
-	itemSizer->Add(label, 0, wxALIGN_LEFT|wxALIGN_CENTER_VERTICAL|wxALL, 5);
+	itemSizer->Add(label, 0, wxALIGN_CENTER_VERTICAL|wxALL, 5);
 	
 	str = wxString::Format(wxT("%d"), options.rotateZ);
 	wxTextCtrl* rotzCtrl = new wxTextCtrl(panel, ID_ROTATE_Z, str, wxDefaultPosition, wxSize(60, -1), 0 );
 	itemSizer->Add(rotzCtrl, 0, wxALIGN_CENTER_VERTICAL|wxALL | wxGROW, 5);
 	
 	label = new wxStaticText(panel, wxID_STATIC, "Z Position:", wxDefaultPosition, wxSize(100, -1), wxALIGN_RIGHT);
-	itemSizer->Add(label, 0, wxALIGN_LEFT|wxALIGN_CENTER_VERTICAL|wxALL, 5);
+	itemSizer->Add(label, 0, wxALIGN_CENTER_VERTICAL|wxALL, 5);
 
 	str = wxString::Format(wxT("%d"), options.positionZ);
 	wxTextCtrl* poszCtrl = new wxTextCtrl(panel, ID_POSITION_Z, str, wxDefaultPosition, wxSize(60, -1), 0 );
@@ -770,7 +770,7 @@ wxPanel* OptionsFrame::CreateOtherSettingsPage(wxBookCtrlBase* parent)
 
 	itemSizer = new wxBoxSizer(wxHORIZONTAL);
 	label = new wxStaticText(panel, wxID_STATIC, "Scale:", wxDefaultPosition, wxSize(100, -1), wxALIGN_RIGHT);
-	itemSizer->Add(label, 0, wxALIGN_LEFT|wxALIGN_CENTER_VERTICAL|wxALL, 5);
+	itemSizer->Add(label, 0, wxALIGN_CENTER_VERTICAL|wxALL, 5);
 	
 	wxString str = wxString::Format(wxT("%g"), options.scaleOther);
 	wxTextCtrl* scaleCtrl = new wxTextCtrl(panel, ID_SCALE_OTHER, str, wxDefaultPosition, wxSize(100, -1), 0 );
@@ -781,14 +781,14 @@ wxPanel* OptionsFrame::CreateOtherSettingsPage(wxBookCtrlBase* parent)
 
 	itemSizer = new wxBoxSizer(wxHORIZONTAL);
 	label = new wxStaticText(panel, wxID_STATIC, "Rotate around Ox:", wxDefaultPosition, wxSize(100, -1), wxALIGN_RIGHT);
-	itemSizer->Add(label, 0, wxALIGN_LEFT|wxALIGN_CENTER_VERTICAL|wxALL, 5);
+	itemSizer->Add(label, 0, wxALIGN_CENTER_VERTICAL|wxALL, 5);
 	
 	str = wxString::Format(wxT("%d"), options.rotateXOther);
 	wxTextCtrl* rotxCtrl = new wxTextCtrl(panel, ID_ROTATE_X_OTHER, str, wxDefaultPosition, wxSize(60, -1), 0 );
 	itemSizer->Add(rotxCtrl, 0, wxALIGN_CENTER_VERTICAL|wxALL | wxGROW, 5);
 	
 	label = new wxStaticText(panel, wxID_STATIC, "X Position:", wxDefaultPosition, wxSize(100, -1), wxALIGN_RIGHT);
-	itemSizer->Add(label, 0, wxALIGN_LEFT|wxALIGN_CENTER_VERTICAL|wxALL, 5);
+	itemSizer->Add(label, 0, wxALIGN_CENTER_VERTICAL|wxALL, 5);
 
 	str = wxString::Format(wxT("%g"), options.positionXOther);
 	wxTextCtrl* posxCtrl = new wxTextCtrl(panel, ID_POSITION_X_OTHER, str, wxDefaultPosition, wxSize(60, -1), 0 );
@@ -800,14 +800,14 @@ wxPanel* OptionsFrame::CreateOtherSettingsPage(wxBookCtrlBase* parent)
 
 	itemSizer = new wxBoxSizer(wxHORIZONTAL);
 	label = new wxStaticText(panel, wxID_STATIC, "Rotate around Oy:", wxDefaultPosition, wxSize(100, -1), wxALIGN_RIGHT);
-	itemSizer->Add(label, 0, wxALIGN_LEFT|wxALIGN_CENTER_VERTICAL|wxALL, 5);
+	itemSizer->Add(label, 0, wxALIGN_CENTER_VERTICAL|wxALL, 5);
 	
 	str = wxString::Format(wxT("%d"), options.rotateYOther);
 	wxTextCtrl* rotyCtrl = new wxTextCtrl(panel, ID_ROTATE_Y_OTHER, str, wxDefaultPosition, wxSize(60, -1), 0 );
 	itemSizer->Add(rotyCtrl, 0, wxALIGN_CENTER_VERTICAL|wxALL | wxGROW, 5);
 
 	label = new wxStaticText(panel, wxID_STATIC, "Y Position:", wxDefaultPosition, wxSize(100, -1), wxALIGN_RIGHT);
-	itemSizer->Add(label, 0, wxALIGN_LEFT|wxALIGN_CENTER_VERTICAL|wxALL, 5);
+	itemSizer->Add(label, 0, wxALIGN_CENTER_VERTICAL|wxALL, 5);
 
 	str = wxString::Format(wxT("%g"), options.positionYOther);
 	wxTextCtrl* posyCtrl = new wxTextCtrl(panel, ID_POSITION_Y_OTHER, str, wxDefaultPosition, wxSize(60, -1), 0 );
@@ -819,14 +819,14 @@ wxPanel* OptionsFrame::CreateOtherSettingsPage(wxBookCtrlBase* parent)
 
 	itemSizer = new wxBoxSizer(wxHORIZONTAL);
 	label = new wxStaticText(panel, wxID_STATIC, "Rotate around Oz:", wxDefaultPosition, wxSize(100, -1), wxALIGN_RIGHT);
-	itemSizer->Add(label, 0, wxALIGN_LEFT|wxALIGN_CENTER_VERTICAL|wxALL, 5);
+	itemSizer->Add(label, 0, wxALIGN_CENTER_VERTICAL|wxALL, 5);
 	
 	str = wxString::Format(wxT("%d"), options.rotateZOther);
 	wxTextCtrl* rotzCtrl = new wxTextCtrl(panel, ID_ROTATE_Z_OTHER, str, wxDefaultPosition, wxSize(60, -1), 0 );
 	itemSizer->Add(rotzCtrl, 0, wxALIGN_CENTER_VERTICAL|wxALL | wxGROW, 5);
 	
 	label = new wxStaticText(panel, wxID_STATIC, "Z Position:", wxDefaultPosition, wxSize(100, -1), wxALIGN_RIGHT);
-	itemSizer->Add(label, 0, wxALIGN_LEFT|wxALIGN_CENTER_VERTICAL|wxALL, 5);
+	itemSizer->Add(label, 0, wxALIGN_CENTER_VERTICAL|wxALL, 5);
 
 	str = wxString::Format(wxT("%g"), options.positionZOther);
 	wxTextCtrl* poszCtrl = new wxTextCtrl(panel, ID_POSITION_Z_OTHER, str, wxDefaultPosition, wxSize(60, -1), 0 );
