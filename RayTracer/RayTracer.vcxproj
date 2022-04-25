@@ -70,20 +70,20 @@
   </ImportGroup>
   <PropertyGroup Label="UserMacros" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
-    <IncludePath>C:\wxWidgets-3.0.4\include\msvc;C:\wxWidgets-3.0.4\include;$(IncludePath)</IncludePath>
-    <LibraryPath>C:\wxWidgets-3.0.4\lib\vc_x64_lib;$(LibraryPath)</LibraryPath>
+    <IncludePath>C:\wxWidgets-3.0.5\include\msvc;C:\wxWidgets-3.0.5\include;$(IncludePath)</IncludePath>
+    <LibraryPath>C:\wxWidgets-3.0.5\lib\vc_x64_lib;$(LibraryPath)</LibraryPath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
-    <IncludePath>C:\wxWidgets-3.0.4\include\msvc;C:\wxWidgets-3.0.4\include;$(IncludePath)</IncludePath>
-    <LibraryPath>C:\wxWidgets-3.0.4\lib\vc_x64_lib;$(LibraryPath)</LibraryPath>
+    <IncludePath>C:\wxWidgets-3.0.5\include\msvc;C:\wxWidgets-3.0.5\include;$(IncludePath)</IncludePath>
+    <LibraryPath>C:\wxWidgets-3.0.5\lib\vc_x64_lib;$(LibraryPath)</LibraryPath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
-    <IncludePath>C:\wxWidgets-3.0.4\include\msvc;C:\wxWidgets-3.0.4\include;$(VC_IncludePath);C:\Program Files %28x86%29\Windows Kits\10\Include\10.0.10240.0\ucrt;$(IncludePath);$(WindowsSDK_IncludePath)include;$(VCInstallDir)include;$(VCInstallDir)atlmfc\include;$(VCInstallDir)PlatformSDK\include;$(VCInstallDir)PlatformSDK\common\include;$(WindowsSdkDir)include;$(FrameworkSDKDir)\include;C:\Program Files (x86)\Microsoft DirectX SDK (August 2007)\Include;C:\Program Files (x86)\Java\jdk1.6.0_20\include;C:\Program Files (x86)\Java\jdk1.6.0_20\include\win32</IncludePath>
-    <LibraryPath>C:\wxWidgets-3.0.4\lib\vc_lib;$(LibraryPath)</LibraryPath>
+    <IncludePath>C:\wxWidgets-3.0.5\include\msvc;C:\wxWidgets-3.0.5\include;$(VC_IncludePath);C:\Program Files %28x86%29\Windows Kits\10\Include\10.0.10240.0\ucrt;$(IncludePath);$(WindowsSDK_IncludePath)include;$(VCInstallDir)include;$(VCInstallDir)atlmfc\include;$(VCInstallDir)PlatformSDK\include;$(VCInstallDir)PlatformSDK\common\include;$(WindowsSdkDir)include;$(FrameworkSDKDir)\include;C:\Program Files (x86)\Microsoft DirectX SDK (August 2007)\Include;C:\Program Files (x86)\Java\jdk1.6.0_20\include;C:\Program Files (x86)\Java\jdk1.6.0_20\include\win32</IncludePath>
+    <LibraryPath>C:\wxWidgets-3.0.5\lib\vc_lib;$(LibraryPath)</LibraryPath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
-    <IncludePath>C:\wxWidgets-3.0.4\include\msvc;C:\wxWidgets-3.0.4\include;$(VC_IncludePath);C:\Program Files %28x86%29\Windows Kits\10\Include\10.0.10240.0\ucrt;$(IncludePath);$(WindowsSDK_IncludePath)include;$(VCInstallDir)include;$(VCInstallDir)atlmfc\include;$(VCInstallDir)PlatformSDK\include;$(VCInstallDir)PlatformSDK\common\include;$(WindowsSdkDir)include;$(FrameworkSDKDir)\include;C:\Program Files (x86)\Microsoft DirectX SDK (August 2007)\Include;C:\Program Files (x86)\Java\jdk1.6.0_20\include;C:\Program Files (x86)\Java\jdk1.6.0_20\include\win32</IncludePath>
-    <LibraryPath>C:\wxWidgets-3.0.4\lib\vc_lib;$(LibraryPath)</LibraryPath>
+    <IncludePath>C:\wxWidgets-3.0.5\include\msvc;C:\wxWidgets-3.0.5\include;$(VC_IncludePath);C:\Program Files %28x86%29\Windows Kits\10\Include\10.0.10240.0\ucrt;$(IncludePath);$(WindowsSDK_IncludePath)include;$(VCInstallDir)include;$(VCInstallDir)atlmfc\include;$(VCInstallDir)PlatformSDK\include;$(VCInstallDir)PlatformSDK\common\include;$(WindowsSdkDir)include;$(FrameworkSDKDir)\include;C:\Program Files (x86)\Microsoft DirectX SDK (August 2007)\Include;C:\Program Files (x86)\Java\jdk1.6.0_20\include;C:\Program Files (x86)\Java\jdk1.6.0_20\include\win32</IncludePath>
+    <LibraryPath>C:\wxWidgets-3.0.5\lib\vc_lib;$(LibraryPath)</LibraryPath>
   </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <ClCompile>
