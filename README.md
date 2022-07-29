@@ -1,6 +1,7 @@
 # RayTracer
 A ray tracing program
 
+[![Codacy Badge](https://api.codacy.com/project/badge/Grade/6239998adab74af4b4fd41f3de9f2439)](https://app.codacy.com/gh/aromanro/RayTracer?utm_source=github.com&utm_medium=referral&utm_content=aromanro/RayTracer&utm_campaign=Badge_Grade_Settings)
 [![CodeFactor](https://www.codefactor.io/repository/github/aromanro/raytracer/badge)](https://www.codefactor.io/repository/github/aromanro/raytracer)
 
 Mainly based on 'Ray Tracing' books from Peter Shirley: http://in1weekend.blogspot.com/2016/01/ray-tracing-in-one-weekend.html
