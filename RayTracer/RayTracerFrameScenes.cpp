@@ -71,7 +71,7 @@ void RayTracerFrame::AvoidIntersections(Scene& scene, Vector3D<double>& center, 
 {
 	bool intersect;
 
-	bool newBox = choose_obj >= 0.5 ? true : false;
+	const bool newBox = choose_obj >= 0.5;
 
 	do
 	{
