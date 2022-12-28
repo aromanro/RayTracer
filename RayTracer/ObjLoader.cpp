@@ -104,8 +104,8 @@ bool ObjLoader::Load(const std::string& name, bool center)
 
 	// first, create the materials
 
-	std::map<std::string, std::shared_ptr<Materials::Material>> materialsMap;
-	std::map<std::string, std::shared_ptr<Textures::Texture>> normalsMap;
+	std::unordered_map<std::string, std::shared_ptr<Materials::Material>> materialsMap;
+	std::unordered_map<std::string, std::shared_ptr<Textures::Texture>> normalsMap;
 
 	BuildMaterialsAndNormalsMaps(materialsMap, normalsMap, dir);
 	// now build the object out of polygons, by splitting them to triangles
@@ -239,7 +239,7 @@ void ObjLoader::LoadVertexInfo(std::string& line, std::vector<Vector3D<double>>&
 }
 
 
-void ObjLoader::BuildMaterialsAndNormalsMaps(std::map<std::string, std::shared_ptr<Materials::Material>>& materialsMap, std::map<std::string, std::shared_ptr<Textures::Texture>>& normalsMap, const std::string& dirv)
+void ObjLoader::BuildMaterialsAndNormalsMaps(std::unordered_map<std::string, std::shared_ptr<Materials::Material>>& materialsMap, std::unordered_map<std::string, std::shared_ptr<Textures::Texture>>& normalsMap, const std::string& dirv)
 {
 	TexturesCache texturesCache;
 	Color bcolor;
@@ -268,7 +268,7 @@ void ObjLoader::BuildMaterialsAndNormalsMaps(std::map<std::string, std::shared_p
 	}
 }
 
-void ObjLoader::AddMaterialWithDiffuseTexture(std::map<std::string, std::shared_ptr<Materials::Material>>& materialsMap, const std::pair<std::string, ObjMaterial>& mat, const std::string& dir, TexturesCache& texturesCache)
+void ObjLoader::AddMaterialWithDiffuseTexture(std::unordered_map<std::string, std::shared_ptr<Materials::Material>>& materialsMap, const std::pair<std::string, ObjMaterial>& mat, const std::string& dir, TexturesCache& texturesCache)
 {
 	const std::string tname = dir + mat.second.diffuseTexture;
 	auto tex = texturesCache.Get(tname, mat.second.diffuseColor);
@@ -306,7 +306,7 @@ void ObjLoader::AddMaterialWithDiffuseTexture(std::map<std::string, std::shared_
 }
 
 
-void ObjLoader::AddMaterialNoDiffuseTexture(std::map<std::string, std::shared_ptr<Materials::Material>>& materialsMap, const std::pair<std::string, ObjMaterial>& mat, const std::string& dir, TexturesCache& texturesCache)
+void ObjLoader::AddMaterialNoDiffuseTexture(std::unordered_map<std::string, std::shared_ptr<Materials::Material>>& materialsMap, const std::pair<std::string, ObjMaterial>& mat, const std::string& dir, TexturesCache& texturesCache)
 {
 	auto tex = std::dynamic_pointer_cast<Textures::Texture>(std::make_shared<Textures::ColorTexture>((mat.second.IsTransparent() && mat.second.diffuseColor.VeryAbsorbing()) ? mat.second.specularColor : mat.second.diffuseColor));
 

@@ -2,7 +2,7 @@
 #include "Material.h"
 #include "ImageTexture.h"
 
-void ObjLoader::SetTriangles(const std::vector<std::pair<double, double>>& textureCoords, const std::vector<Vector3D<double>>& normals, const std::vector<Vector3D<double>>& vertices, const std::vector<std::pair<Polygon, std::string>>& polygons, std::map<std::string, std::shared_ptr<Materials::Material>>& materialsMap, std::map<std::string, std::shared_ptr<Textures::Texture>>& normalsMap)
+void ObjLoader::SetTriangles(const std::vector<std::pair<double, double>>& textureCoords, const std::vector<Vector3D<double>>& normals, const std::vector<Vector3D<double>>& vertices, const std::vector<std::pair<Polygon, std::string>>& polygons, std::unordered_map<std::string, std::shared_ptr<Materials::Material>>& materialsMap, std::unordered_map<std::string, std::shared_ptr<Textures::Texture>>& normalsMap)
 {
 	const auto WhiteMaterial = std::make_shared<Materials::Lambertian>(std::dynamic_pointer_cast<Textures::Texture>(std::make_shared<Textures::ColorTexture>(Color(0.73, 0.73, 0.73))));
 
