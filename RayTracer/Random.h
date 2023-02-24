@@ -19,6 +19,12 @@ public:
 		return uniformZeroOne(rng);
 	}
 
+	// not used yet anywhere, but it might be useful in the future
+	inline double getGaussian()
+	{
+		return gaussian(rng);
+	}
+
 	inline Vector3D<double> getRandomInUnitSphere()
 	{
 		Vector3D<double> res;
@@ -66,6 +72,7 @@ public:
 
 protected:
 	std::mt19937_64 rng;
-	std::uniform_real_distribution<double> uniformZeroOne;	
+	std::uniform_real_distribution<double> uniformZeroOne;
+	std::normal_distribution<double> gaussian;
 };
 
