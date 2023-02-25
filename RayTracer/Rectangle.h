@@ -11,12 +11,40 @@ namespace Objects
 	// those are very limited, only special orientations, no rotation possible
 	// just to implement a Cornell box with them
 
-	class RectangleXY : public VisibleObjectElementary
+	class AlignedRectangle : public VisibleObjectElementary
 	{
 	public:
-		RectangleXY() : m_z(0), m_x0(0), m_x1(0), m_y0(0), m_y1(0), dim1(0), dim2(0), invdim1(0), invdim2(0), area(0) {};
+		AlignedRectangle() : dim1(0), dim2(0), invdim1(0), invdim2(0), area(0) {}
+		AlignedRectangle(const std::shared_ptr<Materials::Material>& m) : VisibleObjectElementary(m) {}
+
+		double pdfValue(const Vector3D<double>& o, const Vector3D<double>& v, Random& rnd) const override
+		{
+			PointInfo info;
+
+			if (Hit(Ray(o, v), info, 0.000001, DBL_MAX, 1, rnd))
+			{
+				const double c = v * info.normal;
+				const double dist2 = info.distance * info.distance;
+				const double cosine = abs(c);
+
+				return dist2 / (cosine * area);
+			}
+
+			return 0;
+		}
+
+	protected:
+		double dim1, dim2;
+		double invdim1, invdim2;
+		double area;
+	};
+
+	class RectangleXY : public AlignedRectangle
+	{
+	public:
+		RectangleXY() : m_z(0), m_x0(0), m_x1(0), m_y0(0), m_y1(0) {};
 		RectangleXY(double x0, double x1, double y0, double y1, double z, const std::shared_ptr<Materials::Material>& m)
-			: VisibleObjectElementary(m), m_z(z), m_x0(x0), m_x1(x1), m_y0(y0), m_y1(y1)
+			: AlignedRectangle(m), m_z(z), m_x0(x0), m_x1(x1), m_y0(y0), m_y1(y1)
 		{
 			dim1 = m_x1 - m_x0;
 			dim2 = m_y1 - m_y0;
@@ -86,24 +114,6 @@ namespace Objects
 
 			boundingBox.Scale(s);
 		}
-
-
-
-		double pdfValue(const Vector3D<double>& o, const Vector3D<double>& v, Random& rnd) const override 
-		{ 
-			PointInfo info;
-
-			if (Hit(Ray(o, v), info, 0.000001, DBL_MAX, 1, rnd))
-			{
-				const double c = v * info.normal;
-				const double dist2 = info.distance * info.distance;
-				const double cosine = abs(c);
-
-				return dist2 / (cosine * area);
-			}
-
-			return 0; 
-		}
 		
 		Vector3D<double> getRandom(const Vector3D<double>& origin, Random& rnd) const override 
 		{ 
@@ -114,20 +124,16 @@ namespace Objects
 
 		double m_z;
 		double m_x0, m_x1, m_y0, m_y1;
-	protected:
-		double dim1, dim2;
-		double invdim1, invdim2;
-		double area;
 	};
 
 
 
-	class RectangleXZ : public VisibleObjectElementary
+	class RectangleXZ : public AlignedRectangle
 	{
 	public:
-		RectangleXZ() : m_y(0), m_x0(0), m_x1(0), m_z0(0), m_z1(0), dim1(0), dim2(0), invdim1(0), invdim2(0), area(0) {};
+		RectangleXZ() : m_y(0), m_x0(0), m_x1(0), m_z0(0), m_z1(0) {};
 		RectangleXZ(double x0, double x1, double z0, double z1, double y, const std::shared_ptr<Materials::Material>& m)
-			: VisibleObjectElementary(m), m_y(y), m_x0(x0), m_x1(x1), m_z0(z0), m_z1(z1)
+			: AlignedRectangle(m), m_y(y), m_x0(x0), m_x1(x1), m_z0(z0), m_z1(z1)
 		{
 			dim1 = m_x1 - m_x0;
 			dim2 = m_z1 - m_z0;
@@ -198,22 +204,6 @@ namespace Objects
 
 			boundingBox.Scale(s);
 		}
-
-		double pdfValue(const Vector3D<double>& o, const Vector3D<double>& v, Random& rnd) const override 
-		{ 
-			PointInfo info;
-
-			if (Hit(Ray(o, v), info, 0.001, DBL_MAX, 1, rnd))
-			{
-				const double c = v * info.normal;
-				const double dist2 = info.distance * info.distance;
-				const double cosine = abs(c);
-
-				return dist2 / (cosine * area);
-			}
-
-			return 0; 
-		}
 		
 		Vector3D<double> getRandom(const Vector3D<double>& origin, Random& rnd) const override 
 		{ 
@@ -222,23 +212,17 @@ namespace Objects
 			return rndPoint - origin; 
 		}
 
-
-
 		double m_y;
 		double m_x0, m_x1, m_z0, m_z1;
-	protected:
-		double dim1, dim2;
-		double invdim1, invdim2;
-		double area;
 	};
 
 
-	class RectangleYZ : public VisibleObjectElementary
+	class RectangleYZ : public AlignedRectangle
 	{
 	public:
-		RectangleYZ() : m_x(0), m_y0(0), m_y1(0), m_z0(0), m_z1(0), dim1(0), dim2(0), invdim1(0), invdim2(0), area(0) {};
+		RectangleYZ() : m_x(0), m_y0(0), m_y1(0), m_z0(0), m_z1(0) {};
 		RectangleYZ(double y0, double y1, double z0, double z1, double x, const std::shared_ptr<Materials::Material>& m)
-			: VisibleObjectElementary(m), m_x(x), m_y0(y0), m_y1(y1), m_z0(z0), m_z1(z1)
+			: AlignedRectangle(m), m_x(x), m_y0(y0), m_y1(y1), m_z0(z0), m_z1(z1)
 		{
 			dim1 = m_y1 - m_y0;
 			dim2 = m_z1 - m_z0;
@@ -309,25 +293,6 @@ namespace Objects
 
 			boundingBox.Scale(s);
 		}
-
-
-
-		double pdfValue(const Vector3D<double>& o, const Vector3D<double>& v, Random& rnd) const override 
-		{ 
-			PointInfo info;
-
-			if (Hit(Ray(o, v), info, 0.001, DBL_MAX, 1, rnd))
-			{
-				const double c = v * info.normal;
-
-				const double dist2 = info.distance * info.distance;
-				const double cosine = abs(c);
-
-				return dist2 / (cosine * area);
-			}
-
-			return 0; 
-		}
 		
 		Vector3D<double> getRandom(const Vector3D<double>& origin, Random& rnd) const override 
 		{ 
@@ -336,13 +301,8 @@ namespace Objects
 			return rndPoint - origin; 
 		}
 
-
 		double m_x;
 		double m_y0, m_y1, m_z0, m_z1;
-	protected:
-		double dim1, dim2;
-		double invdim1, invdim2;
-		double area;
 	};
 
 

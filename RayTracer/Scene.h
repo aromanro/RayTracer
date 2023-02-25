@@ -95,8 +95,8 @@ public:
 	{		
 		double sum = 0;
 
-		for (const auto& obj : PriorityObjects)
-			sum += obj->pdfValue(o, v, rnd);
+		for (int i = 0; i < PriorityObjects.size(); ++i)
+			sum += PriorityObjects[i]->pdfValue(o, v, rnd);
 
 		return sum * invPriSize;
 	}
