@@ -93,6 +93,8 @@ namespace Textures
 		}
 		else
 		{
+			static const double scale = 1. / 255.;
+
 			for (int line = Height - 1; line >= 0; --line)
 			{
 				imageData[line].resize(Width);
@@ -101,9 +103,9 @@ namespace Textures
 
 				for (int col = 0; col < Width; ++col, ++p)
 				{
-					imageData[line][col].r = p.Red() / 255.;
-					imageData[line][col].g = p.Green() / 255.;
-					imageData[line][col].b = p.Blue() / 255.;
+					imageData[line][col].r = p.Red() * scale;
+					imageData[line][col].g = p.Green() * scale;
+					imageData[line][col].b = p.Blue() * scale;
 				}
 
 				p = rowStartSave;
@@ -128,7 +130,9 @@ namespace Textures
 
 		p.Offset(data, x, y);
 
-		return (static_cast<double>(p.Red()) + static_cast<double>(p.Green()) + static_cast<double>(p.Blue())) / (3. * 255.);
+		static const double scale = 1. / (3. * 255.);
+
+		return (static_cast<double>(p.Red()) + static_cast<double>(p.Green()) + static_cast<double>(p.Blue())) * scale;
 
 		return 0.;
 	}

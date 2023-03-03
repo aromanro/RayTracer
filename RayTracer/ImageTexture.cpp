@@ -41,6 +41,8 @@ namespace Textures
 
 	bool ImageTexture::Load(const std::string& name)
 	{
+		static const double scale = 1. / 255.;
+
 		imageData.clear();
 
 		wxImage image(name);
@@ -67,9 +69,9 @@ namespace Textures
 
 			for (int col = 0; col < Width; ++col, ++p)
 			{
-				imageData[line][col].r = p.Red() / 255.;
-				imageData[line][col].g = p.Green() / 255.;
-				imageData[line][col].b = p.Blue() / 255.;
+				imageData[line][col].r = p.Red() * scale;
+				imageData[line][col].g = p.Green() * scale;
+				imageData[line][col].b = p.Blue() * scale;
 			}
 
 			p = rowStartSave;

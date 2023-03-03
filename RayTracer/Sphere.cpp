@@ -72,6 +72,7 @@ namespace Objects {
 	void Sphere::getUV(const Vector3D<double>& pos, double& u, double& v) const
 	{
 		static const double TWO_M_PI = 2. * M_PI;
+		static const double invTWO_M_PI = 1. / TWO_M_PI;
 
 		const Vector3D<double> dir = (pos - center).Normalize();
 
@@ -84,7 +85,7 @@ namespace Objects {
 		if (phi > M_PI) phi -= TWO_M_PI;
 		else if (phi < -M_PI) phi += TWO_M_PI;
 
-		u = 1. - (phi + M_PI) / TWO_M_PI;
+		u = 1. - (phi + M_PI) * invTWO_M_PI;
 		v = (theta + M_PI_2) * M_1_PI;
 	}
 

@@ -48,6 +48,8 @@ void RayTracerFrame::FillRandomScene(Scene& scene, const Options& options)
 
 void RayTracerFrame::FillRandomObjects(Scene& scene, const Options& options, Random& random)
 {
+	static const double scale = 1. / sqrt(2.);
+
 	for (double a = -10; a < 10; a += 1.25)
 	{
 		for (double b = -10; b < 10; b += 1.25)
@@ -56,7 +58,7 @@ void RayTracerFrame::FillRandomObjects(Scene& scene, const Options& options, Ran
 			double choose_obj = random.getZeroOne();
 			double radius = 0.2 * random.getZeroOne() + 0.15;
 			
-			if (choose_obj >= 0.5) radius /= sqrt(2); // make them smaller
+			if (choose_obj >= 0.5) radius *= scale; // make them smaller
 
 			Vector3D<double> center(a + 1.4 * random.getZeroOne(), radius, b + 1.4 * random.getZeroOne());
 
@@ -71,6 +73,7 @@ void RayTracerFrame::AvoidIntersections(Scene& scene, Vector3D<double>& center, 
 {
 	bool intersect;
 
+	static const double scale = 1. / sqrt(2.);
 	const bool newBox = choose_obj >= 0.5;
 
 	do
@@ -128,7 +131,7 @@ void RayTracerFrame::AvoidIntersections(Scene& scene, Vector3D<double>& center, 
 		if (intersect)
 		{
 			radius = 0.2 * random.getZeroOne() + 0.15;
-			if (choose_obj >= 0.5) radius /= sqrt(2); // make them smaller
+			if (choose_obj >= 0.5) radius *= scale; // make them smaller
 
 			center = Vector3D<double>(a + 1.4 * random.getZeroOne(), radius, b + 1.4 * random.getZeroOne());
 		}
@@ -347,9 +350,10 @@ void RayTracerFrame::SetObj(Scene& scene, const Options& options, const std::sha
 	const Vector3D<double> Oy(0, 1, 0);
 	const Vector3D<double> Oz(0, 1, 0);
 
-	object->RotateAround(Ox, options.rotateX * M_PI / 180.);
-	object->RotateAround(Oy, options.rotateY * M_PI / 180.);
-	object->RotateAround(Oz, options.rotateZ * M_PI / 180.);
+	static const double angleConv = M_PI / 180.;
+	object->RotateAround(Ox, options.rotateX * angleConv);
+	object->RotateAround(Oy, options.rotateY * angleConv);
+	object->RotateAround(Oz, options.rotateZ * angleConv);
 
 	object->Translate(Vector3D<double>(options.positionX, options.positionY, options.positionZ));
 
@@ -467,9 +471,10 @@ void RayTracerFrame::FillOtherScene(Scene& scene, const Options& options)
 		const Vector3D<double> Oy(0, 1, 0);
 		const Vector3D<double> Oz(0, 1, 0);
 
-		object->RotateAround(Ox, options.rotateXOther * M_PI / 180.);
-		object->RotateAround(Oy, options.rotateYOther * M_PI / 180.);
-		object->RotateAround(Oz, options.rotateZOther * M_PI / 180.);
+		static const double angleConv = M_PI / 180.;
+		object->RotateAround(Ox, options.rotateXOther * angleConv);
+		object->RotateAround(Oy, options.rotateYOther * angleConv);
+		object->RotateAround(Oz, options.rotateZOther * angleConv);
 
 		object->Translate(Vector3D<double>(options.positionXOther, options.positionYOther, options.positionZOther));
 
