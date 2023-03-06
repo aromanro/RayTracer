@@ -187,7 +187,7 @@ void RayTracerFrame::AddObject(Scene& scene, const Options& options, Vector3D<do
 		auto mat = std::make_shared<Materials::Dielectric>(1.5);
 
 		// make some colored glass
-		mat->density = random.getZeroOne() * 10;
+		mat->setDensity(random.getZeroOne() * 10);
 		mat->volumeColor = Color(random.getZeroOne(), random.getZeroOne(), random.getZeroOne());
 
 		if (choose_obj < 0.5)
@@ -365,7 +365,7 @@ void RayTracerFrame::SetObj(Scene& scene, const Options& options, const std::sha
 	else if (2 == options.objMaterial)
 	{
 		auto glassmat = std::make_shared<Materials::Dielectric>(1.5);
-		glassmat->density = 0.03;
+		glassmat->setDensity(0.03);
 		glassmat->volumeColor = Color(1, 1, 0);
 		for (auto& obj : object->objects)
 			std::dynamic_pointer_cast<Objects::VisibleObjectMaterial>(obj)->SetMaterial(glassmat);
@@ -487,7 +487,7 @@ void RayTracerFrame::FillOtherScene(Scene& scene, const Options& options)
 		else if (2 == options.objMaterialOther)
 		{
 			auto glassmat = std::make_shared<Materials::Dielectric>(1.5);
-			glassmat->density = 0.03;
+			glassmat->setDensity(0.03);
 			glassmat->volumeColor = Color(1, 1, 0);
 			for (auto& obj : object->objects)
 				std::dynamic_pointer_cast<Objects::VisibleObjectMaterial>(obj)->SetMaterial(glassmat);

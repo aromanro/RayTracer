@@ -14,11 +14,12 @@ namespace Objects {
 	protected:
 		std::shared_ptr<BVH::BVHNode> root;
 		BVH::AxisAlignedBoundingBox boundingBox;
+		double w;
 
 	public:
 		std::vector<std::shared_ptr<VisibleObject>> objects;
 
-		VisibleObjectComposite() {}
+		VisibleObjectComposite() : w(0.) {}
 
 		bool IsComposite() const override { return true; }
 
@@ -31,8 +32,8 @@ namespace Objects {
 			PointInfo oinfo, hitInfo;
 			hitInfo.distance = oinfo.distance = maxr;
 
-			for (const auto& obj : objects)
-				if (obj->Hit(ray, oinfo, minr, hitInfo.distance, rcount, random))
+			for (int i = 0; i < objects.size(); ++i)
+				if (objects[i]->Hit(ray, oinfo, minr, hitInfo.distance, rcount, random))
 				{
 					wasHit = true;
 					if (oinfo.distance < hitInfo.distance)
@@ -69,30 +70,33 @@ namespace Objects {
 				if (objects[i]->BoundingBox(res))
 					boundingBox = BVH::AxisAlignedBoundingBox::EnclosingBox(boundingBox, res);
 			}
+
+			//equal weight for all of them, reasonably good if they are about the same size, if not, maybe something different should be used (based on area?)
+			w = 1. / objects.size();
 		}
 
 		void ConstructBVH() override
 		{
 			ConstructBoundingBox();
 
-			for (auto& obj : objects)
-				obj->ConstructBVH();
+			for (int i = 0; i < objects.size(); ++i)
+				objects[i]->ConstructBVH();
 
 			root = std::make_shared<BVH::BVHNode>(objects.begin(), objects.end());
 		}
 
 		void Translate(const Vector3D<double>& t) override
 		{
-			for (auto& obj : objects)
-				obj->Translate(t);
+			for (int i = 0; i < objects.size(); ++i)
+				objects[i]->Translate(t);
 
 			boundingBox.Translate(t);
 		}
 
 		void RotateAround(const Vector3D<double>& v, double angle) override
 		{
-			for (auto& obj : objects)
-				obj->RotateAround(v, angle);
+			for (int i = 0; i < objects.size(); ++i)
+				objects[i]->RotateAround(v, angle);
 
 			ConstructBoundingBox();
 		}
@@ -100,8 +104,8 @@ namespace Objects {
 
 		void Scale(double s) override
 		{
-			for (auto& obj : objects)
-				obj->Scale(s);
+			for (int i = 0; i < objects.size(); ++i)
+				objects[i]->Scale(s);
 
 			boundingBox.Scale(s);
 		}
@@ -112,10 +116,7 @@ namespace Objects {
 			PointInfo info;
 
 			if (Hit(Ray(o, v), info, 1E-5, DBL_MAX, 1, rnd))
-			{
-				const double w = 1. / objects.size(); //equal weight for all of them, reasonably good if they are about the same size, if not, maybe something different should be used (based on area?)
 				return w * info.object->pdfValue(o, v, rnd);
-			}
 			
 			return 0;
 		}
@@ -133,9 +134,10 @@ namespace Objects {
 	class ConstantMedium : public VisibleObjectElementary
 	{
 	public:
-		ConstantMedium() : density(0) { isotropic = std::make_shared<Materials::Isotropic>(); }
+		ConstantMedium() : density(0), invDensity(1E15) { isotropic = std::make_shared<Materials::Isotropic>(); }
 		ConstantMedium(const std::shared_ptr<VisibleObject>& b, const std::shared_ptr<Textures::Texture>& t, double d) : boundary(b), density(d)
 		{
+			invDensity = 1. / density;
 			isotropic = std::make_shared<Materials::Isotropic>(t); 
 
 			ConstructBoundingBox();
@@ -188,7 +190,7 @@ namespace Objects {
 						info1.distance = 0;
 
 					const double distInside = info2.distance - info1.distance;
-					const double hitDist = -1. / density * log(random.getZeroOne());
+					const double hitDist = -invDensity * log(random.getZeroOne());
 
 					if (hitDist < distInside)
 					{
@@ -223,8 +225,17 @@ namespace Objects {
 				boundary->Scale(s);
 		}
 
-		double density;
+		double getDensity() const { return density; }
+		
+		void setDensity(double d)
+		{
+			density = d;
+			invDensity = 1. / d;
+		}
+
 	protected:
+		double density;
+		double invDensity;
 		std::shared_ptr<Materials::Isotropic> isotropic;
 		std::shared_ptr<VisibleObject> boundary;
 	};

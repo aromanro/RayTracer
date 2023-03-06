@@ -105,16 +105,24 @@ namespace Materials {
 		Dielectric(const double ri = 1.5, const std::shared_ptr<Textures::Texture>& texture = nullptr, double f = 0) : ReflectiveMaterial(texture, f), density(0), refrIndex(ri)
 		{
 			invRefrIndex = 1. / ri;
+			F0 = (1. - refrIndex) / (1. + refrIndex);
+			F0 *= F0;
 		}
 
 		bool Scatter(const Ray& incidentRay, const PointInfo& info, ScatterInfo& scatterInfo, Random& random) override;
 
-		double density;
+		double getDensity() const { return density; }
+		void setDensity(double d) { density = d; }
+
 		Color volumeColor;
 
 	protected:
+		double density;
 		double refrIndex;
 		double invRefrIndex;
+		// Fresnel reflectance
+		// F0 is reflectance for normal incidence
+		double F0;
 
 
 		static inline bool Refract(const Vector3D<double>& incidentRay, const Vector3D<double>& normal, double relativeRefrIndex, Vector3D<double>& refractedRay)
@@ -134,11 +142,6 @@ namespace Materials {
 
 		inline double Schlick(double cosine) const
 		{
-			// Fresnel reflectance
-			double F0 = (1. - refrIndex) / (1. + refrIndex);
-			F0 *= F0;
-			// F0 is reflectance for normal incidence
-
 			// for an angle:
 			return F0 + (1. - F0) * pow(1. - cosine, 5.);
 		}
