@@ -15,14 +15,6 @@ namespace Textures
 		Load(name);
 	}
 
-
-
-
-	NormalsTexture::~NormalsTexture()
-	{
-	}
-
-
 	bool NormalsTexture::Load(const std::string& name)
 	{
 		imageData.clear();

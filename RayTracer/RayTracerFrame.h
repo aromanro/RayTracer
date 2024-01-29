@@ -65,15 +65,6 @@ public:
 	std::atomic_int runningThreads;
 
 private:
-	wxTimer timer;
-
-	std::vector<std::vector<Color>> result;
-	wxBitmap bitmap;
-
-#ifdef RECORD_MOVIE
-	int frameNo = 0;
-#endif
-
 	bool isFinished() const;
 	void StopThreads(bool cancel = false);
 
@@ -114,6 +105,18 @@ private:
 
 	static void FillOtherScene(Scene& scene, const Options& options);
 	static void SetSkyOther(Scene& scene, const Options& options);
+
+
+	wxTimer timer;
+
+	std::vector<std::vector<Color>> result;
+	wxBitmap bitmap;
+
+#ifdef RECORD_MOVIE
+	int frameNo = 0;
+#endif
+
+	std::thread computeThread;
 
 	wxDECLARE_EVENT_TABLE();
 };

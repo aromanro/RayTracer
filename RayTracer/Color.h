@@ -44,7 +44,9 @@ public:
 
 	double Max() const
 	{
-		return r > g && r > b ? r : g > b ? g : b;
+		if (r > g && r > b) return r;
+
+		return g > b ? g : b;
 	}
 
 	bool TotalReflective() const

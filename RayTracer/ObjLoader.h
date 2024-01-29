@@ -11,7 +11,7 @@
 class ObjLoader
 {
 public:
-	typedef std::vector<std::tuple<size_t, long long int, long long int>> Polygon;
+	using Polygon = std::vector<std::tuple<size_t, long long int, long long int>>;
 
 	ObjLoader();
 	~ObjLoader();

@@ -5,7 +5,7 @@
 class Ray
 {
 public:
-	Ray() {}
+	Ray() = default;
 	Ray(const Vector3D<double>& origin, const Vector3D<double>& direction);
 
 

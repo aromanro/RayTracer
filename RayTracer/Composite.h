@@ -113,9 +113,7 @@ namespace Objects {
 
 		double pdfValue(const Vector3D<double>& o, const Vector3D<double>& v, Random& rnd) const override
 		{							
-			PointInfo info;
-
-			if (Hit(Ray(o, v), info, 1E-5, DBL_MAX, 1, rnd))
+			if (PointInfo info; Hit(Ray(o, v), info, 1E-5, DBL_MAX, 1, rnd))
 				return w * info.object->pdfValue(o, v, rnd);
 			
 			return 0;
@@ -135,7 +133,7 @@ namespace Objects {
 	{
 	public:
 		ConstantMedium() : density(0), invDensity(1E15) { isotropic = std::make_shared<Materials::Isotropic>(); }
-		ConstantMedium(const std::shared_ptr<VisibleObject>& b, const std::shared_ptr<Textures::Texture>& t, double d) : boundary(b), density(d)
+		ConstantMedium(const std::shared_ptr<VisibleObject>& b, const std::shared_ptr<Textures::Texture>& t, double d) : density(d), boundary(b)
 		{
 			invDensity = 1. / density;
 			isotropic = std::make_shared<Materials::Isotropic>(t); 
@@ -162,7 +160,7 @@ namespace Objects {
 			return boundary->BoundingBox(box);
 		}
 
-		inline const Vector3D<double> getNormal(const PointInfo& info) const
+		inline Vector3D<double> getNormal(const PointInfo& info) const
 		{
 			static const Vector3D<double> normal(0, 0, 1);
 
@@ -173,10 +171,8 @@ namespace Objects {
 		{
 			if (!boundary) return false;
 
-			PointInfo info1, info2;
-
-			if (boundary->Hit(ray, info1, -DBL_MAX, DBL_MAX, rcount, random))
-				if (boundary->Hit(ray, info2, info1.distance + 0.000001, DBL_MAX, rcount, random))
+			if (PointInfo info1; boundary->Hit(ray, info1, -DBL_MAX, DBL_MAX, rcount, random))
+				if (PointInfo info2; boundary->Hit(ray, info2, info1.distance + 0.000001, DBL_MAX, rcount, random))
 				{
 					if (info1.distance < minr)
 						info1.distance = minr;

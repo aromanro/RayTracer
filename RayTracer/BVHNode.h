@@ -12,18 +12,19 @@ namespace BVH
 	class BVHNode : public Objects::VisibleObject
 	{
 	public:
-		BVHNode() {};
+		BVHNode() = default;
 
 		BVHNode(std::vector<std::shared_ptr<Objects::VisibleObject>>::iterator start, std::vector<std::shared_ptr<Objects::VisibleObject>>::iterator end, int dir = 0)
 		{
-			const int size = end - start;
+			const int size = static_cast<int>(end - start);
 			if (0 == size) return;
 
 			if (0 == dir)
 			{
 				std::sort(start, end, [](const auto& o1, const auto& o2)
 				{
-					AxisAlignedBoundingBox b1, b2;
+					AxisAlignedBoundingBox b1;
+					AxisAlignedBoundingBox b2;
 
 					o1->BoundingBox(b1);
 					o2->BoundingBox(b2);
@@ -35,7 +36,8 @@ namespace BVH
 			{
 				std::sort(start, end, [](const auto& o1, const auto& o2)
 				{
-					AxisAlignedBoundingBox b1, b2;
+					AxisAlignedBoundingBox b1;
+					AxisAlignedBoundingBox b2;
 
 					o1->BoundingBox(b1);
 					o2->BoundingBox(b2);
@@ -47,7 +49,8 @@ namespace BVH
 			{
 				std::sort(start, end, [](const auto& o1, const auto& o2)
 				{
-					AxisAlignedBoundingBox b1, b2;
+					AxisAlignedBoundingBox b1;
+					AxisAlignedBoundingBox b2;
 
 					o1->BoundingBox(b1);
 					o2->BoundingBox(b2);
@@ -66,7 +69,8 @@ namespace BVH
 				child1 = *start;
 				child2 = *(start + 1);
 
-				AxisAlignedBoundingBox b1, b2;
+				AxisAlignedBoundingBox b1;
+				AxisAlignedBoundingBox b2;
 				child1->BoundingBox(b1);
 				child2->BoundingBox(b2);
 				boundingBox = AxisAlignedBoundingBox::EnclosingBox(b1, b2);
@@ -79,7 +83,8 @@ namespace BVH
 				child1 = std::dynamic_pointer_cast<Objects::VisibleObject>(std::make_shared<BVHNode>(start, start + mIndex, dir));
 				child2 = std::dynamic_pointer_cast<Objects::VisibleObject>(std::make_shared<BVHNode>(start + mIndex, end, dir));
 
-				AxisAlignedBoundingBox b1, b2;
+				AxisAlignedBoundingBox b1;
+				AxisAlignedBoundingBox b2;
 				child1->BoundingBox(b1);
 				child2->BoundingBox(b2);
 				boundingBox = AxisAlignedBoundingBox::EnclosingBox(b1, b2);
@@ -119,7 +124,7 @@ namespace BVH
 			if (child2) child2->Translate(t);
 		}
 
-		void RotateAround(const Vector3D<double>& v, double angle)
+		void RotateAround(const Vector3D<double>& v, double angle) override
 		{
 			child1->RotateAround(v, angle);
 			child1->BoundingBox(boundingBox);

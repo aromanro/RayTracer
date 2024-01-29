@@ -7,9 +7,7 @@
 class Scene : public Objects::VisibleObjectComposite
 {
 public:
-	Scene() : blackSky(false) {}
-
-	inline Color BackgroundColor(const Ray& ray, Random& random)
+	inline Color BackgroundColor(const Ray& ray, Random& random) const
 	{
 		if (sky)
 		{
@@ -25,7 +23,7 @@ public:
 		return (1. - p) * Color(1, 1, 1) + p * Color(0.5, 0.7, 1);		
 	}
 
-	Color RayCast(const Ray& ray, Random& random, int rcount = 0, double maxr = 300000)
+	Color RayCast(const Ray& ray, Random& random, int rcount = 0, double maxr = 300000) const
 	{
 		if (++rcount > recursivityStop) return Color(0, 0, 0);
 
@@ -48,8 +46,7 @@ public:
 					maxr -= info.distance;
 					if (maxr <= 0) return c; // or too far
 
-					Materials::ScatterInfo scatterInfo;
-					if (info.material->Scatter(ray, info, scatterInfo, random))
+					if (Materials::ScatterInfo scatterInfo; info.material->Scatter(ray, info, scatterInfo, random))
 					{						
 						if (scatterInfo.isSpecular) return scatterInfo.atten * RayCast(scatterInfo.specularRay, random, rcount, maxr);
 							
@@ -103,15 +100,13 @@ public:
 
 	Vector3D<double> getRandom(const Vector3D<double>& origin, Random& rnd) const override
 	{
-		const unsigned int obj = static_cast<unsigned int>(rnd.getZeroOne() * static_cast<double>(PriorityObjects.size()));
-
-		return PriorityObjects[obj]->getRandom(origin, rnd);
+		return PriorityObjects[static_cast<unsigned int>(rnd.getZeroOne() * static_cast<double>(PriorityObjects.size()))]->getRandom(origin, rnd);
 	}
 
 
 	std::shared_ptr<Objects::VisibleObject> sky;
 
-	bool blackSky;
+	bool blackSky = false;
 
 	int recursivityStop = 60;
 
@@ -120,7 +115,7 @@ public:
 		if (obj->IsComposite()) return; // composite objects need more work
 
 		PriorityObjects.emplace_back(obj);
-		invPriSize = 1. / PriorityObjects.size();
+		invPriSize = 1. / static_cast<double>(PriorityObjects.size());
 	}
 
 	void CleanPriorityObjects()
@@ -129,7 +124,7 @@ public:
 		invPriSize = 0;
 	}
 
-protected:
+private:
 	// lights and stuff like that
 	std::vector<std::shared_ptr<VisibleObject>> PriorityObjects; 
 	double invPriSize = 0;

@@ -383,7 +383,8 @@ namespace Objects
 			objects.emplace_back(std::make_shared<Transforms::FlipNormal>(std::make_shared<Objects::RectangleYZ>(m_p1.Y, m_p2.Y, m_p1.Z, m_p2.Z, m_p1.X, right_mat))); //right
 		}
 
-		Vector3D<double> m_p1, m_p2;
+		Vector3D<double> m_p1;
+		Vector3D<double> m_p2;
 	};
 
 
@@ -526,7 +527,8 @@ namespace Objects
 			objects.emplace_back(std::make_shared<Objects::RectangleYZ>(m_p1.Y, m_p2.Y, m_p1.Z, m_p2.Z, m_p1.X, nullptr)); //left
 		}
 
-		Vector3D<double> m_p1, m_p2;
+		Vector3D<double> m_p1;
+		Vector3D<double> m_p2;
 	};
 
 }

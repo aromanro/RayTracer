@@ -4,10 +4,9 @@
 #include <math.h>
 
 Camera::Camera(const Vector3D<double>& origin, const Vector3D<double>& target, const Vector3D<double>& upv, double angle, double aspect, double aperture, double focusDist)
-	: eyePos(origin), lookAt(target), up(upv)
+	: eyePos(origin), lookAt(target), up(upv), lensRadius(aperture / 2.)
 {	
-	lensRadius = aperture / 2.;
-	double rangle = angle * M_PI/180.;
+	const double rangle = angle * M_PI/180.;
 
 	const double viewportWidth = 2 * tan(rangle/2);
 	const double viewportHeight = aspect * viewportWidth;
@@ -27,7 +26,3 @@ Camera::Camera(const Vector3D<double>& origin, const Vector3D<double>& target, c
 	orig = lowerLeftCorner - eyePos;
 }
 
-
-Camera::~Camera()
-{
-}

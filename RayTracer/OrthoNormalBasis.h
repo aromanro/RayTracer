@@ -1,21 +1,22 @@
 #pragma once
 
+#include <array>
 #include "Vector3D.h"
 
 class OrthoNormalBasis
 {
 public:
-	OrthoNormalBasis() {};
+	OrthoNormalBasis() = default;
 
 	// this will have passed the normal to the surface
-	OrthoNormalBasis(const Vector3D<double>& v) { BuildFrom(v); };
+	explicit OrthoNormalBasis(const Vector3D<double>& v) { BuildFrom(v); };
 	// the normal and the incident ray vector
 	OrthoNormalBasis(const Vector3D<double>& n, const Vector3D<double>& i) { BuildFrom(n, i); };
 
 	// normal, tangent, bitangent - in case it's also used for the TBN matrix
 	OrthoNormalBasis(const Vector3D<double>& n, const Vector3D<double>& t, const Vector3D<double>& b) { BuildFrom(n, t, b); };
 
-	~OrthoNormalBasis() {};
+	~OrthoNormalBasis() = default;
 
 
 	inline Vector3D<double> operator[](int i) const { return basis[i]; }
@@ -72,8 +73,8 @@ public:
 		basis[1] = b;
 	}
 
-protected:
-	Vector3D<double> basis[3];
+private:
+	std::array<Vector3D<double>, 3> basis;
 };
 
 

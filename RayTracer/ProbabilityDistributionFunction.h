@@ -7,7 +7,7 @@
 #include "Random.h"
 
 namespace Materials {
-	class ScatterInfo;
+	struct ScatterInfo;
 }
 
 
@@ -17,8 +17,7 @@ namespace PDFs
 	class ProbabilityDistributionFunction
 	{
 	public:
-		ProbabilityDistributionFunction() {}
-		virtual ~ProbabilityDistributionFunction() {}
+		virtual ~ProbabilityDistributionFunction() = default;
 
 		virtual double Value(const Vector3D<double>& dir, Random& rnd) = 0;
 		virtual Vector3D<double> Generate(Random& rnd, Materials::ScatterInfo* info) = 0;
@@ -29,7 +28,7 @@ namespace PDFs
 	class CosinePDF : public ProbabilityDistributionFunction
 	{
 	public:
-		CosinePDF(const Vector3D<double>& dir)
+		explicit CosinePDF(const Vector3D<double>& dir)
 			: onb(dir)
 		{
 		}
@@ -48,7 +47,7 @@ namespace PDFs
 			return onb.LocalToGlobal(rnd.getRandomCosineDirection());
 		}
 
-	protected:
+	private:
 		OrthoNormalBasis onb;
 	};
 
@@ -56,10 +55,6 @@ namespace PDFs
 	class SphericalPDF : public ProbabilityDistributionFunction
 	{
 	public:
-		SphericalPDF()
-		{
-		}
-
 		double Value(const Vector3D<double>& dir, Random& rnd) override
 		{
 			return 0.25 * M_1_PI;

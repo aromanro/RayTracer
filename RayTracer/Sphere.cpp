@@ -14,11 +14,6 @@ namespace Objects {
 	}
 
 
-	Sphere::~Sphere()
-	{
-	}
-
-
 	bool Sphere::Hit(const Ray& ray, PointInfo& info, double minr, double maxr, unsigned rcount, Random& random) const
 	{
 		const Vector3D<double> v = ray.getOrigin() - center;

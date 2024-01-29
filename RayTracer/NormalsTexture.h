@@ -26,8 +26,7 @@ namespace Textures
 	{
 	public:
 		NormalsTexture();
-		NormalsTexture(const std::string& name);
-		virtual ~NormalsTexture();
+		explicit NormalsTexture(const std::string& name);
 
 		bool Load(const std::string& name) override;
 

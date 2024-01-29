@@ -70,7 +70,7 @@ public:
 	}
 
 
-protected:
+private:
 	std::mt19937_64 rng;
 	std::uniform_real_distribution<double> uniformZeroOne;
 	std::normal_distribution<double> gaussian;

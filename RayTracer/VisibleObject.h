@@ -20,19 +20,16 @@ namespace Objects {
 	class VisibleObject;
 }
 
-class PointInfo
+struct PointInfo
 {
-public:
-	PointInfo() : distance(0), u(0), v(0), material(nullptr), object(nullptr) {}
-
-	double distance;
+	double distance = 0;
 	Vector3D<double> normal;
 	Vector3D<double> position;
-	double u;
-	double v;
+	double u = 0;
+	double v = 0;
 
-	Materials::Material* material;
-	const Objects::VisibleObject* object;
+	Materials::Material* material = nullptr;
+	const Objects::VisibleObject* object = nullptr;
 };
 
 
@@ -45,9 +42,9 @@ namespace Objects {
 	class VisibleObject
 	{
 	protected:
-		VisibleObject() {};
+		VisibleObject() = default;
 	public:
-		virtual ~VisibleObject() {};
+		virtual ~VisibleObject() = default;
 
 		virtual bool Hit(const Ray& ray, PointInfo& info, double minr, double maxr, unsigned rcount, Random& random) const = 0;
 		virtual bool BoundingBox(BVH::AxisAlignedBoundingBox& box) = 0;
@@ -71,9 +68,9 @@ namespace Objects {
 		void SetMaterial(const std::shared_ptr<Materials::Material>& m) { material = m; }
 		void SetNormals(const std::shared_ptr<Textures::Texture>& n) { normals = n; }
 	protected:
-		VisibleObjectMaterial() {};
-		VisibleObjectMaterial(const std::shared_ptr<Materials::Material>& m) : material(m) {};
-		VisibleObjectMaterial(const std::shared_ptr<Textures::Texture>& t) : normals(t) {};
+		VisibleObjectMaterial() = default;
+		explicit VisibleObjectMaterial(const std::shared_ptr<Materials::Material>& m) : material(m) {};
+		explicit VisibleObjectMaterial(const std::shared_ptr<Textures::Texture>& t) : normals(t) {};
 		VisibleObjectMaterial(const std::shared_ptr<Materials::Material>& m, const std::shared_ptr<Textures::Texture>& t) : material(m), normals(t) {};
 
 		std::shared_ptr<Materials::Material> material;
@@ -84,9 +81,9 @@ namespace Objects {
 	class VisibleObjectElementary : public VisibleObjectMaterial
 	{
 	protected:
-		VisibleObjectElementary() {};
-		VisibleObjectElementary(const std::shared_ptr<Materials::Material>& m) : VisibleObjectMaterial(m) {};
-		VisibleObjectElementary(const std::shared_ptr<Textures::Texture>& t) : VisibleObjectMaterial(t) {};
+		VisibleObjectElementary() = default;
+		explicit VisibleObjectElementary(const std::shared_ptr<Materials::Material>& m) : VisibleObjectMaterial(m) {};
+		explicit VisibleObjectElementary(const std::shared_ptr<Textures::Texture>& t) : VisibleObjectMaterial(t) {};
 		VisibleObjectElementary(const std::shared_ptr<Materials::Material>& m, const std::shared_ptr<Textures::Texture>& t) : VisibleObjectMaterial(m, t) {};
 
 		BVH::AxisAlignedBoundingBox boundingBox;

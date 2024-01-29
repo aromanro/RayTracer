@@ -13,7 +13,6 @@ class Camera
 {
 public:
 	Camera(const Vector3D<double>& origin = Vector3D<double>(13., 2., 3.), const Vector3D<double>& target = Vector3D<double>(0., 0., 0.), const Vector3D<double>& upv = Vector3D<double>(0., 1., 0.), double ang = 40, double aspect = 1080. / 1920., double aperture = 0, double focusDist = 1.);
-	~Camera();
 
 	// x, y - fractions of viewport size
 	inline Ray getRay(double x, double y, Random& random) const
@@ -28,7 +27,7 @@ public:
 	}
 
 
-protected:
+private:
 	Vector3D<double> eyePos;
 	Vector3D<double> lookAt;
 	Vector3D<double> up;

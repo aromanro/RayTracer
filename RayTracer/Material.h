@@ -18,9 +18,8 @@ namespace PDFs
 
 namespace Materials {
 
-	class ScatterInfo
+	struct ScatterInfo
 	{
-	public:
 		~ScatterInfo() { delete pdf; }
 
 		bool isSpecular = false;
@@ -37,8 +36,8 @@ namespace Materials {
 	class Material
 	{
 	public:
-		Material(const std::shared_ptr<Textures::Texture>& texture = nullptr);
-		virtual ~Material();
+		explicit Material(const std::shared_ptr<Textures::Texture>& texture = nullptr);
+		virtual ~Material() = default;
 
 		virtual bool Scatter(const Ray& incidentRay, const PointInfo& info, ScatterInfo& scatterInfo, Random& random) = 0;
 		virtual double ScatteringPDF(const Ray& incidentRay, Ray& scatteredRay, const PointInfo& info) const
@@ -58,8 +57,8 @@ namespace Materials {
 	class Lambertian : public Material
 	{
 	public:
-		Lambertian(const std::shared_ptr<Textures::Texture>& texture = nullptr) : Material(texture) {}
-
+		using Material::Material;
+		
 		bool Scatter(const Ray& incidentRay, const PointInfo& info, ScatterInfo& scatterInfo, Random& random) override;
 
 		double ScatteringPDF(const Ray& incidentRay, Ray& scatteredRay, const PointInfo& info) const override
@@ -102,9 +101,8 @@ namespace Materials {
 	class Dielectric : public ReflectiveMaterial
 	{
 	public:
-		Dielectric(const double ri = 1.5, const std::shared_ptr<Textures::Texture>& texture = nullptr, double f = 0) : ReflectiveMaterial(texture, f), density(0), refrIndex(ri)
+		Dielectric(const double ri = 1.5, const std::shared_ptr<Textures::Texture>& texture = nullptr, double f = 0) : ReflectiveMaterial(texture, f), refrIndex(ri), invRefrIndex(1. / ri)
 		{
-			invRefrIndex = 1. / ri;
 			F0 = (1. - refrIndex) / (1. + refrIndex);
 			F0 *= F0;
 		}
@@ -117,7 +115,7 @@ namespace Materials {
 		Color volumeColor;
 
 	protected:
-		double density;
+		double density = 0;
 		double refrIndex;
 		double invRefrIndex;
 		// Fresnel reflectance
@@ -129,8 +127,7 @@ namespace Materials {
 		{
 			const double projectionOnNormal = incidentRay * normal;
 
-			const double cos2t = 1. - relativeRefrIndex * relativeRefrIndex * (1. - projectionOnNormal * projectionOnNormal);
-			if (cos2t > 0)
+			if (const double cos2t = 1. - relativeRefrIndex * relativeRefrIndex * (1. - projectionOnNormal * projectionOnNormal); cos2t > 0)
 			{
 				refractedRay = relativeRefrIndex * (incidentRay - projectionOnNormal * normal) - sqrt(cos2t) * normal;
 				return true;
@@ -150,7 +147,7 @@ namespace Materials {
 	class Isotropic : public Material
 	{
 	public:
-		Isotropic(const std::shared_ptr<Textures::Texture>& texture = nullptr) : Material(texture) {}
+		using Material::Material;
 
 		bool Scatter(const Ray& incidentRay, const PointInfo& info, ScatterInfo& scatterInfo, Random& random) override;
 
@@ -179,7 +176,7 @@ namespace Materials {
 		}
 
 
-	protected:
+	private:
 		std::shared_ptr<Textures::Texture> specular;
 		std::shared_ptr<Textures::Texture> exponent;
 

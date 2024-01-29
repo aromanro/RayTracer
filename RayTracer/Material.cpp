@@ -12,10 +12,6 @@ namespace Materials
 	}
 
 
-	Material::~Material()
-	{
-	}
-
 
 	bool Lambertian::Scatter(const Ray& incidentRay, const PointInfo& info, ScatterInfo& scatterInfo, Random& random)
 	{
@@ -33,7 +29,7 @@ namespace Materials
 		const Vector3D<double> normal = info.normal;
 		Vector3D<double> reflected = Reflect(incidentRay.getDirection(), normal);
 
-		if (fuzzy) reflected += fuzzy * random.getRandomInUnitSphere();
+		if (fuzzy != 0) reflected += fuzzy * random.getRandomInUnitSphere();
 
 		scatterInfo.isSpecular = true;
 		scatterInfo.specularRay = Ray(info.position + epsilon * normal, reflected);

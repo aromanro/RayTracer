@@ -98,6 +98,7 @@ RayTracerFrame::RayTracerFrame(const wxString& title, const wxPoint& pos, const 
 
 RayTracerFrame::~RayTracerFrame()
 {
+	if (computeThread.joinable()) computeThread.join();
 }
 
 
@@ -152,6 +153,7 @@ void RayTracerFrame::OnOptions(wxCommandEvent& /*event*/)
 void RayTracerFrame::Compute()
 {
 	if (!isFinished()) return;
+	else if (computeThread.joinable()) computeThread.join();
 
 	wxBeginBusyCursor();
 
@@ -159,12 +161,13 @@ void RayTracerFrame::Compute()
 
 	runningThreads = 1;
 
+
 	timer.Start(100);
 
-	RayTracerApp& app = wxGetApp();
+	const RayTracerApp& app = wxGetApp();
 	const Options options = app.options;
 
-	std::thread([this, options]()
+	computeThread = std::thread([this, options]()
 	{
 		std::chrono::high_resolution_clock::time_point t1 = std::chrono::high_resolution_clock::now();
 
@@ -182,13 +185,13 @@ void RayTracerFrame::Compute()
 
 		std::vector<Random> randomEngines;
 		for (int i = 0; i < nrThreads; ++i)
-			randomEngines.emplace_back(Random(static_cast<int>(initialSeed.getZeroOne() * 1E5)));
+			randomEngines.emplace_back(static_cast<int>(initialSeed.getZeroOne() * 1E5));
 
 		Scene scene;
 		InitScene(scene, options);
 
 		std::chrono::high_resolution_clock::time_point t2 = std::chrono::high_resolution_clock::now();
-		double dif = std::chrono::duration_cast<std::chrono::seconds>(t2 - t1).count();
+		auto dif = std::chrono::duration_cast<std::chrono::seconds>(t2 - t1).count();
 
 		Camera camera;
 		InitCamera(camera, options);
@@ -201,7 +204,7 @@ void RayTracerFrame::Compute()
 		for (int t = 0; t < nrThreads; ++t)
 		{
 			Random& random = randomEngines[t];
-			tasks[t] = std::async(std::launch::async, [samples, jitter, nx, ny, &camera, &scene, &random, distMax]()->std::vector<std::vector<Color>>
+			tasks[t] = std::async(std::launch::async, [samples, jitter, nx, ny, &camera, &scene, &random, distMax]()
 			{
 				std::vector<std::vector<Color>> results(nx);
 				for (int i = 0; i < nx; ++i) results[i].resize(ny);
@@ -215,7 +218,7 @@ void RayTracerFrame::Compute()
 					ComputeNoJitter(nx, ny, samples, distMax, random, camera, scene, results);
 				}
 
-				return std::move(results);
+				return results;
 			});
 		}
 
@@ -229,7 +232,7 @@ void RayTracerFrame::Compute()
 		SetStatusText(str);
 
 		runningThreads = 0;
-	}).detach();
+	});
 }
 
 void RayTracerFrame::InitCamera(Camera& camera, const Options& options)

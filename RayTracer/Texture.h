@@ -11,7 +11,7 @@ namespace Textures
 	class Texture
 	{
 	public:
-		virtual ~Texture() {}
+		virtual ~Texture() = default;
 		virtual Color Value(double u, double v, const Vector3D<double>& pos) const = 0;
 	};
 
@@ -19,21 +19,19 @@ namespace Textures
 
 	class ColorTexture : public Texture
 	{
-	protected:
-		Color m_color;
 	public:
-		ColorTexture(const Color& color) : m_color(color) {}
+		explicit ColorTexture(const Color& color) : m_color(color) {}
 		Color Value(double u, double v, const Vector3D<double>& pos) const override { return m_color; }
+
+		const Color& GetColor() const { return m_color; }
+
+	private:
+		Color m_color;
 	};
 
 
 	class CheckerTexture : public Texture
 	{
-	protected:
-		std::shared_ptr<Texture> m_texture1;
-		std::shared_ptr<Texture> m_texture2;
-
-		double m_scale;
 	public:
 		CheckerTexture(const std::shared_ptr<Texture> texture1, const std::shared_ptr<Texture> texture2, double scale = 10.) : m_texture1(texture1), m_texture2(texture2), m_scale(scale) {}
 
@@ -54,6 +52,12 @@ namespace Textures
 
 			return val;
 		}
+
+	private:
+		std::shared_ptr<Texture> m_texture1;
+		std::shared_ptr<Texture> m_texture2;
+
+		double m_scale;
 	};
 
 }

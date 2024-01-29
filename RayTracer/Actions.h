@@ -8,8 +8,8 @@ namespace Transforms
 	class FlipNormal : public Objects::VisibleObject
 	{
 	public:
-		FlipNormal() {};
-		FlipNormal(const std::shared_ptr<Objects::VisibleObject>& o) : obj(o) {}
+		FlipNormal() = default;
+		explicit FlipNormal(const std::shared_ptr<Objects::VisibleObject>& o) : obj(o) {}
 
 		bool IsComposite() const override { return obj->IsComposite(); }
 
@@ -127,7 +127,7 @@ namespace Transforms
 			}
 
 
-	protected:
+	private:
 			std::shared_ptr<Objects::VisibleObject> obj;
 			Vector3D<double> offset;
 			double offlen;
@@ -136,10 +136,10 @@ namespace Transforms
 	class RotateYAction : public Objects::VisibleObject
 	{
 	public:
-		RotateYAction() {};
+		RotateYAction() = default;
 
 		RotateYAction(const std::shared_ptr<Objects::VisibleObject>& o, double ang)
-			: obj(o), angle(ang)
+			: angle(ang), obj(o)
 		{
 			ConstructBoundingBox();
 		}
@@ -176,9 +176,8 @@ namespace Transforms
 		bool Hit(const Ray& ray, PointInfo& info, double minr, double maxr, unsigned rcount, Random& random) const override
 		{
 			static const Vector3D<double> YAxis(0, 1, 0);
-			Ray rotatedRay(ray.getOrigin().RotateAround(YAxis, -angle), ray.getDirection().RotateAround(YAxis, -angle));
-
-			if (obj->Hit(rotatedRay, info, minr, maxr, rcount, random))
+			
+			if (Ray rotatedRay(ray.getOrigin().RotateAround(YAxis, -angle), ray.getDirection().RotateAround(YAxis, -angle)); obj->Hit(rotatedRay, info, minr, maxr, rcount, random))
 			{
 				info.position = info.position.RotateAround(YAxis, angle);
 				info.normal = info.normal.RotateAround(YAxis, angle);
@@ -229,7 +228,7 @@ namespace Transforms
 			return obj->getRandom(origin.RotateAround(YAxis, -angle), rnd).RotateAround(YAxis, angle);
 		}
 
-	protected:
+	private:
 		bool hasBox = false;
 		double angle = 0;
 		std::shared_ptr<Objects::VisibleObject> obj;

@@ -19,7 +19,6 @@ namespace Objects
 	{
 	public:
 		Sphere(const Vector3D<double>& position, double R, const std::shared_ptr<Materials::Material>& m);
-		virtual ~Sphere();
 
 		bool Hit(const Ray& ray, PointInfo& info, double minr, double maxr, unsigned rcount, Random& random) const override;
 
@@ -75,9 +74,7 @@ namespace Objects
 
 		double pdfValue(const Vector3D<double>& o, const Vector3D<double>& v, Random& rnd) const override 
 		{ 
-			PointInfo info;
-
-			if (Hit(Ray(o, v), info, 1E-5, DBL_MAX, 1, rnd))
+			if (PointInfo info; Hit(Ray(o, v), info, 1E-5, DBL_MAX, 1, rnd))
 			{
 				static const double TWO_M_PI = 2. * M_PI;
 
@@ -101,12 +98,12 @@ namespace Objects
 			return onb.LocalToGlobal(RandomToSphere(radius, d2, rnd));
 		}
 
-		inline const Vector3D<double> getNormal(const PointInfo& info) const
+		virtual Vector3D<double> getNormal(const PointInfo& info) const
 		{
 			return (info.position - center).Normalize();
 		}
 
-	protected:
+	private:
 		static inline Vector3D<double> RandomToSphere(double Radius, double dist2, Random& rnd)
 		{
 			static const double TWO_M_PI = 2. * M_PI;
@@ -127,19 +124,17 @@ namespace Objects
 		double radius;
 		double R2;
 
-		double startTheta, startPhi;
+		double startTheta;
+		double startPhi;
 	};
 
 
 	class InvertedSphere : public Sphere
 	{
 	public:
-		InvertedSphere(const Vector3D<double>& position, double R, const std::shared_ptr<Materials::Material>& m)
-			: Sphere(position, R, m)
-		{
-		}
+		using Sphere::Sphere;
 
-		inline const Vector3D<double> getNormal(const PointInfo& info) const
+		Vector3D<double> getNormal(const PointInfo& info) const override
 		{
 			return -Sphere::getNormal(info);
 		}
@@ -149,7 +144,7 @@ namespace Objects
 
 
 	// TODO: not tested yet, probably does not work!
-	// use ContantMedium for it
+	// use ConstantMedium for it
 	// the 'inside' will be actually outside, so there will be no Beer-Lambert
 	// but it can be implemented if needed
 

@@ -13,8 +13,8 @@ namespace Textures
 	{
 	public:
 		ImageTexture();
-		ImageTexture(const std::string& name);
-		virtual ~ImageTexture();
+		explicit ImageTexture(const std::string& name);
+		~ImageTexture() override;
 
 		virtual bool Load(const std::string& name);
 
