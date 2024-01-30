@@ -5,12 +5,12 @@ namespace Textures
 {
 
 	NormalsTexture::NormalsTexture()
-		: ImageTexture(), bumpParam(2.)
+		: ImageTexture()
 	{
 	}
 
 	NormalsTexture::NormalsTexture(const std::string& name)
-		: ImageTexture(), bumpParam(2.)
+		: ImageTexture()
 	{
 		Load(name);
 	}
@@ -125,8 +125,6 @@ namespace Textures
 		static const double scale = 1. / (3. * 255.);
 
 		return (static_cast<double>(p.Red()) + static_cast<double>(p.Green()) + static_cast<double>(p.Blue())) * scale;
-
-		return 0.;
 	}
 
 }

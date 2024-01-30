@@ -99,7 +99,7 @@ EVT_BUTTON(ID_OBJECT_CHOOSE_OTHER, OptionsFrame::OnObjectChooseOther)
 EVT_BUTTON(ID_OBJECT_CLEAR_OTHER, OptionsFrame::OnObjectClearOther) 
 wxEND_EVENT_TABLE()
 
-OptionsFrame::OptionsFrame(const Options& opt, const wxString & title, wxWindow* parent)
+OptionsFrame::OptionsFrame(const Options& opt, const wxString& title, wxWindow* parent)
 {
 	SetExtraStyle(wxWS_EX_VALIDATE_RECURSIVELY);
 

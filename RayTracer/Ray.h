@@ -15,7 +15,7 @@ public:
 
 	inline Vector3D<double> operator()(double parameter) const { return m_origin + parameter * m_direction; }
 
-protected:
+private:
 	Vector3D<double> m_origin;
 	Vector3D<double> m_direction;
 

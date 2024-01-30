@@ -158,10 +158,10 @@ namespace Objects {
 		inline const Vector3D<double> getNormal(const PointInfo& info) const
 		{
 			const Vector3D<double> tNormal = getTriangleNormal(info);
-			if (!normals) 
+			if (!GetNormals()) 
 				return tNormal;
 
-			const Color textureColor = normals->Value(info.u, info.v, info.position);
+			const Color textureColor = GetNormals()->Value(info.u, info.v, info.position);
 			const Vector3D<double> bumpNormal(textureColor.r * 2. - 1., textureColor.g * 2. - 1., textureColor.b * 2. - 1.);
 
 			Vector3D<double> tangent = getTangent(info);
@@ -176,14 +176,21 @@ namespace Objects {
 			return TBN.GlobalToLocal(bumpNormal).Normalize();
 		}
 
-		Vector3D<double> A, B, C;
+		Vector3D<double> A;
+		Vector3D<double> B;
+		Vector3D<double> C;
 
-		double U1, V1, U2, V2, U3, V3;
+		double U1;
+		double V1;
+		double U2;
+		double V2;
+		double U3;
+		double V3;
 
-	protected:
+	private:
 		void Init();
 
-		inline const Vector3D<double> getTriangleNormal(const PointInfo& info) const
+		inline Vector3D<double> getTriangleNormal(const PointInfo& info) const
 		{
 			if (threeNormals)
 			{
@@ -195,7 +202,7 @@ namespace Objects {
 			return normal;
 		}
 
-		inline const Vector3D<double> getTangent(const PointInfo& info) const
+		inline Vector3D<double> getTangent(const PointInfo& info) const
 		{
 			if (threeNormals)
 			{
@@ -207,7 +214,7 @@ namespace Objects {
 			return tangent1;
 		}
 
-		inline const Vector3D<double> getBitangent(const PointInfo& info) const
+		inline Vector3D<double> getBitangent(const PointInfo& info) const
 		{
 			if (threeNormals)
 			{

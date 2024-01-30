@@ -5,9 +5,9 @@
 namespace Objects {
 
 	Sphere::Sphere(const Vector3D<double>& position, double R, const std::shared_ptr<Materials::Material>& m)
-		: center(position), radius(R), R2(R*R), startTheta(0), startPhi(0)
+		: center(position), radius(R), R2(R*R)
 	{
-		VisibleObjectElementary::material = m;
+		VisibleObjectElementary::SetMaterial(m);
 
 		const Vector3D<double> c = Vector3D<double>(radius, radius, radius);
 		boundingBox = BVH::AxisAlignedBoundingBox(center - c, center + c);
@@ -24,12 +24,9 @@ namespace Objects {
 		const double b = v * ray.getDirection();
 		const double c = v * v - R2;
 
-		const double d = b * b - c; // discriminant
-
-		if (d > 0)
+		if (const double d = b * b - c; d > 0)
 		{
 			const double sd = sqrt(d);
-
 			double dist = -b - sd;
 
 			if (dist > minr && dist < maxr)
@@ -37,7 +34,7 @@ namespace Objects {
 				info.distance = dist;
 				info.position = ray(dist);
 				info.normal = getNormal(info);
-				info.material = material.get();
+				info.material = GetMaterial().get();
 				info.object = this;
 
 				getUV(info.position, info.u, info.v);
@@ -51,7 +48,7 @@ namespace Objects {
 				info.distance = dist;
 				info.position = ray(dist);
 				info.normal = getNormal(info);
-				info.material = material.get();
+				info.material = GetMaterial().get();
 				info.object = this;
 
 

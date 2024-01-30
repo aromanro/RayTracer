@@ -12,7 +12,7 @@
 class Random
 {
 public:
-	Random(int addseed = 0);
+	explicit Random(int addseed = 0);
 
 	inline double getZeroOne()
 	{		
@@ -68,7 +68,6 @@ public:
 
 		return Vector3D<double>(x, y, z);
 	}
-
 
 private:
 	std::mt19937_64 rng;

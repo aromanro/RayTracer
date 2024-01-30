@@ -44,8 +44,8 @@ void Options::Close()
 void Options::Load()
 {
 	Open();
-	wxConfigBase *conf=wxConfigBase::Get(false);
-	if (conf)
+	
+	if (const wxConfigBase* const conf = wxConfigBase::Get(false))
 	{
 		nrThreads = conf->ReadLong("/nrThreads", 8);
 		nrSamples = conf->ReadLong("/nrSamples", 4);

@@ -8,10 +8,6 @@ class Color
 public:
 	Color(double rr = 0, double gg = 0, double bb = 0);
 
-	double r;
-	double g;
-	double b;
-
 	// ease up some things to allow combining colors, attenuating/amplifying them and so on
 
 	Color& operator*=(double s) { r *= s; g *= s; b *= s; return *this; };
@@ -69,7 +65,11 @@ public:
 		return r > 1.01 || g > 1.01 || b > 1.01;
 	}
 
-protected:
+	double r;
+	double g;
+	double b;
+
+private:
 	static void ClampVal(double &val)
 	{
 		if (val < 0) val = 0;

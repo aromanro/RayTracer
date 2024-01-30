@@ -114,7 +114,7 @@ namespace Materials {
 
 		Color volumeColor;
 
-	protected:
+	private:
 		double density = 0;
 		double refrIndex;
 		double invRefrIndex;

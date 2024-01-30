@@ -48,7 +48,6 @@ namespace Textures
 			std::shuffle(permZ.begin(), permZ.end(), g);
 		}
 
-
 		double Noise(const Vector3D<double>& p) const override
 		{
 			int i = floor(p.X);
@@ -72,7 +71,6 @@ namespace Textures
 
 			return trilinear_interpolation(c, u, v, w);
 		}
-
 
 		double Turbulence(const Vector3D<double>& p, int depth = 7) const override
 		{

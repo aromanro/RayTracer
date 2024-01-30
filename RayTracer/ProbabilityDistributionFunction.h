@@ -86,7 +86,7 @@ namespace PDFs
 			return object->getRandom(origin, rnd); // generates a random ray pointing to the object, using a uniform distribution over the surface
 		}
 
-	protected:
+	private:
 		const Vector3D<double> origin;
 		const Objects::VisibleObject* object;
 	};
@@ -112,7 +112,7 @@ namespace PDFs
 			return m_pdf2->Generate(rnd, info);
 		}
 
-	protected:
+	private:
 		ProbabilityDistributionFunction* m_pdf1;
 		ProbabilityDistributionFunction* m_pdf2;
 	};
@@ -144,7 +144,7 @@ namespace PDFs
 
 		Vector3D<double> Generate(Random& rnd, Materials::ScatterInfo* info) override;
 
-	protected:
+	private:
 		inline static double Schlick(const double val, double cosine)
 		{
 			return val + (1. - val) * pow(1. - cosine, 5.);
@@ -175,7 +175,8 @@ namespace PDFs
 		double nu;
 		double nv;
 
-		double prefactor1, prefactor2;
+		double prefactor1;
+		double prefactor2;
 	};
 
 }

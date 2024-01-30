@@ -11,11 +11,6 @@ namespace Objects {
 
 	class VisibleObjectComposite : public VisibleObject
 	{
-	protected:
-		std::shared_ptr<BVH::BVHNode> root;
-		BVH::AxisAlignedBoundingBox boundingBox;
-		double w;
-
 	public:
 		std::vector<std::shared_ptr<VisibleObject>> objects;
 
@@ -126,6 +121,11 @@ namespace Objects {
 
 			return objects[obj]->getRandom(origin, rnd);
 		}
+
+	protected:
+		std::shared_ptr<BVH::BVHNode> root;
+		BVH::AxisAlignedBoundingBox boundingBox;
+		double w;
 	};
 
 
@@ -133,6 +133,7 @@ namespace Objects {
 	{
 	public:
 		ConstantMedium() : density(0), invDensity(1E15) { isotropic = std::make_shared<Materials::Isotropic>(); }
+		
 		ConstantMedium(const std::shared_ptr<VisibleObject>& b, const std::shared_ptr<Textures::Texture>& t, double d) : density(d), boundary(b)
 		{
 			invDensity = 1. / density;

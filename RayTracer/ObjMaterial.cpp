@@ -38,13 +38,14 @@ void ObjMaterial::LoadLine(std::string& line)
 	case 'B':
 		LoadBumpLine(line);
 		break;
+	default:
+		break;
 	}
 }
 
 void ObjMaterial::LoadTfTrLine(std::string& line)
 {
-	std::string what = line.substr(0, 2);
-	if (what == "Tf") // transmission filter
+	if (std::string what = line.substr(0, 2); what == "Tf") // transmission filter
 	{
 		// TODO: again, for Tf is as above
 		line = line.substr(3);
@@ -72,8 +73,7 @@ void ObjMaterial::LoadTfTrLine(std::string& line)
 
 void ObjMaterial::LoadNsNiLine(std::string& line)
 {
-	std::string what = line.substr(0, 2);
-	if (what == "Ns") // specular exponent
+	if (std::string what = line.substr(0, 2); what == "Ns") // specular exponent
 	{
 		line = line.substr(3);
 
@@ -92,8 +92,7 @@ void ObjMaterial::LoadNsNiLine(std::string& line)
 
 void ObjMaterial::LoadDissolveLine(std::string& line)
 {
-	std::string what = line.substr(0, 1);
-	if (what == "d") // halo factor
+	if (std::string what = line.substr(0, 1); what == "d") // halo factor
 	{
 		line = line.substr(2);
 
@@ -105,8 +104,7 @@ void ObjMaterial::LoadDissolveLine(std::string& line)
 
 void ObjMaterial::LoadBumpLine(std::string& line)
 {
-	std::string what = line.substr(0, 4);
-	if (what == "bump" || what == "Bump") // bump, see above map_bump, it's the same thing
+	if (std::string what = line.substr(0, 4); what == "bump" || what == "Bump") // bump, see above map_bump, it's the same thing
 	{
 		line = line.substr(5);
 		bumpTexture = line;
@@ -115,8 +113,7 @@ void ObjMaterial::LoadBumpLine(std::string& line)
 
 void ObjMaterial::LoadIllumLine(std::string& line)
 {
-	std::string what = line.substr(0, 5);
-	if (what == "illum")
+	if (std::string what = line.substr(0, 5); what == "illum")
 	{
 		line = line.substr(6);
 		int i;
@@ -127,7 +124,7 @@ void ObjMaterial::LoadIllumLine(std::string& line)
 }
 
 
-void ObjMaterial::LoadColor(std::string& line, Color& color)
+void ObjMaterial::LoadColor(const std::string& line, Color& color) const
 {
 	// so check the prefix
 	if (line.substr(0, 3) != "xyz" && line.substr(0, 8) != "spectral")
@@ -150,8 +147,7 @@ void ObjMaterial::LoadColor(std::string& line, Color& color)
 
 void ObjMaterial::LoadColor(std::string& line)
 {
-	std::string what = line.substr(0, 2);
-	if (what == "Ka") // ambient reflectivity
+	if (std::string what = line.substr(0, 2); what == "Ka") // ambient reflectivity
 	{
 		// TODO: can actually be not ony 'Ka r g b' but also 'Ka spectral file.rfl factor' or 'Ka xyz x y z'
 		line = line.substr(3);
@@ -190,8 +186,7 @@ void ObjMaterial::FixLine(std::string& line)
 
 void ObjMaterial::LoadMap(std::string& line)
 {
-	std::string what = line.substr(0, 6);
-	if (what == "map_Ka") // material ambient is multiplied by the texture value
+	if (std::string what = line.substr(0, 6); what == "map_Ka") // material ambient is multiplied by the texture value
 	{
 		line = line.substr(7);
 		FixLine(line);

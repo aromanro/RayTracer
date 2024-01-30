@@ -139,7 +139,6 @@ namespace BVH
 			}
 		}
 
-
 		void Scale(double s) override
 		{
 			boundingBox.Scale(s);
@@ -147,8 +146,7 @@ namespace BVH
 			if (child2) child2->Scale(s);
 		}
 
-
-
+	private:
 		AxisAlignedBoundingBox boundingBox;
 
 		// only leaves are something else than BVHNode

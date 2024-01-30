@@ -67,12 +67,17 @@ namespace Objects {
 	public:
 		void SetMaterial(const std::shared_ptr<Materials::Material>& m) { material = m; }
 		void SetNormals(const std::shared_ptr<Textures::Texture>& n) { normals = n; }
+
 	protected:
 		VisibleObjectMaterial() = default;
 		explicit VisibleObjectMaterial(const std::shared_ptr<Materials::Material>& m) : material(m) {};
 		explicit VisibleObjectMaterial(const std::shared_ptr<Textures::Texture>& t) : normals(t) {};
 		VisibleObjectMaterial(const std::shared_ptr<Materials::Material>& m, const std::shared_ptr<Textures::Texture>& t) : material(m), normals(t) {};
 
+		const std::shared_ptr<Materials::Material>& GetMaterial() const { return material; }
+		const std::shared_ptr<Textures::Texture>& GetNormals() const { return normals; }
+
+	private:
 		std::shared_ptr<Materials::Material> material;
 		std::shared_ptr<Textures::Texture> normals; // for normal mapping
 	};

@@ -14,8 +14,8 @@ namespace Objects
 	class AlignedRectangle : public VisibleObjectElementary
 	{
 	public:
-		AlignedRectangle() : dim1(0), dim2(0), invdim1(0), invdim2(0), area(0) {}
-		AlignedRectangle(const std::shared_ptr<Materials::Material>& m) : VisibleObjectElementary(m) {}
+		AlignedRectangle() = default;
+		explicit AlignedRectangle(const std::shared_ptr<Materials::Material>& m) : VisibleObjectElementary(m) {}
 
 		double pdfValue(const Vector3D<double>& o, const Vector3D<double>& v, Random& rnd) const override
 		{
@@ -34,9 +34,11 @@ namespace Objects
 		}
 
 	protected:
-		double dim1, dim2;
-		double invdim1, invdim2;
-		double area;
+		double dim1 = 0;
+		double dim2 = 0;
+		double invdim1 = 0;
+		double invdim2 = 0;
+		double area = 0;
 	};
 
 	class RectangleXY : public AlignedRectangle
@@ -73,7 +75,7 @@ namespace Objects
 
 			info.distance = t;
 			info.position = ray(t);
-			info.material = material.get();
+			info.material = GetMaterial().get();
 			info.object = this;
 			info.normal = getNormal(info);
 
@@ -123,7 +125,10 @@ namespace Objects
 		}
 
 		double m_z;
-		double m_x0, m_x1, m_y0, m_y1;
+		double m_x0;
+		double m_x1;
+		double m_y0;
+		double m_y1;
 	};
 
 
@@ -162,7 +167,7 @@ namespace Objects
 
 			info.distance = t;
 			info.position = ray(t);
-			info.material = material.get();
+			info.material = GetMaterial().get();
 			info.object = this;
 			info.normal = getNormal(info);
 
@@ -213,7 +218,10 @@ namespace Objects
 		}
 
 		double m_y;
-		double m_x0, m_x1, m_z0, m_z1;
+		double m_x0;
+		double m_x1;
+		double m_z0;
+		double m_z1;
 	};
 
 
@@ -252,7 +260,7 @@ namespace Objects
 
 			info.distance = t;
 			info.position = ray(t);
-			info.material = material.get();
+			info.material = GetMaterial().get();
 			info.object = this;
 			info.normal = getNormal(info);
 
@@ -302,14 +310,17 @@ namespace Objects
 		}
 
 		double m_x;
-		double m_y0, m_y1, m_z0, m_z1;
+		double m_y0;
+		double m_y1;
+		double m_z0;
+		double m_z1;
 	};
 
 
 	class Box : public VisibleObjectComposite
 	{
 	public:
-		Box() {};
+		Box() = default;
 		Box(const Vector3D<double>& p1, const Vector3D<double>& p2, const std::shared_ptr<Materials::Material>& m)
 			: m_p1(p1), m_p2(p2)
 		{
@@ -358,7 +369,7 @@ namespace Objects
 		Vector3D<double> getCenter() const { return (m_p1 + m_p2) * 0.5; }
 		double getRadius() const { return (m_p1 - getCenter()).Length(); }
 
-	protected:
+	private:
 		void AddFaces(const std::shared_ptr<Materials::Material>& material)
 		{
 			objects.emplace_back(std::make_shared<Objects::RectangleXY>(m_p1.X, m_p2.X, m_p1.Y, m_p2.Y, m_p2.Z, material)); // front
@@ -393,7 +404,7 @@ namespace Objects
 	class SkyBox : public VisibleObjectComposite
 	{
 	public:
-		SkyBox() {};
+		SkyBox() = default;
 
 		SkyBox(const Vector3D<double>& p1, const Vector3D<double>& p2)
 			: m_p1(p1), m_p2(p2)
@@ -455,7 +466,7 @@ namespace Objects
 				// front
 				auto tf = std::make_shared<Textures::ImageTexture>(front);
 
-				std::dynamic_pointer_cast<Objects::RectangleXY>(std::dynamic_pointer_cast<Transforms::FlipNormal>(objects[0])->obj)->SetMaterial(std::make_shared<Materials::Lambertian>(tf));
+				std::dynamic_pointer_cast<Objects::RectangleXY>(std::dynamic_pointer_cast<Transforms::FlipNormal>(objects[0])->GetObject())->SetMaterial(std::make_shared<Materials::Lambertian>(tf));
 
 
 				// back
@@ -469,7 +480,7 @@ namespace Objects
 				auto tc = std::make_shared<Textures::ImageTexture>(ceil);
 				tc->flipVertically = true;
 
-				std::dynamic_pointer_cast<Objects::RectangleXZ>(std::dynamic_pointer_cast<Transforms::FlipNormal>(objects[2])->obj)->SetMaterial(std::make_shared<Materials::Lambertian>(tc));
+				std::dynamic_pointer_cast<Objects::RectangleXZ>(std::dynamic_pointer_cast<Transforms::FlipNormal>(objects[2])->GetObject())->SetMaterial(std::make_shared<Materials::Lambertian>(tc));
 
 
 				// floor - this might need some transformations
@@ -484,7 +495,7 @@ namespace Objects
 				tr->flipAxes = true;
 
 
-				std::dynamic_pointer_cast<Objects::RectangleYZ>(std::dynamic_pointer_cast<Transforms::FlipNormal>(objects[4])->obj)->SetMaterial(std::make_shared<Materials::Lambertian>(tr));
+				std::dynamic_pointer_cast<Objects::RectangleYZ>(std::dynamic_pointer_cast<Transforms::FlipNormal>(objects[4])->GetObject())->SetMaterial(std::make_shared<Materials::Lambertian>(tr));
 
 
 				// left
@@ -502,7 +513,7 @@ namespace Objects
 		}
 
 
-	protected:
+	private:
 		void AddFaces(const std::shared_ptr<Materials::Material>& front_mat, const std::shared_ptr<Materials::Material>& back_mat, const std::shared_ptr<Materials::Material>& ceil_mat, const std::shared_ptr<Materials::Material>& floor_mat, const std::shared_ptr<Materials::Material>& left_mat, const std::shared_ptr<Materials::Material>& right_mat)
 		{
 			objects.emplace_back(std::make_shared<Transforms::FlipNormal>(std::make_shared<Objects::RectangleXY>(m_p1.X, m_p2.X, m_p1.Y, m_p2.Y, m_p2.Z, front_mat))); // front

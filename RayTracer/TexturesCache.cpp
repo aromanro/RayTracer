@@ -8,13 +8,13 @@ std::shared_ptr<Textures::Texture> TexturesCache::Get(const std::string& tname, 
 
 	if (texturesCache.find(index) == texturesCache.end())
 	{
-		std::shared_ptr<Textures::ImageTexture> theTexture = std::make_shared<Textures::ImageTexture>(tname);
+		auto theTexture = std::make_shared<Textures::ImageTexture>(tname);
 		
 		if (!color.TotalAbsorbant() && !color.TotalReflective())
 			theTexture->MultiplyWith(color);
 
-		texturesCache.emplace(index, theTexture);
+		texturesCache.try_emplace(index, theTexture);
 	}
 
-	return texturesCache.at(index);
+	return texturesCache[index];
 }

@@ -66,9 +66,6 @@ namespace BVH
 		}
 
 	private:
-		Vector3D<double> m_min;
-		Vector3D<double> m_max;
-
 		inline static double mmin(double a, double b) { return a < b ? a : b; }
 		inline static double mmax(double a, double b) { return a > b ? a : b; }
 
@@ -93,6 +90,9 @@ namespace BVH
 		{
 			return mmin(mmin(v.X, v.Y), v.Z);
 		}
+
+		Vector3D<double> m_min;
+		Vector3D<double> m_max;
 	};
 
 }

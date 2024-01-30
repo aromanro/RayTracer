@@ -27,10 +27,7 @@ namespace Transforms
 		bool BoundingBox(BVH::AxisAlignedBoundingBox& box) override
 		{
 			return obj->BoundingBox(box);
-
-			return false;
 		}
-
 
 		void Translate(const Vector3D<double>& t) override
 		{
@@ -57,6 +54,9 @@ namespace Transforms
 			return obj->getRandom(origin, rnd);
 		}
 
+		const std::shared_ptr<Objects::VisibleObject>& GetObject() const { return obj; }
+
+	private:
 		std::shared_ptr<Objects::VisibleObject> obj;
 	};
 

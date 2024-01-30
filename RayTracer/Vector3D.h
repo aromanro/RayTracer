@@ -10,8 +10,8 @@ public:
 	T Z;
 
 	Vector3D();
-	Vector3D(const T& v);
-	template<typename O> Vector3D(const Vector3D<O>& other);
+	explicit Vector3D(const T& v);
+	template<typename O> explicit Vector3D(const Vector3D<O>& other);
 	Vector3D(const T& x, const T& y, const T& z);
 
 	template<typename O> Vector3D& operator=(const Vector3D<O>& other);

@@ -124,8 +124,8 @@ namespace Objects
 		double radius;
 		double R2;
 
-		double startTheta;
-		double startPhi;
+		double startTheta = 0.;
+		double startPhi = 0.;
 	};
 
 

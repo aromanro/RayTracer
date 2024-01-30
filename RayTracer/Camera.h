@@ -26,7 +26,6 @@ public:
 		return Ray(eyePos + off, orig + x * viewportWidthVec + y * viewportHeightVec - off);
 	}
 
-
 private:
 	Vector3D<double> eyePos;
 	Vector3D<double> lookAt;

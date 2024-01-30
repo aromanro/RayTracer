@@ -30,10 +30,13 @@ namespace Textures
 
 		bool Load(const std::string& name) override;
 
-		double bumpParam;
+		double GetBumpParam() const { return bumpParam; }
+		void SetBumpParam(double val) { bumpParam = val; }
 
-	protected:
+	private:
 		double GetPixelValue(const wxImagePixelData& data, wxImagePixelData::Iterator& p, int x, int y) const;
+
+		double bumpParam = 2.;
 	};
 
 }

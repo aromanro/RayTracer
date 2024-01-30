@@ -111,7 +111,7 @@ namespace Objects {
 		info.position = ray.getOrigin() + t * ray.getDirection();
 		info.u = u;
 		info.v = v;
-		info.material = material.get();
+		info.material = GetMaterial().get();
 		info.object = this;
 		
 		info.normal = getNormal(info);

@@ -11,11 +11,8 @@ void ObjLoader::SetTriangles(const std::vector<std::pair<double, double>>& textu
 
 	// it won't work for all polygons, works for convex ones and some concave ones
 
-	for (const auto& polygonpair : polygons)
+	for (const auto [polygon, matName] : polygons)
 	{
-		Polygon polygon = polygonpair.first;
-		const std::string& matName = polygonpair.second;
-
 		std::shared_ptr<Materials::Material> material;
 		if (materialsMap.find(matName) != materialsMap.end())
 			material = materialsMap[matName];
@@ -30,7 +27,7 @@ void ObjLoader::SetTriangles(const std::vector<std::pair<double, double>>& textu
 	}
 }
 
-bool ObjLoader::SplitPolygon(Polygon& polygon, const std::vector<Vector3D<double>>& vertices, const std::vector<Vector3D<double>>& normals, const std::vector<std::pair<double, double>>& textureCoords, std::shared_ptr<Materials::Material>& material, const std::shared_ptr<Textures::Texture>& normalTexture)
+bool ObjLoader::SplitPolygon(const Polygon& polygon, const std::vector<Vector3D<double>>& vertices, const std::vector<Vector3D<double>>& normals, const std::vector<std::pair<double, double>>& textureCoords, std::shared_ptr<Materials::Material>& material, const std::shared_ptr<Textures::Texture>& normalTexture)
 {
 	int startPoint = 0;
 
@@ -108,7 +105,7 @@ bool ObjLoader::SplitPolygon(Polygon& polygon, const std::vector<Vector3D<double
 
 
 
-bool ObjLoader::SplitPolygonNoNormals(Polygon& polygon, const std::vector<Vector3D<double>>& vertices, const std::vector<std::pair<double, double>>& textureCoords, std::shared_ptr<Materials::Material>& material, const std::shared_ptr<Textures::Texture>& normalTexture)
+bool ObjLoader::SplitPolygonNoNormals(const Polygon& polygon, const std::vector<Vector3D<double>>& vertices, const std::vector<std::pair<double, double>>& textureCoords, std::shared_ptr<Materials::Material>& material, const std::shared_ptr<Textures::Texture>& normalTexture)
 {
 	int startPoint = 0;
 

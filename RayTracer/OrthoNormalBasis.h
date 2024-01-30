@@ -44,9 +44,8 @@ public:
 	{
 		//basis[2] = v.Normalize(); // don't normalize, pass it as normalized already, so avoid useless computations
 		basis[2] = v;
-		const bool useY = abs(basis[2].X) > 0.9;
 
-		if (useY) basis[1] = Vector3D<double>(0, 1, 0);
+		if (abs(basis[2].X) > 0.9) basis[1] = Vector3D<double>(0, 1, 0);
 		else basis[1] = Vector3D<double>(1, 0, 0);
 
 		basis[1] = (basis[1] % basis[2]).Normalize();
