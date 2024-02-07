@@ -24,7 +24,8 @@ namespace Objects {
 
 			bool wasHit = false;
 
-			PointInfo oinfo, hitInfo;
+			PointInfo oinfo;
+			PointInfo hitInfo;
 			hitInfo.distance = oinfo.distance = maxr;
 
 			for (int i = 0; i < objects.size(); ++i)
@@ -67,31 +68,31 @@ namespace Objects {
 			}
 
 			//equal weight for all of them, reasonably good if they are about the same size, if not, maybe something different should be used (based on area?)
-			w = 1. / objects.size();
+			w = 1. / static_cast<double>(objects.size());
 		}
 
 		void ConstructBVH() override
 		{
 			ConstructBoundingBox();
 
-			for (int i = 0; i < objects.size(); ++i)
-				objects[i]->ConstructBVH();
+			for (const auto& obj : objects)
+				obj->ConstructBVH();
 
 			root = std::make_shared<BVH::BVHNode>(objects.begin(), objects.end());
 		}
 
 		void Translate(const Vector3D<double>& t) override
 		{
-			for (int i = 0; i < objects.size(); ++i)
-				objects[i]->Translate(t);
+			for (const auto& obj : objects)
+				obj->Translate(t);
 
 			boundingBox.Translate(t);
 		}
 
 		void RotateAround(const Vector3D<double>& v, double angle) override
 		{
-			for (int i = 0; i < objects.size(); ++i)
-				objects[i]->RotateAround(v, angle);
+			for (const auto& obj : objects)
+				obj->RotateAround(v, angle);
 
 			ConstructBoundingBox();
 		}
@@ -99,8 +100,8 @@ namespace Objects {
 
 		void Scale(double s) override
 		{
-			for (int i = 0; i < objects.size(); ++i)
-				objects[i]->Scale(s);
+			for (const auto& obj : objects)
+				obj->Scale(s);
 
 			boundingBox.Scale(s);
 		}
@@ -108,7 +109,7 @@ namespace Objects {
 
 		double pdfValue(const Vector3D<double>& o, const Vector3D<double>& v, Random& rnd) const override
 		{							
-			if (PointInfo info; Hit(Ray(o, v), info, 1E-5, DBL_MAX, 1, rnd))
+			if (PointInfo info; Hit(Ray(o, v), info, 1E-5, DBL_MAX, 1, rnd) && info.object)
 				return w * info.object->pdfValue(o, v, rnd);
 			
 			return 0;
@@ -134,13 +135,16 @@ namespace Objects {
 	public:
 		ConstantMedium() : density(0), invDensity(1E15) { isotropic = std::make_shared<Materials::Isotropic>(); }
 		
-		ConstantMedium(const std::shared_ptr<VisibleObject>& b, const std::shared_ptr<Textures::Texture>& t, double d) : density(d), boundary(b)
+		ConstantMedium(const std::shared_ptr<VisibleObject>& b, const std::shared_ptr<Textures::Texture>& t, double d) 
+			: density(d), invDensity(1. / density), boundary(b)
 		{
-			invDensity = 1. / density;
 			isotropic = std::make_shared<Materials::Isotropic>(t); 
 
-			ConstructBoundingBox();
-			ConstructBVH();
+			if (boundary)
+			{
+				boundary->ConstructBoundingBox();
+				boundary->ConstructBVH();
+			}
 		}
 
 		void ConstructBoundingBox() override
@@ -161,7 +165,7 @@ namespace Objects {
 			return boundary->BoundingBox(box);
 		}
 
-		inline Vector3D<double> getNormal(const PointInfo& info) const
+		inline Vector3D<double> getNormal(const PointInfo& /*info*/) const
 		{
 			static const Vector3D<double> normal(0, 0, 1);
 

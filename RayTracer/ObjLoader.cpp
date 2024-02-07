@@ -261,7 +261,7 @@ void ObjLoader::BuildMaterialsAndNormalsMaps(std::unordered_map<std::string, std
 
 void ObjLoader::AddMaterialWithDiffuseTexture(std::unordered_map<std::string, std::shared_ptr<Materials::Material>>& materialsMap, const std::pair<std::string, ObjMaterial>& mat, const std::string& dir, TexturesCache& texturesCache) const
 {
-	const std::string tname = dir + mat.second.diffuseTexture;
+	std::string tname = dir + mat.second.diffuseTexture;
 	auto tex = texturesCache.Get(tname, mat.second.diffuseColor);
 
 	if (mat.second.IsTransparent()) materialsMap[mat.first] = std::make_shared<Materials::Dielectric>(mat.second.refractionCoeff <= 1. ? 1.5 : mat.second.refractionCoeff, tex);
@@ -276,7 +276,7 @@ void ObjLoader::AddMaterialWithDiffuseTexture(std::unordered_map<std::string, st
 				specTexture = std::dynamic_pointer_cast<Textures::Texture>(std::make_shared<Textures::ColorTexture>(mat.second.specularColor));
 			else
 			{
-				const std::string tname = dir + mat.second.specularTexture;
+				tname = dir + mat.second.specularTexture;
 				specTexture = texturesCache.Get(tname, mat.second.specularColor);
 			}
 
@@ -286,7 +286,7 @@ void ObjLoader::AddMaterialWithDiffuseTexture(std::unordered_map<std::string, st
 				materialsMap[mat.first] = std::make_shared<Materials::AnisotropicPhong>(exponent, exponent, tex, specTexture);
 			else
 			{
-				const std::string tname = dir + mat.second.exponentTexture;
+				tname = dir + mat.second.exponentTexture;
 				std::shared_ptr<Textures::Texture> expTexture = texturesCache.Get(tname, Color());
 
 				materialsMap[mat.first] = std::make_shared<Materials::AnisotropicPhong>(exponent, exponent, tex, specTexture, expTexture);
@@ -342,20 +342,20 @@ bool ObjLoader::IsConcaveVertex(const Polygon& polygon, const std::vector<Vector
 	const size_t np = (cp == polygon.size() - 1) ? 0 : cp + 1;
 
 	const size_t indpp = std::get<0>(polygon[pp]);
-	if (indpp < 0 || indpp >= vertices.size()) return false;
+	if (indpp >= vertices.size()) return false;
 
 	const size_t indcp = std::get<0>(polygon[cp]);
-	if (indcp < 0 || indcp >= vertices.size()) return false;
+	if (indcp >= vertices.size()) return false;
 
 	const size_t indnp = std::get<0>(polygon[np]);
-	if (indnp < 0 || indnp >= vertices.size()) return false;
+	if (indnp >= vertices.size()) return false;
 
-	const Vector3D<double> prevPoint = vertices[indpp];
-	const Vector3D<double> curPoint = vertices[indcp];
-	const Vector3D<double> nextPoint = vertices[indnp];
+	const Vector3D prevPoint(vertices[indpp]);
+	const Vector3D curPoint(vertices[indcp]);
+	const Vector3D nextPoint(vertices[indnp]);
 
-	const Vector3D<double> edge1 = (prevPoint - curPoint).Normalize();
-	const Vector3D<double> edge2 = (nextPoint - curPoint).Normalize();
+	const Vector3D edge1((prevPoint - curPoint).Normalize());
+	const Vector3D edge2((nextPoint - curPoint).Normalize());
 
 	sine = (edge1 % edge2).Length();
 
@@ -409,7 +409,7 @@ bool ObjLoader::IsConcave(const Polygon& polygon, const std::vector<Vector3D<dou
 
 				if (sine < worstSine)
 				{
-					worstSine = sine;
+					//worstSine = sine;
 					pointIndex = cp;
 					return true; // just pick up the first one
 				}

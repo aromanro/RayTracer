@@ -12,7 +12,7 @@ namespace Objects {
 	class Triangle : public VisibleObjectElementary
 	{
 	public:
-		Triangle() : area(0), U1(-1), V1(-1), U2(-1), V2(-1), U3(-1), V3(-1), useInterpolation(true), threeNormals(true) {}
+		Triangle() : U1(-1), V1(-1), U2(-1), V2(-1), U3(-1), V3(-1), threeNormals(true), area(0), useInterpolation(true) {}
 		Triangle(const Vector3D<double>& a, const Vector3D<double>& b, const Vector3D<double>& c, const std::shared_ptr<Materials::Material>& m = nullptr, const std::shared_ptr<Textures::Texture>& t = nullptr);
 		Triangle(const Vector3D<double>& a, const Vector3D<double>& b, const Vector3D<double>& c, const Vector3D<double>& n1, const Vector3D<double>& n2, const Vector3D<double>& n3, const std::shared_ptr<Materials::Material>& m = nullptr, const std::shared_ptr<Textures::Texture>& t = nullptr);
 
@@ -20,8 +20,8 @@ namespace Objects {
 
 		void ConstructBoundingBox() override
 		{
-			Vector3D<double> minv(std::min(std::min(A.X, B.X), C.X), std::min(std::min(A.Y, B.Y), C.Y), std::min(std::min(A.Z, B.Z), C.Z));
-			Vector3D<double> maxv(std::max(std::max(A.X, B.X), C.X), std::max(std::max(A.Y, B.Y), C.Y), std::max(std::max(A.Z, B.Z), C.Z));
+			Vector3D minv(std::min(std::min(A.X, B.X), C.X), std::min(std::min(A.Y, B.Y), C.Y), std::min(std::min(A.Z, B.Z), C.Z));
+			Vector3D maxv(std::max(std::max(A.X, B.X), C.X), std::max(std::max(A.Y, B.Y), C.Y), std::max(std::max(A.Z, B.Z), C.Z));
 
 			const Vector3D<double> dif = maxv - minv;
 
@@ -119,9 +119,7 @@ namespace Objects {
 
 		double pdfValue(const Vector3D<double>& o, const Vector3D<double>& v, Random& rnd) const override 
 		{ 
-			PointInfo info;
-
-			if (Hit(Ray(o, v), info, 1E-5, DBL_MAX, 1, rnd))
+			if (PointInfo info; Hit(Ray(o, v), info, 1E-5, DBL_MAX, 1, rnd))
 			{
 				const double dist2 = info.distance * info.distance;
 				const double cosine = abs(v * normal); // don't use the normal from info because for three normals case it's not good for pdf
@@ -155,37 +153,35 @@ namespace Objects {
 				useInterpolation = false;
 		}
 
-		inline const Vector3D<double> getNormal(const PointInfo& info) const
+		inline Vector3D<double> getNormal(const PointInfo& info) const
 		{
 			const Vector3D<double> tNormal = getTriangleNormal(info);
 			if (!GetNormals()) 
 				return tNormal;
 
 			const Color textureColor = GetNormals()->Value(info.u, info.v, info.position);
-			const Vector3D<double> bumpNormal(textureColor.r * 2. - 1., textureColor.g * 2. - 1., textureColor.b * 2. - 1.);
+			const Vector3D bumpNormal(textureColor.r * 2. - 1., textureColor.g * 2. - 1., textureColor.b * 2. - 1.);
 
-			Vector3D<double> tangent = getTangent(info);
-			Vector3D<double> bitangent = getBitangent(info);
+			Vector3D tangent = getTangent(info);
+			Vector3D bitangent = getBitangent(info);
 
 			// renormalize
 			tangent -= (tangent * tNormal) * tNormal;
 			bitangent -= (bitangent * tNormal) * tNormal;
 
-			OrthoNormalBasis TBN(tNormal, tangent, bitangent);
-
-			return TBN.GlobalToLocal(bumpNormal).Normalize();
+			return OrthoNormalBasis(tNormal, tangent, bitangent).GlobalToLocal(bumpNormal).Normalize();
 		}
 
 		Vector3D<double> A;
 		Vector3D<double> B;
 		Vector3D<double> C;
 
-		double U1;
-		double V1;
-		double U2;
-		double V2;
-		double U3;
-		double V3;
+		double U1 = -1;
+		double V1 = -1;
+		double U2 = -1;
+		double V2 = -1;
+		double U3 = -1;
+		double V3 = -1;
 
 	private:
 		void Init();
@@ -249,7 +245,7 @@ namespace Objects {
 		Vector3D<double> edge1;
 		Vector3D<double> edge2;
 
-		bool useInterpolation;
+		bool useInterpolation = false;
 	};
 
 }

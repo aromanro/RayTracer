@@ -33,8 +33,6 @@ struct PointInfo
 };
 
 
-
-
 namespace Objects {
 
 	// derive from it triangles, quads, sphere, cube, whatever
@@ -92,6 +90,7 @@ namespace Objects {
 		VisibleObjectElementary(const std::shared_ptr<Materials::Material>& m, const std::shared_ptr<Textures::Texture>& t) : VisibleObjectMaterial(m, t) {};
 
 		BVH::AxisAlignedBoundingBox boundingBox;
+
 	public:
 		bool BoundingBox(BVH::AxisAlignedBoundingBox& box) override
 		{

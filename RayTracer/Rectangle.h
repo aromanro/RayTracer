@@ -19,9 +19,7 @@ namespace Objects
 
 		double pdfValue(const Vector3D<double>& o, const Vector3D<double>& v, Random& rnd) const override
 		{
-			PointInfo info;
-
-			if (Hit(Ray(o, v), info, 0.000001, DBL_MAX, 1, rnd))
+			if (PointInfo info; Hit(Ray(o, v), info, 0.000001, DBL_MAX, 1, rnd))
 			{
 				const double c = v * info.normal;
 				const double dist2 = info.distance * info.distance;
@@ -53,12 +51,12 @@ namespace Objects
 			area = abs(dim1 * dim2);
 			invdim1 = 1. / dim1;
 			invdim2 = 1. / dim2;
-			ConstructBoundingBox();
+			boundingBox = BVH::AxisAlignedBoundingBox(Vector3D<double>(m_x0, m_y0, m_z - 0.000001), Vector3D<double>(m_x1, m_y1, m_z + 0.000001));
 		};
 
-		inline const Vector3D<double> getNormal(const PointInfo& info) const
+		inline Vector3D<double> getNormal(const PointInfo& /*info*/) const
 		{
-			static const Vector3D<double> normal(0, 0, 1);
+			static const Vector3D normal(0., 0., 1.);
 
 			return normal;
 		}
@@ -119,9 +117,7 @@ namespace Objects
 		
 		Vector3D<double> getRandom(const Vector3D<double>& origin, Random& rnd) const override 
 		{ 
-			const Vector3D<double> rndPoint(m_x0 + rnd.getZeroOne() * dim1, m_y0 + rnd.getZeroOne() * dim2, m_z + 0.000001);
-
-			return rndPoint - origin; 
+			return Vector3D<double>(m_x0 + rnd.getZeroOne() * dim1, m_y0 + rnd.getZeroOne() * dim2, m_z + 0.000001) - origin;
 		}
 
 		double m_z;
@@ -145,12 +141,12 @@ namespace Objects
 			area = abs(dim1 * dim2);
 			invdim1 = 1. / dim1;
 			invdim2 = 1. / dim2;
-			ConstructBoundingBox();
+			boundingBox = BVH::AxisAlignedBoundingBox(Vector3D<double>(m_x0, m_y - 0.000001, m_z0), Vector3D<double>(m_x1, m_y + 0.000001, m_z1));
 		};
 
-		inline const Vector3D<double> getNormal(const PointInfo& info) const
+		inline Vector3D<double> getNormal(const PointInfo& /*info*/) const
 		{
-			static const Vector3D<double> normal(0, 1, 0);
+			static const Vector3D normal(0., 1., 0.);
 
 			return normal;
 		}
@@ -212,9 +208,7 @@ namespace Objects
 		
 		Vector3D<double> getRandom(const Vector3D<double>& origin, Random& rnd) const override 
 		{ 
-			const Vector3D<double> rndPoint(m_x0 + rnd.getZeroOne() * dim1, m_y + 0.000001, m_z0 + rnd.getZeroOne() * dim2);
-
-			return rndPoint - origin; 
+			return Vector3D<double>(m_x0 + rnd.getZeroOne() * dim1, m_y + 0.000001, m_z0 + rnd.getZeroOne() * dim2) - origin;
 		}
 
 		double m_y;
@@ -237,12 +231,12 @@ namespace Objects
 			area = abs(dim1 * dim2);
 			invdim1 = 1. / dim1;
 			invdim2 = 1. / dim2;
-			ConstructBoundingBox();
+			boundingBox = BVH::AxisAlignedBoundingBox(Vector3D<double>(m_x - 0.000001, m_y0, m_z0), Vector3D<double>(m_x + 0.000001, m_y1, m_z1));
 		};
 
-		inline const Vector3D<double> getNormal(const PointInfo& info) const
+		inline Vector3D<double> getNormal(const PointInfo& /*info*/) const
 		{
-			static const Vector3D<double> normal(1, 0, 0);
+			static const Vector3D normal(1., 0., 0.);
 
 			return normal;
 		}
@@ -304,9 +298,7 @@ namespace Objects
 		
 		Vector3D<double> getRandom(const Vector3D<double>& origin, Random& rnd) const override 
 		{ 
-			const Vector3D<double> rndPoint(m_x + 0.000001, m_y0 + rnd.getZeroOne() * dim1, m_z0 + rnd.getZeroOne() * dim2);
-
-			return rndPoint - origin; 
+			return Vector3D<double>(m_x + 0.000001, m_y0 + rnd.getZeroOne() * dim1, m_z0 + rnd.getZeroOne() * dim2) - origin;
 		}
 
 		double m_x;
@@ -326,7 +318,7 @@ namespace Objects
 		{
 			AddFaces(m);
 
-			ConstructBoundingBox();
+			boundingBox = BVH::AxisAlignedBoundingBox(m_p1, m_p2);
 		};
 
 		Box(const Vector3D<double>& p1, const Vector3D<double>& p2, const std::shared_ptr<Materials::Material>& front_mat, const std::shared_ptr<Materials::Material>& back_mat, const std::shared_ptr<Materials::Material>& ceil_mat, const std::shared_ptr<Materials::Material>& floor_mat, const std::shared_ptr<Materials::Material>& left_mat, const std::shared_ptr<Materials::Material>& right_mat)
@@ -334,7 +326,7 @@ namespace Objects
 		{
 			AddFaces(front_mat, back_mat, ceil_mat, floor_mat, left_mat, right_mat);
 
-			ConstructBoundingBox();
+			boundingBox = BVH::AxisAlignedBoundingBox(m_p1, m_p2);
 		};
 
 		void ConstructBoundingBox() override
@@ -410,17 +402,14 @@ namespace Objects
 			: m_p1(p1), m_p2(p2)
 		{
 			AddFaces();
-			ConstructBoundingBox();
+			boundingBox = BVH::AxisAlignedBoundingBox(m_p1, m_p2);
 		}
-
-
 
 		SkyBox(const Vector3D<double>& p1, const Vector3D<double>& p2, const std::shared_ptr<Materials::Material>& front_mat, const std::shared_ptr<Materials::Material>& back_mat, const std::shared_ptr<Materials::Material>& ceil_mat, const std::shared_ptr<Materials::Material>& floor_mat, const std::shared_ptr<Materials::Material>& left_mat, const std::shared_ptr<Materials::Material>& right_mat)			
 		: m_p1(p1), m_p2(p2)
 		{
 			AddFaces(front_mat, back_mat, ceil_mat, floor_mat, left_mat, right_mat);
-
-			ConstructBoundingBox();
+			boundingBox = BVH::AxisAlignedBoundingBox(m_p1, m_p2);
 		};
 
 		void ConstructBoundingBox() override

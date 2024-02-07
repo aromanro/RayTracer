@@ -11,8 +11,6 @@ namespace Materials
 	{		
 	}
 
-
-
 	bool Lambertian::Scatter(const Ray& incidentRay, const PointInfo& info, ScatterInfo& scatterInfo, Random& random)
 	{
 		scatterInfo.isSpecular = false;
@@ -26,8 +24,8 @@ namespace Materials
 
 	bool Metal::Scatter(const Ray& incidentRay, const PointInfo& info, ScatterInfo& scatterInfo, Random& random)
 	{
-		const Vector3D<double> normal = info.normal;
-		Vector3D<double> reflected = Reflect(incidentRay.getDirection(), normal);
+		const Vector3D normal(info.normal);
+		Vector3D reflected(Reflect(incidentRay.getDirection(), normal));
 
 		if (fuzzy != 0) reflected += fuzzy * random.getRandomInUnitSphere();
 
@@ -58,8 +56,8 @@ namespace Materials
 
 			// since it was inside the object, compute the attenuation using Beer-Lambert law
 
-			const Color absorb = info.distance * density * volumeColor;
-			const Color transparency = Color(exp(-absorb.r), exp(-absorb.g), exp(-absorb.b));
+			const Color absorb(info.distance * density * volumeColor);
+			const Color transparency(exp(-absorb.r), exp(-absorb.g), exp(-absorb.b));
 			scatterInfo.atten *= transparency;
 		}
 		else
@@ -79,14 +77,14 @@ namespace Materials
 
 		if (random.getZeroOne() < reflectProbability)
 		{
-			Vector3D<double> reflected = Reflect(incidentRay.getDirection(), outNormal);
-			if (fuzzy) reflected += fuzzy * random.getRandomInUnitSphere();
+			Vector3D reflected(Reflect(incidentRay.getDirection(), outNormal));
+			reflected += fuzzy * random.getRandomInUnitSphere();
 
 			scatterInfo.specularRay = Ray(info.position + epsilon * outNormal, reflected);
 		}
 		else
 		{
-			if (fuzzy) refracted += fuzzy * random.getRandomInUnitSphere();
+			refracted += fuzzy * random.getRandomInUnitSphere();
 			scatterInfo.specularRay = Ray(info.position - epsilon * outNormal, refracted);
 		}
 
@@ -108,7 +106,6 @@ namespace Materials
 	bool AnisotropicPhong::Scatter(const Ray& incidentRay, const PointInfo& info, ScatterInfo& scatterInfo, Random& random)
 	{
 		scatterInfo.isSpecular = true;
-
 		scatterInfo.atten = scatterInfo.diffuseColor = albedo->Value(info.u, info.v, info.position);
 		scatterInfo.specularColor = specular->Value(info.u, info.v, info.position);
 
@@ -125,7 +122,7 @@ namespace Materials
 		else
 			scatterInfo.pdf = new PDFs::AnisotropicPhongPDF(incidentRay.getDirection(), info.normal, nu, nv);		
 
-		Vector3D<double> dir  = scatterInfo.pdf->Generate(random, &scatterInfo);			
+		Vector3D dir(scatterInfo.pdf->Generate(random, &scatterInfo));			
 		while (dir*info.normal < 0)
 		{
 			dir = scatterInfo.pdf->Generate(random, &scatterInfo);

@@ -9,14 +9,14 @@ namespace Objects {
 	{
 		VisibleObjectElementary::SetMaterial(m);
 
-		const Vector3D<double> c = Vector3D<double>(radius, radius, radius);
+		const Vector3D c(radius, radius, radius);
 		boundingBox = BVH::AxisAlignedBoundingBox(center - c, center + c);
 	}
 
 
 	bool Sphere::Hit(const Ray& ray, PointInfo& info, double minr, double maxr, unsigned rcount, Random& random) const
 	{
-		const Vector3D<double> v = ray.getOrigin() - center;
+		const Vector3D v = ray.getOrigin() - center;
 
 		// a = 1 because ray direction is normalized
 
@@ -66,7 +66,7 @@ namespace Objects {
 		static const double TWO_M_PI = 2. * M_PI;
 		static const double invTWO_M_PI = 1. / TWO_M_PI;
 
-		const Vector3D<double> dir = (pos - center).Normalize();
+		const Vector3D dir = (pos - center).Normalize();
 
 		double theta = asin(dir.Y) + startTheta;
 		double phi = atan2(dir.Z, dir.X) + startPhi;

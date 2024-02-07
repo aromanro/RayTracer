@@ -25,7 +25,7 @@ namespace Objects
 		
 		void ConstructBoundingBox() override
 		{
-			const Vector3D<double> c = Vector3D<double>(radius, radius, radius);
+			const Vector3D c(radius, radius, radius);
 			boundingBox = BVH::AxisAlignedBoundingBox(center - c, center + c);
 		}
 
@@ -49,8 +49,8 @@ namespace Objects
 			// I will rotate them probably only around Oz, so I don't care for something better
 
 			static const double TWO_M_PI = 2. * M_PI;
-			const Vector3D<double> X(1, 0, 0);
-			const Vector3D<double> Xn = X.RotateAround(v, angle);
+			const Vector3D X(1., 0., 0.);
+			const Vector3D Xn(X.RotateAround(v, angle));
 
 			startTheta += asin(Xn.Y);
 			startPhi += atan2(Xn.Z, Xn.X);
@@ -78,7 +78,7 @@ namespace Objects
 			{
 				static const double TWO_M_PI = 2. * M_PI;
 
-				const Vector3D<double> d = center - o;
+				const Vector3D d = center - o;
 				const double CosThetaMax = sqrt(1. - R2 / (d * d));
 				const double solidAngle = TWO_M_PI * (1. - CosThetaMax);
 
@@ -90,7 +90,7 @@ namespace Objects
 		
 		Vector3D<double> getRandom(const Vector3D<double>& origin, Random& rnd) const override 
 		{ 
-			const Vector3D<double> d = center - origin;
+			const Vector3D d = center - origin;
 			const double d2 = d * d;
 
 			OrthoNormalBasis onb(d);

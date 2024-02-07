@@ -50,9 +50,9 @@ namespace Textures
 
 		double Noise(const Vector3D<double>& p) const override
 		{
-			int i = floor(p.X);
-			int j = floor(p.Y);
-			int k = floor(p.Z);
+			int i = static_cast<int>(floor(p.X));
+			int j = static_cast<int>(floor(p.Y));
+			int k = static_cast<int>(floor(p.Z));
 
 			double u = p.X - i;
 			double v = p.Y - j;
@@ -99,7 +99,7 @@ namespace Textures
 				for (int j = 0; j < 2; ++j)
 					for (int k = 0; k < 2; ++k)
 					{
-						const Vector3D<double> weight_v(u - i, v - j, w - k);
+						const Vector3D weight_v(u - i, v - j, w - k);
 
 						accum += (i * uu + (1LL - i) * (1LL - uu))
 							* (j * vv + (1LL - j) * (1LL - vv))

@@ -59,7 +59,7 @@ class RayTracerFrame : public wxFrame
 {
 public:
 	RayTracerFrame(const wxString& title, const wxPoint& pos, const wxSize& size);
-	~RayTracerFrame();
+	~RayTracerFrame() override;
 
 
 	std::atomic_int runningThreads;

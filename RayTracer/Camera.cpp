@@ -11,10 +11,10 @@ Camera::Camera(const Vector3D<double>& origin, const Vector3D<double>& target, c
 	const double viewportWidth = 2 * tan(rangle/2);
 	const double viewportHeight = aspect * viewportWidth;
 
-	const Vector3D<double> lookVec = (eyePos - lookAt).Normalize();
+	const Vector3D lookVec = (eyePos - lookAt).Normalize();
 
-	const Vector3D<double> u = up%lookVec;
-	const Vector3D<double> v = lookVec%u;
+	const Vector3D u = up%lookVec;
+	const Vector3D v = lookVec%u;
 
 	up = v.Normalize();
 	right = u.Normalize();

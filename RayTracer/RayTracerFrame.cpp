@@ -56,8 +56,8 @@ wxEND_EVENT_TABLE()
 
 
 RayTracerFrame::RayTracerFrame(const wxString& title, const wxPoint& pos, const wxSize& size)
-	: wxFrame(NULL, wxID_ANY, title, pos, size),
-	timer(this, 101), runningThreads(0)
+	: wxFrame(nullptr, wxID_ANY, title, pos, size),
+	runningThreads(0), timer(this, 101)
 {
 	wxMenu *menuFile = new wxMenu;
 

@@ -14,7 +14,7 @@ namespace Textures
 	public:
 		ImageTexture();
 		explicit ImageTexture(const std::string& name);
-		~ImageTexture() override;
+		~ImageTexture() override = default;
 
 		virtual bool Load(const std::string& name);
 

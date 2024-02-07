@@ -24,7 +24,7 @@ class OptionsFrame : public wxPropertySheetDialog
 {
 	wxDECLARE_CLASS(OptionsFrame);
 public:
-	OptionsFrame(const Options& opt, const wxString& title, wxWindow* parent = NULL);
+	OptionsFrame(const Options& opt, const wxString& title, wxWindow* parent = nullptr);
 
 	Options options;
 	

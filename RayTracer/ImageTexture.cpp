@@ -31,14 +31,6 @@ namespace Textures
 		Load(name);
 	}
 
-
-
-
-	ImageTexture::~ImageTexture()
-	{
-	}
-
-
 	bool ImageTexture::Load(const std::string& name)
 	{
 		static const double scale = 1. / 255.;

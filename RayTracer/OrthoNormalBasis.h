@@ -33,7 +33,7 @@ public:
 
 	inline Vector3D<double> GlobalToLocal(const Vector3D<double>& vect) const
 	{
-		return Vector3D<double>(
+		return Vector3D(
 				basis[0].X * vect.X + basis[1].X * vect.Y + basis[2].X * vect.Z,
 				basis[0].Y * vect.X + basis[1].Y * vect.Y + basis[2].Y * vect.Z,
 				basis[0].Z * vect.X + basis[1].Z * vect.Y + basis[2].Z * vect.Z

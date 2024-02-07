@@ -11,8 +11,7 @@ public:
 	{
 		if (sky)
 		{
-			PointInfo info;
-			if (sky->Hit(ray, info, 1E-5, DBL_MAX, 1, random))
+			if (PointInfo info; sky->Hit(ray, info, 1E-5, DBL_MAX, 1, random) && info.material)
 				return info.material->Emitted(info);	
 		}
 		else if (blackSky) return Color(0, 0, 0); // black sky
@@ -27,14 +26,11 @@ public:
 	{
 		if (++rcount > recursivityStop) return Color(0, 0, 0);
 
-		PointInfo info;
-
-		if (Hit(ray, info, 1E-5, maxr, rcount, random))
+		if (PointInfo info; Hit(ray, info, 1E-5, maxr, rcount, random))
 		{
 			if (info.material)
-			{
-				const Color c = info.material->Emitted(info);				
-				if (c.Emitter()) // it's a light
+			{				
+				if (const Color c = info.material->Emitted(info); c.Emitter()) // it's a light
 				{
 					if (info.normal * ray.getDirection() < 0) return c;
 
@@ -92,8 +88,8 @@ public:
 	{		
 		double sum = 0;
 
-		for (int i = 0; i < PriorityObjects.size(); ++i)
-			sum += PriorityObjects[i]->pdfValue(o, v, rnd);
+		for (auto& obj : PriorityObjects)
+			sum += obj->pdfValue(o, v, rnd);
 
 		return sum * invPriSize;
 	}

@@ -61,8 +61,8 @@ namespace BVH
 
 		inline static AxisAlignedBoundingBox EnclosingBox(const AxisAlignedBoundingBox& b1, const AxisAlignedBoundingBox& b2)
 		{
-			return AxisAlignedBoundingBox(Vector3D<double>(mmin(b1.m_min.X, b2.m_min.X), mmin(b1.m_min.Y, b2.m_min.Y), mmin(b1.m_min.Z, b2.m_min.Z)),
-				Vector3D<double>(mmax(b1.m_max.X, b2.m_max.X), mmax(b1.m_max.Y, b2.m_max.Y), mmax(b1.m_max.Z, b2.m_max.Z)));
+			return AxisAlignedBoundingBox(Vector3D(mmin(b1.m_min.X, b2.m_min.X), mmin(b1.m_min.Y, b2.m_min.Y), mmin(b1.m_min.Z, b2.m_min.Z)),
+				Vector3D(mmax(b1.m_max.X, b2.m_max.X), mmax(b1.m_max.Y, b2.m_max.Y), mmax(b1.m_max.Z, b2.m_max.Z)));
 		}
 
 	private:
@@ -73,12 +73,12 @@ namespace BVH
 
 		inline static Vector3D<double> mmin(const Vector3D<double>& a, const Vector3D<double>& b)
 		{
-			return Vector3D<double>(mmin(a.X, b.X), mmin(a.Y, b.Y), mmin(a.Z, b.Z));
+			return Vector3D(mmin(a.X, b.X), mmin(a.Y, b.Y), mmin(a.Z, b.Z));
 		}
 
 		inline static Vector3D<double> mmax(const Vector3D<double>& a, const Vector3D<double>& b)
 		{
-			return Vector3D<double>(mmax(a.X, b.X), mmax(a.Y, b.Y), mmax(a.Z, b.Z));
+			return Vector3D(mmax(a.X, b.X), mmax(a.Y, b.Y), mmax(a.Z, b.Z));
 		}
 
 		inline static double maxComp(const Vector3D<double>& v)

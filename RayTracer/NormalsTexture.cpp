@@ -69,7 +69,7 @@ namespace Textures
 
 					const double dZ = bumpParam; // make it smaller to increase the slope 
 
-					Vector3D<double> v(-dX, -dY, dZ);
+					Vector3D v(-dX, -dY, dZ);
 					v = v.Normalize();
 
 					// now convert to RGB

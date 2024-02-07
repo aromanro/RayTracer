@@ -4,15 +4,15 @@
 namespace Objects {
 
 	Triangle::Triangle(const Vector3D<double>& a, const Vector3D<double>& b, const Vector3D<double>& c, const std::shared_ptr<Materials::Material>& m, const std::shared_ptr<Textures::Texture>& t)
-		: VisibleObjectElementary(m, t), A(a), B(b), C(c), U1(-1), V1(-1), U2(-1), V2(-1), U3(-1), V3(-1), threeNormals(false), useInterpolation(false)
+		: VisibleObjectElementary(m, t), A(a), B(b), C(c), threeNormals(false)
 	{
 		Init();
 	}
 
 
 	Triangle::Triangle(const Vector3D<double>& a, const Vector3D<double>& b, const Vector3D<double>& c, const Vector3D<double>& n1, const Vector3D<double>& n2, const Vector3D<double>& n3, const std::shared_ptr<Materials::Material>& m, const std::shared_ptr<Textures::Texture>& t)
-		: VisibleObjectElementary(m, t), A(a), B(b), C(c), U1(-1), V1(-1), U2(-1), V2(-1), U3(-1), V3(-1), threeNormals(true),
-		normal1(n1), normal2(n2), normal3(n3), useInterpolation(false)
+		: VisibleObjectElementary(m, t), A(a), B(b), C(c), threeNormals(true),
+		normal1(n1), normal2(n2), normal3(n3)
 	{
 		Init();
 	}

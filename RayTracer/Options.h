@@ -171,7 +171,7 @@ public:
 
 	int objMaterialOther; // 0 - original, 1 - make metal, 2 - make transparent
 
-protected:
+private:
 	void Open();
 	void Close();
 

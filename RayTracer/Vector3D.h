@@ -2,13 +2,9 @@
 
 #include <tuple>
 
-template<typename T> class Vector3D
+template<typename T = double> class Vector3D
 {
 public:
-	T X;
-	T Y;
-	T Z;
-
 	Vector3D();
 	explicit Vector3D(const T& v);
 	template<typename O> explicit Vector3D(const Vector3D<O>& other);
@@ -53,6 +49,10 @@ public:
 	{
 		return atan2(Y, X);
 	}
+
+	T X;
+	T Y;
+	T Z;
 };
 
 template<typename T> Vector3D<T> operator*(T o, const Vector3D<T>& t) { return t*o; }

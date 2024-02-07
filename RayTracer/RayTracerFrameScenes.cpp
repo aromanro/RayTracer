@@ -16,7 +16,7 @@ void RayTracerFrame::FillRandomScene(Scene& scene, const Options& options)
 	scene.objects.emplace_back(std::make_shared<Objects::RectangleXZ>(-100, 100, -100, 100, 0, floorTexture));
 
 
-	scene.objects.emplace_back(std::make_shared<Objects::Sphere>(Vector3D<double>(0, 1, 0), 1, std::make_shared<Materials::Dielectric>(1.5)));
+	scene.objects.emplace_back(std::make_shared<Objects::Sphere>(Vector3D(0., 1., 0.), 1, std::make_shared<Materials::Dielectric>(1.5)));
 
 
 	std::shared_ptr<Textures::Texture> tex;
@@ -24,21 +24,21 @@ void RayTracerFrame::FillRandomScene(Scene& scene, const Options& options)
 	if (options.textureFileName.size()) tex = std::dynamic_pointer_cast<Textures::Texture>(std::make_shared<Textures::ImageTexture>(std::string(options.textureFileName.c_str())));
 	else tex = std::dynamic_pointer_cast<Textures::Texture>(std::make_shared<Textures::ColorTexture>(Color(0.4, 0.2, 0.1)));
 
-	auto earth = std::make_shared<Objects::Sphere>(Vector3D<double>(0, 0, 0), 1, std::make_shared<Materials::Lambertian>(tex));
-	earth->RotateAround(Vector3D<double>(0, 0, 1), M_PI);
-	earth->Translate(Vector3D<double>(4, 1, 0));
+	auto earth = std::make_shared<Objects::Sphere>(Vector3D(0., 0., 0.), 1, std::make_shared<Materials::Lambertian>(tex));
+	earth->RotateAround(Vector3D(0., 0., 1.), M_PI);
+	earth->Translate(Vector3D(4., 1., 0.));
 	scene.objects.emplace_back(earth);
 
 
 	if (options.localIllumination)
 	{
 		auto lightTex = std::dynamic_pointer_cast<Textures::Texture>(std::make_shared<Textures::ColorTexture>(Color(25, 25, 25)));
-		auto light = std::make_shared<Objects::Sphere>(Vector3D<double>(6, 2, 2), 0.4, std::make_shared<Materials::Lambertian>(lightTex));
+		auto light = std::make_shared<Objects::Sphere>(Vector3D(6., 2., 2.), 0.4, std::make_shared<Materials::Lambertian>(lightTex));
 		scene.objects.emplace_back(light);
 		scene.AddPriorityObject(light);
 	}
 
-	scene.objects.emplace_back(std::make_shared<Objects::Sphere>(Vector3D<double>(-4, 1, 0), 1, std::make_shared<Materials::Metal>(std::dynamic_pointer_cast<Textures::Texture>(std::make_shared<Textures::ColorTexture>(Color(0.7, 0.6, 0.5))))));
+	scene.objects.emplace_back(std::make_shared<Objects::Sphere>(Vector3D(-4., 1., 0.), 1, std::make_shared<Materials::Metal>(std::dynamic_pointer_cast<Textures::Texture>(std::make_shared<Textures::ColorTexture>(Color(0.7, 0.6, 0.5))))));
 
 	SetSky(scene, options);
 
@@ -60,7 +60,7 @@ void RayTracerFrame::FillRandomObjects(Scene& scene, const Options& options, Ran
 			
 			if (choose_obj >= 0.5) radius *= scale; // make them smaller
 
-			Vector3D<double> center(a + 1.4 * random.getZeroOne(), radius, b + 1.4 * random.getZeroOne());
+			Vector3D center(a + 1.4 * random.getZeroOne(), radius, b + 1.4 * random.getZeroOne());
 
 			AvoidIntersections(scene, center, radius, choose_obj, a, b, random);
 
@@ -133,7 +133,7 @@ void RayTracerFrame::AvoidIntersections(Scene& scene, Vector3D<double>& center, 
 			radius = 0.2 * random.getZeroOne() + 0.15;
 			if (choose_obj >= 0.5) radius *= scale; // make them smaller
 
-			center = Vector3D<double>(a + 1.4 * random.getZeroOne(), radius, b + 1.4 * random.getZeroOne());
+			center = Vector3D(a + 1.4 * random.getZeroOne(), radius, b + 1.4 * random.getZeroOne());
 		}
 	} while (intersect);
 }
@@ -158,7 +158,7 @@ void RayTracerFrame::AddObject(Scene& scene, const Options& options, Vector3D<do
 			scene.objects.emplace_back(std::make_shared<Objects::Sphere>(center, radius, mat));
 		else
 		{
-			auto b = std::make_shared<Objects::Box>(Vector3D<double>(-radius, -radius, -radius), Vector3D<double>(radius, radius, radius), mat);
+			auto b = std::make_shared<Objects::Box>(Vector3D(-radius, -radius, -radius), Vector3D(radius, radius, radius), mat);
 			const double choose_rot = random.getZeroOne() * 0.5 * M_PI;
 			auto r = std::make_shared<Transforms::RotateYAction>(b, choose_rot);
 			auto t = std::make_shared<Transforms::TranslateAction>(r, center);
@@ -173,7 +173,7 @@ void RayTracerFrame::AddObject(Scene& scene, const Options& options, Vector3D<do
 			scene.objects.emplace_back(std::make_shared<Objects::Sphere>(center, radius, mat));
 		else
 		{
-			auto b = std::make_shared<Objects::Box>(Vector3D<double>(-radius, -radius, -radius), Vector3D<double>(radius, radius, radius), mat);
+			auto b = std::make_shared<Objects::Box>(Vector3D(-radius, -radius, -radius), Vector3D(radius, radius, radius), mat);
 			const double choose_rot = random.getZeroOne() * 0.5 * M_PI;
 			auto r = std::make_shared<Transforms::RotateYAction>(b, choose_rot);
 			auto t = std::make_shared<Transforms::TranslateAction>(r, center);
@@ -194,7 +194,7 @@ void RayTracerFrame::AddObject(Scene& scene, const Options& options, Vector3D<do
 			scene.objects.emplace_back(std::make_shared<Objects::Sphere>(center, radius, mat));
 		else
 		{
-			auto b = std::make_shared<Objects::Box>(Vector3D<double>(-radius, -radius, -radius), Vector3D<double>(radius, radius, radius), mat);
+			auto b = std::make_shared<Objects::Box>(Vector3D(-radius, -radius, -radius), Vector3D(radius, radius, radius), mat);
 			const double choose_rot = random.getZeroOne() * 0.5 * M_PI;
 			auto r = std::make_shared<Transforms::RotateYAction>(b, choose_rot);
 			auto t = std::make_shared<Transforms::TranslateAction>(r, center);
@@ -247,7 +247,7 @@ void RayTracerFrame::SetSky(Scene& scene, const Options& options)
 
 		if (exists)
 		{
-			auto skybox = std::make_shared<Objects::SkyBox>(Vector3D<double>(13. - 10000, 2. - 10000, 3. - 10000), Vector3D<double>(13. + 10000, 2. + 10000, 3. + 10000));
+			auto skybox = std::make_shared<Objects::SkyBox>(Vector3D(13. - 10000, 2. - 10000, 3. - 10000), Vector3D(13. + 10000, 2. + 10000, 3. + 10000));
 			skybox->Load(frontFile, backFile, topFile, bottomFile, leftFile, rightFile);
 			scene.sky = skybox;
 		}
@@ -256,7 +256,7 @@ void RayTracerFrame::SetSky(Scene& scene, const Options& options)
 	{
 		scene.blackSky = true;
 
-		auto skysphere = std::make_shared<Objects::SkySphere>(Vector3D<double>(0, 0, 0), 10000);
+		auto skysphere = std::make_shared<Objects::SkySphere>(Vector3D(0., 0., 0.), 10000);
 		if (skysphere->Load(std::string(options.skySphereFileName.c_str())))
 		{
 			scene.sky = skysphere;
@@ -288,14 +288,14 @@ void RayTracerFrame::FillCornellScene(Scene& scene, const Options& options)
 
 	if (options.boxContent < 3)
 	{
-		const auto box1 = std::make_shared<Objects::Box>(Vector3D<double>(0, 0, 0), Vector3D<double>(165, 165, 165), WhiteMaterial);
-		const auto box2 = std::make_shared<Objects::Box>(Vector3D<double>(0, 0, 0), Vector3D<double>(165, 330, 165), 1 == options.boxContent ? std::dynamic_pointer_cast<Materials::Material>(AluminiumMaterial) : WhiteMaterial);
+		const auto box1 = std::make_shared<Objects::Box>(Vector3D(0., 0., 0.), Vector3D(165., 165., 165.), WhiteMaterial);
+		const auto box2 = std::make_shared<Objects::Box>(Vector3D(0., 0., 0.), Vector3D(165., 330., 165.), 1 == options.boxContent ? std::dynamic_pointer_cast<Materials::Material>(AluminiumMaterial) : WhiteMaterial);
 
 		const auto rbox1 = std::make_shared<Transforms::RotateYAction>(box1, -18. / 180. * M_PI);
 		const auto rbox2 = std::make_shared<Transforms::RotateYAction>(box2, 15. / 180. * M_PI);
 
-		const auto trbox1 = std::make_shared<Transforms::TranslateAction>(rbox1, Vector3D<double>(130, 0, 65));
-		const auto trbox2 = std::make_shared<Transforms::TranslateAction>(rbox2, Vector3D<double>(265, 0, 295));
+		const auto trbox1 = std::make_shared<Transforms::TranslateAction>(rbox1, Vector3D(130., 0., 65.));
+		const auto trbox2 = std::make_shared<Transforms::TranslateAction>(rbox2, Vector3D(265., 0., 295.));
 
 		if (options.boxContent < 2)
 		{
@@ -317,11 +317,11 @@ void RayTracerFrame::FillCornellScene(Scene& scene, const Options& options)
 	}
 	else if (3 == options.boxContent)
 	{
-		const auto box = std::make_shared<Objects::Box>(Vector3D<double>(0, 0, 0), Vector3D<double>(165, 330, 165), 1 == options.boxContent ? std::dynamic_pointer_cast<Materials::Material>(AluminiumMaterial) : WhiteMaterial);
+		const auto box = std::make_shared<Objects::Box>(Vector3D(0., 0., 0.), Vector3D(165., 330., 165.), 1 == options.boxContent ? std::dynamic_pointer_cast<Materials::Material>(AluminiumMaterial) : WhiteMaterial);
 		const auto rbox = std::make_shared<Transforms::RotateYAction>(box, 15. / 180. * M_PI);
-		const auto trbox = std::make_shared<Transforms::TranslateAction>(rbox, Vector3D<double>(265, 0, 295));
+		const auto trbox = std::make_shared<Transforms::TranslateAction>(rbox, Vector3D(265., 0., 295.));
 
-		const auto glassSphere = std::make_shared<Objects::Sphere>(Vector3D<double>(190, 90, 190), 90, std::make_shared<Materials::Dielectric>(1.5));
+		const auto glassSphere = std::make_shared<Objects::Sphere>(Vector3D(190., 90., 190.), 90, std::make_shared<Materials::Dielectric>(1.5));
 
 		scene.objects.emplace_back(trbox);
 		scene.objects.emplace_back(glassSphere);
@@ -346,9 +346,9 @@ void RayTracerFrame::SetObj(Scene& scene, const Options& options, const std::sha
 
 	object->Scale(options.scale);
 
-	const Vector3D<double> Ox(1, 0, 0);
-	const Vector3D<double> Oy(0, 1, 0);
-	const Vector3D<double> Oz(0, 1, 0);
+	const Vector3D Ox(1., 0., 0.);
+	const Vector3D Oy(0., 1., 0.);
+	const Vector3D Oz(0., 1., 0.);
 
 	static const double angleConv = M_PI / 180.;
 	object->RotateAround(Ox, options.rotateX * angleConv);
@@ -359,7 +359,7 @@ void RayTracerFrame::SetObj(Scene& scene, const Options& options, const std::sha
 
 	if (1 == options.objMaterial)
 	{
-		for (auto& obj : object->objects)
+		for (const auto& obj : object->objects)
 			std::dynamic_pointer_cast<Objects::VisibleObjectMaterial>(obj)->SetMaterial(AluminiumMaterial);
 	}
 	else if (2 == options.objMaterial)
@@ -367,7 +367,7 @@ void RayTracerFrame::SetObj(Scene& scene, const Options& options, const std::sha
 		auto glassmat = std::make_shared<Materials::Dielectric>(1.5);
 		glassmat->setDensity(0.03);
 		glassmat->volumeColor = Color(1, 1, 0);
-		for (auto& obj : object->objects)
+		for (const auto& obj : object->objects)
 			std::dynamic_pointer_cast<Objects::VisibleObjectMaterial>(obj)->SetMaterial(glassmat);
 	}
 
@@ -391,7 +391,7 @@ void RayTracerFrame::SetObj(Scene& scene, const Options& options, const std::sha
 	scene.objects.emplace_back(object);
 }
 
-void RayTracerFrame::BuildWalls(Scene& scene, const Options& options, const std::shared_ptr<Materials::Lambertian>& WhiteMaterial, const std::shared_ptr<Materials::Lambertian>& LightMaterial)
+void RayTracerFrame::BuildWalls(Scene& scene, const Options& /*options*/, const std::shared_ptr<Materials::Lambertian>& WhiteMaterial, const std::shared_ptr<Materials::Lambertian>& LightMaterial)
 {
 	const auto RedMaterial = std::make_shared<Materials::Lambertian>(std::dynamic_pointer_cast<Textures::Texture>(std::make_shared<Textures::ColorTexture>(Color(0.65, 0.05, 0.05))));
 	const auto GreenMaterial = std::make_shared<Materials::Lambertian>(std::dynamic_pointer_cast<Textures::Texture>(std::make_shared<Textures::ColorTexture>(Color(0.12, 0.45, 0.15))));
@@ -443,10 +443,10 @@ void RayTracerFrame::FillOtherScene(Scene& scene, const Options& options)
 #ifdef RECORD_MOVIE
 		// move the light out of the scene and make it strong, for the effect
 		auto lightTex = std::dynamic_pointer_cast<Textures::Texture>(std::make_shared<Textures::ColorTexture>(Color(30, 30, 30)));
-		auto light = std::make_shared<Objects::Sphere>(Vector3D<double>(6, 3.9, 2), 0.4, std::make_shared<Materials::Lambertian>(lightTex));
+		auto light = std::make_shared<Objects::Sphere>(Vector3D(6., 3.9, 2.), 0.4, std::make_shared<Materials::Lambertian>(lightTex));
 #else
 		auto lightTex = std::dynamic_pointer_cast<Textures::Texture>(std::make_shared<Textures::ColorTexture>(Color(25, 25, 25)));
-		auto light = std::make_shared<Objects::Sphere>(Vector3D<double>(6, 2, 2), 0.4, std::make_shared<Materials::Lambertian>(lightTex));
+		auto light = std::make_shared<Objects::Sphere>(Vector3D(6., 2., 2.), 0.4, std::make_shared<Materials::Lambertian>(lightTex));
 #endif		
 
 		scene.objects.emplace_back(light);
@@ -481,7 +481,7 @@ void RayTracerFrame::FillOtherScene(Scene& scene, const Options& options)
 		if (1 == options.objMaterialOther)
 		{
 			const auto AluminiumMaterial = std::make_shared<Materials::Metal>(std::dynamic_pointer_cast<Textures::Texture>(std::make_shared<Textures::ColorTexture>(Color(0.8, 0.85, 0.88))));
-			for (auto& obj : object->objects)
+			for (const auto& obj : object->objects)
 				std::dynamic_pointer_cast<Objects::VisibleObjectMaterial>(obj)->SetMaterial(AluminiumMaterial);
 		}
 		else if (2 == options.objMaterialOther)
@@ -489,7 +489,7 @@ void RayTracerFrame::FillOtherScene(Scene& scene, const Options& options)
 			auto glassmat = std::make_shared<Materials::Dielectric>(1.5);
 			glassmat->setDensity(0.03);
 			glassmat->volumeColor = Color(1, 1, 0);
-			for (auto& obj : object->objects)
+			for (const auto& obj : object->objects)
 				std::dynamic_pointer_cast<Objects::VisibleObjectMaterial>(obj)->SetMaterial(glassmat);
 		}
 
@@ -581,7 +581,7 @@ void RayTracerFrame::SetSkyOther(Scene& scene, const Options& options)
 
 		if (exists)
 		{
-			auto skybox = std::make_shared<Objects::SkyBox>(Vector3D<double>(13. - 10000, 2. - 10000, 3. - 10000), Vector3D<double>(13. + 10000, 2. + 10000, 3. + 10000));
+			auto skybox = std::make_shared<Objects::SkyBox>(Vector3D(13. - 10000, 2. - 10000, 3. - 10000), Vector3D(13. + 10000, 2. + 10000, 3. + 10000));
 			skybox->Load(frontFile, backFile, topFile, bottomFile, leftFile, rightFile);
 			scene.sky = skybox;
 		}
@@ -589,11 +589,9 @@ void RayTracerFrame::SetSkyOther(Scene& scene, const Options& options)
 	else if (3 == options.skyOther && !options.skySphereFileNameOther.empty() && wxFileName::Exists(options.skySphereFileNameOther))
 	{
 		scene.blackSky = true;
-		auto skysphere = std::make_shared<Objects::SkySphere>(Vector3D<double>(0, 0, 0), 10000);
+		auto skysphere = std::make_shared<Objects::SkySphere>(Vector3D(0., 0., 0.), 10000);
 		if (skysphere->Load(std::string(options.skySphereFileNameOther.c_str())))
-		{
 			scene.sky = skysphere;
-		}
 	}
 	else if (1 == options.skyOther)
 		scene.blackSky = true;

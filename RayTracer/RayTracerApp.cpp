@@ -10,9 +10,6 @@ bool RayTracerApp::OnInit()
 	if (!wxApp::OnInit())
 		return false;
 
-	
-	std::srand(unsigned(std::time(0)));
-
 	wxInitAllImageHandlers();
 
 	options.Load();

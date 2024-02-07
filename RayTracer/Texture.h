@@ -37,11 +37,9 @@ namespace Textures
 
 		Color Value(double u, double v, const Vector3D<double>& pos) const override
 		{
-			const double c = cos(m_scale * pos.X) * cos(m_scale * pos.Y) * cos(m_scale * pos.Z);
-
 			Color val;
 
-			if (c < 0)
+			if (cos(m_scale * pos.X) * cos(m_scale * pos.Y) * cos(m_scale * pos.Z) < 0)
 			{
 				val = m_texture1 ? m_texture1->Value(u, v, pos) : Color(1., 1., 1.);
 			}

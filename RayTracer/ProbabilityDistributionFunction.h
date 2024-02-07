@@ -150,7 +150,7 @@ namespace PDFs
 			return val + (1. - val) * pow(1. - cosine, 5.);
 		}
 
-		inline Vector3D<double> GetSpecularReflected(const Vector3D<double>& incident, const Vector3D<double>& h, double kh) const
+		inline Vector3D<double> GetSpecularReflected(const Vector3D<double>& h, double kh) const
 		{
 			return incident + 2. * kh * h;
 		}

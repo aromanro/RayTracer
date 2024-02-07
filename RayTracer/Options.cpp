@@ -38,7 +38,7 @@ void Options::Open()
 void Options::Close()
 {
 	m_fileconfig.reset();
-	wxConfigBase::Set(NULL);
+	wxConfigBase::Set(nullptr);
 }
 
 void Options::Load()

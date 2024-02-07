@@ -74,9 +74,7 @@ namespace Transforms
 
 			bool Hit(const Ray& ray, PointInfo& info, double minr, double maxr, unsigned rcount, Random& random) const override
 			{
-				const Ray offRay(ray.getOrigin() - offset, ray.getDirection());
-
-				if (obj->Hit(offRay, info, minr, maxr, rcount, random))
+				if (const Ray offRay(ray.getOrigin() - offset, ray.getDirection()); obj->Hit(offRay, info, minr, maxr, rcount, random))
 				{
 					info.position += offset;
 
@@ -141,33 +139,12 @@ namespace Transforms
 		RotateYAction(const std::shared_ptr<Objects::VisibleObject>& o, double ang)
 			: angle(ang), obj(o)
 		{
-			ConstructBoundingBox();
+			InitBoundingBox();
 		}
 
-		void  ConstructBoundingBox() override
+		void ConstructBoundingBox() override
 		{
-			static const Vector3D<double> YAxis(0, 1, 0);
-			hasBox = obj->BoundingBox(box);
-			Vector3D<double> Min(DBL_MAX, DBL_MAX, DBL_MAX);
-			Vector3D<double> Max(-DBL_MAX, -DBL_MAX, -DBL_MAX);
-			for (int i = 0; i <= 1; ++i)
-				for (int j = 0; j <= 1; ++j)
-					for (int k = 0; k <= 1; ++k)
-					{
-						Vector3D<double> corner(i * box.min().X + (1LL - i) * box.max().X, j * box.min().Y + (1LL - j) * box.max().Y, k * box.min().Z + (1LL - k) * box.max().Z);
-						corner = corner.RotateAround(YAxis, angle);
-
-						if (corner.X > Max.X) Max.X = corner.X;
-						if (corner.X < Min.X) Min.X = corner.X;
-
-						if (corner.Y > Max.Y) Max.Y = corner.Y;
-						if (corner.Y < Min.Y) Min.Y = corner.Y;
-
-						if (corner.Z > Max.Z) Max.Z = corner.Z;
-						if (corner.Z < Min.Z) Min.Z = corner.Z;
-					}
-
-			box = BVH::AxisAlignedBoundingBox(Min, Max);
+			InitBoundingBox();
 		}
 
 		bool IsComposite() const override { return obj->IsComposite(); }
@@ -229,6 +206,33 @@ namespace Transforms
 		}
 
 	private:
+		void InitBoundingBox()
+		{
+			static const Vector3D<double> YAxis(0, 1, 0);
+			hasBox = obj->BoundingBox(box);
+			Vector3D Min(DBL_MAX, DBL_MAX, DBL_MAX);
+			Vector3D Max(-DBL_MAX, -DBL_MAX, -DBL_MAX);
+
+			for (int i = 0; i <= 1; ++i)
+				for (int j = 0; j <= 1; ++j)
+					for (int k = 0; k <= 1; ++k)
+					{
+						Vector3D corner(i * box.min().X + (1LL - i) * box.max().X, j * box.min().Y + (1LL - j) * box.max().Y, k * box.min().Z + (1LL - k) * box.max().Z);
+						corner = corner.RotateAround(YAxis, angle);
+
+						if (corner.X > Max.X) Max.X = corner.X;
+						if (corner.X < Min.X) Min.X = corner.X;
+
+						if (corner.Y > Max.Y) Max.Y = corner.Y;
+						if (corner.Y < Min.Y) Min.Y = corner.Y;
+
+						if (corner.Z > Max.Z) Max.Z = corner.Z;
+						if (corner.Z < Min.Z) Min.Z = corner.Z;
+					}
+
+			box = BVH::AxisAlignedBoundingBox(Min, Max);
+		}
+
 		bool hasBox = false;
 		double angle = 0;
 		std::shared_ptr<Objects::VisibleObject> obj;
