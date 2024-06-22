@@ -1,10 +1,5 @@
 #include "RayTracerFrame.h"
 
-
-
-
-
-//#include "OptionsFrame.h"
 #include <wx/rawbmp.h>
 
 #include <thread>
@@ -177,7 +172,7 @@ void RayTracerFrame::Compute()
 		int samples = options.nrSamples;
 		const bool jitter = options.jitter;
 		if (jitter)
-			samples = ceil(sqrt(samples));
+			samples = static_cast<int>(ceil(sqrt(samples)));
 
 		std::vector<std::future<std::vector<std::vector<Color>>>> tasks(nrThreads);
 
@@ -210,13 +205,9 @@ void RayTracerFrame::Compute()
 				for (int i = 0; i < nx; ++i) results[i].resize(ny);
 
 				if (jitter)
-				{
 					ComputeJitter(nx, ny, samples, distMax, random, camera, scene, results);
-				}
 				else
-				{
 					ComputeNoJitter(nx, ny, samples, distMax, random, camera, scene, results);
-				}
 
 				return results;
 			});
@@ -268,7 +259,7 @@ void RayTracerFrame::InitScene(Scene& scene, const Options& options)
 }
 
 
-void RayTracerFrame::ComputeNoJitter(int nx, int ny, int samples, double distMax, Random& random, Camera& camera, Scene& scene, std::vector<std::vector<Color>>& results)
+void RayTracerFrame::ComputeNoJitter(int nx, int ny, int samples, double distMax, Random& random, const Camera& camera, const Scene& scene, std::vector<std::vector<Color>>& results)
 {
 	for (int i = 0; i < nx; ++i)
 	{
@@ -291,7 +282,7 @@ void RayTracerFrame::ComputeNoJitter(int nx, int ny, int samples, double distMax
 	}
 }
 
-void RayTracerFrame::ComputeJitter(int nx, int ny, int samples, double distMax, Random& random, Camera& camera, Scene& scene, std::vector<std::vector<Color>>& results)
+void RayTracerFrame::ComputeJitter(int nx, int ny, int samples, double distMax, Random& random, const Camera& camera, const Scene& scene, std::vector<std::vector<Color>>& results)
 {
 	const double scaleSamp = 1. / samples;
 	const double xScale = 1. / nx;

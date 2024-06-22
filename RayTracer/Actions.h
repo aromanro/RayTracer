@@ -24,7 +24,7 @@ namespace Transforms
 			return false;
 		}
 
-		bool BoundingBox(BVH::AxisAlignedBoundingBox& box) override
+		bool BoundingBox(BVH::AxisAlignedBoundingBox& box) const override
 		{
 			return obj->BoundingBox(box);
 		}
@@ -84,7 +84,7 @@ namespace Transforms
 				return false;
 			}
 
-			bool BoundingBox(BVH::AxisAlignedBoundingBox& box) override
+			bool BoundingBox(BVH::AxisAlignedBoundingBox& box) const override
 			{
 				if (obj->BoundingBox(box))
 				{
@@ -123,7 +123,6 @@ namespace Transforms
 			{
 				return obj->getRandom(origin - offset, rnd) + offset;
 			}
-
 
 	private:
 			std::shared_ptr<Objects::VisibleObject> obj;
@@ -165,7 +164,7 @@ namespace Transforms
 			return false;
 		}
 
-		bool BoundingBox(BVH::AxisAlignedBoundingBox& rbox) override
+		bool BoundingBox(BVH::AxisAlignedBoundingBox& rbox) const override
 		{
 			rbox = box;
 
@@ -178,9 +177,9 @@ namespace Transforms
 			ConstructBoundingBox();
 		}
 
-		void RotateAround(const Vector3D<double>& v, double angle) override
+		void RotateAround(const Vector3D<double>& v, double ang) override
 		{
-			obj->RotateAround(v, angle);
+			obj->RotateAround(v, ang);
 			ConstructBoundingBox();
 		}
 

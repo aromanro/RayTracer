@@ -108,7 +108,7 @@ namespace BVH
 			return false;
 		}
 
-		bool BoundingBox(AxisAlignedBoundingBox& box) override
+		bool BoundingBox(AxisAlignedBoundingBox& box) const override
 		{
 			box = boundingBox;
 

@@ -41,7 +41,7 @@ namespace Objects {
 			return wasHit;
 		}
 
-		bool BoundingBox(BVH::AxisAlignedBoundingBox& box) override
+		bool BoundingBox(BVH::AxisAlignedBoundingBox& box) const override
 		{
 			if (objects.empty()) return false;
 
@@ -158,7 +158,7 @@ namespace Objects {
 		}
 
 
-		bool BoundingBox(BVH::AxisAlignedBoundingBox& box) override
+		bool BoundingBox(BVH::AxisAlignedBoundingBox& box) const override
 		{
 			if (!boundary) return false;
 

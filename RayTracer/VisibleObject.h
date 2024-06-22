@@ -45,7 +45,7 @@ namespace Objects {
 		virtual ~VisibleObject() = default;
 
 		virtual bool Hit(const Ray& ray, PointInfo& info, double minr, double maxr, unsigned rcount, Random& random) const = 0;
-		virtual bool BoundingBox(BVH::AxisAlignedBoundingBox& box) = 0;
+		virtual bool BoundingBox(BVH::AxisAlignedBoundingBox& box) const = 0;
 		virtual void ConstructBoundingBox() {};
 		virtual void ConstructBVH() { ConstructBoundingBox(); };
 
@@ -92,7 +92,7 @@ namespace Objects {
 		BVH::AxisAlignedBoundingBox boundingBox;
 
 	public:
-		bool BoundingBox(BVH::AxisAlignedBoundingBox& box) override
+		bool BoundingBox(BVH::AxisAlignedBoundingBox& box) const override
 		{
 			box = boundingBox;
 

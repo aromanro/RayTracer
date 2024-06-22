@@ -72,8 +72,8 @@ private:
 	
 	static void InitScene(Scene& scene, const Options& options);
 	static void InitCamera(Camera& camera, const Options& options);
-	static void ComputeNoJitter(int nx, int ny, int samples, double distMax, Random& random, Camera& camera, Scene& scene, std::vector<std::vector<Color>>& results);
-	static void ComputeJitter(int nx, int ny, int samples, double distMax, Random& random, Camera& camera, Scene& scene, std::vector<std::vector<Color>>& results);
+	static void ComputeNoJitter(int nx, int ny, int samples, double distMax, Random& random, const Camera& camera, const Scene& scene, std::vector<std::vector<Color>>& results);
+	static void ComputeJitter(int nx, int ny, int samples, double distMax, Random& random, const Camera& camera, const Scene& scene, std::vector<std::vector<Color>>& results);
 
 	void GetResults(std::vector<std::future<std::vector<std::vector<Color>>>>& tasks, int nx, int ny, int nrThreads, bool jitter, int samples);
 

@@ -12,7 +12,7 @@ namespace Objects {
 	class Triangle : public VisibleObjectElementary
 	{
 	public:
-		Triangle() : U1(-1), V1(-1), U2(-1), V2(-1), U3(-1), V3(-1), threeNormals(true), area(0), useInterpolation(true) {}
+		Triangle() = default;
 		Triangle(const Vector3D<double>& a, const Vector3D<double>& b, const Vector3D<double>& c, const std::shared_ptr<Materials::Material>& m = nullptr, const std::shared_ptr<Textures::Texture>& t = nullptr);
 		Triangle(const Vector3D<double>& a, const Vector3D<double>& b, const Vector3D<double>& c, const Vector3D<double>& n1, const Vector3D<double>& n2, const Vector3D<double>& n3, const std::shared_ptr<Materials::Material>& m = nullptr, const std::shared_ptr<Textures::Texture>& t = nullptr);
 
@@ -222,9 +222,9 @@ namespace Objects {
 			return bitangent1;
 		}
 
-		bool threeNormals;
+		bool threeNormals = true;
 
-		double area;
+		double area = 0.;
 		Vector3D<double> normal; // the computed normal, it's the real one
 
 		// normals supplied by other means, for each vertex (for example by loading from an obj file or programmatically)
