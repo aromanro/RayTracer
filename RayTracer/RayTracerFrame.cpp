@@ -11,6 +11,7 @@
 #include <fstream>
 
 #include <memory>
+#include <chrono>
 
 #include "Triangle.h"
 
