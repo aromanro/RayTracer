@@ -9,6 +9,17 @@ I skipped the boring (for me) texture generation part and also the motion blurin
 
 Some more info is on Computational Physics Blog: https://compphys.go.ro/ray-tracing/
 
+### TOOLS
+
+The project compiles on Windows with Visual Studio 2026 (the code can be compiled with older versions starting with VS 2015, but it's currently maintained with VS 2026 and C++ 17 or higher).
+
+### LIBRARIES
+
+The program requires the typical VC++ runtime libraries.
+Additional library: wxWidgets https://wxwidgets.org/.
+
+### MORE INFO
+
 Some papers that were used:
 
 'An Anisotropic Phong BRDF Model' by Michael Ashikhmin and Peter Shirley
